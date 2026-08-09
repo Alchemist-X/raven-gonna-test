@@ -22,6 +22,7 @@ It does not submit, email, upload to GCS, onboard, or execute funds/trades. Exte
 - [x] Independent trials, logit aggregation, prior shrinkage, and Platt calibration.
 - [x] Baseline-first execution, timeouts, aborts, concurrency, checkpoints, and hash manifests.
 - [x] FutureX fetch/route/run/export/validate/score.
+- [x] FutureX inventory, explicit route-review gate, ID-selected pilot, research-snapshot validator, and per-task end-time gate.
 - [x] ForecastBench fetch/expand/run/export/coverage/raw score/source baselines.
 - [x] Prophet current/legacy normalization, market prior, bounded residual, geometry, and HTTP service.
 - [x] Trading-dependency and core-boundary gates.
@@ -81,4 +82,3 @@ Gate: artifacts reproduce from manifests; service failures return market priors;
 - The base implementation is complete and locally verified.
 - External registration, paid full rounds, and public deployment require credentials, budget, or explicit authorization.
 - Local P1/P2 work can continue, but external submission, public deployment, and costly batches require renewed confirmation.
-

@@ -84,6 +84,8 @@ ForecastBench 和 Prophet 在调用模型前都能生成 deterministic baseline�
 
 固定 40 位 dataset SHA；按 prompt 而非 level 判断题型；官方附件只含 `id`/`prediction`。数组、rationale、未知 ID、空答案、非法数值或过期提交 fail closed。
 
+自动 route artifact 保存 detector 的 confidence/reasons，并全部从 `pending` 开始；正式调用模型前必须显式改为 `approved` 或 `edited`。部分题目实验走独立 pilot/research-snapshot 协议，包含证据与完整结果，但硬编码 `submissionEligible=false`，不会被序列化成官方 JSONL。
+
 ### ForecastBench
 
 唯一键为 `(source,id,resolution_date|null)`。Market 一题一行，dataset 严格展开官方日期，不假设永远八个 horizon。Market/dataset 分别报告 row coverage 和 complete-question coverage，默认只有 100% 才 `safeToUpload`。

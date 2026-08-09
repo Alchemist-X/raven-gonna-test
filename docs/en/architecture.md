@@ -48,7 +48,7 @@ ForecastBench and Prophet create deterministic priors before invoking a model. A
 
 ## Adapters
 
-- FutureX pins a 40-character revision, routes from the prompt rather than the level, and exports only `id` and scalar `prediction`.
+- FutureX pins a 40-character revision, routes from the prompt rather than the level, and exports only `id` and scalar `prediction`. Generated routes preserve detector confidence/reasons and start as `pending`; paid execution requires explicit `approved` or `edited` review state. Partial experiments use a separate pilot/research-snapshot contract with `submissionEligible=false` and can never serialize as an official JSONL attachment.
 - ForecastBench keys every row by `(source,id,resolution_date|null)`, expands only official dates, and separately checks market/dataset row and complete-question coverage.
 - Prophet expands an event into one binary task per market/outcome. Current and legacy wire encoders stay separate. Independent markets are not normalized unless geometry is explicitly known.
 

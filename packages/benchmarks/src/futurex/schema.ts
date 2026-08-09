@@ -36,10 +36,21 @@ export type FutureXLevel = z.infer<typeof FutureXLevelSchema>;
 export type FutureXTaskKind = "single_choice" | "multi_choice" | "numeric" | "ranking" | "open_text";
 
 export const FutureXTaskKindSchema = z.enum(["single_choice", "multi_choice", "numeric", "ranking", "open_text"]);
+export const FutureXRouteReviewStatusSchema = z.enum(["pending", "approved", "edited"]);
 export const FutureXRouteOverrideSchema = z.object({
   kind: FutureXTaskKindSchema,
   choices: z.array(z.object({ key: z.string().min(1), text: z.string().min(1) })).optional(),
-  rankCount: z.number().int().min(1).optional()
+  rankCount: z.number().int().min(1).optional(),
+  inference: z.object({
+    kind: FutureXTaskKindSchema,
+    confidence: z.number().min(0).max(1),
+    reasons: z.array(z.string().min(1)).min(1)
+  }).strict().optional(),
+  review: z.object({
+    status: FutureXRouteReviewStatusSchema,
+    reviewedAtUtc: z.string().datetime({ offset: true }).optional(),
+    notes: z.string().max(2_000).optional()
+  }).strict().optional()
 }).strict();
 export const FutureXRouteOverrideFileSchema = z.object({
   schemaVersion: z.literal("raven-gonna-test.futurex-routes.v1"),
@@ -49,6 +60,34 @@ export const FutureXRouteOverrideFileSchema = z.object({
 
 export type FutureXRouteOverride = z.infer<typeof FutureXRouteOverrideSchema>;
 export type FutureXRouteOverrideFile = z.infer<typeof FutureXRouteOverrideFileSchema>;
+
+export const FutureXResearchEvidenceSchema = z.object({
+  title: z.string().min(1).max(500),
+  url: z.string().url(),
+  observedAtUtc: z.string().datetime({ offset: true })
+}).strict();
+
+export const FutureXResearchPredictionSchema = z.object({
+  id: z.string().min(1),
+  prediction: z.string().min(1),
+  confidence: z.number().min(0).max(1),
+  method: z.enum(["manual_research", "predictor", "ensemble", "baseline"]),
+  rationaleSummary: z.array(z.string().min(1).max(1_000)).min(1).max(12),
+  counterEvidence: z.array(z.string().min(1).max(1_000)).max(8),
+  evidence: z.array(FutureXResearchEvidenceSchema).max(20)
+}).strict();
+
+export const FutureXResearchSnapshotSchema = z.object({
+  schemaVersion: z.literal("raven-gonna-test.futurex-research-snapshot.v1"),
+  status: z.literal("research_only"),
+  submissionEligible: z.literal(false),
+  revision: z.string().regex(/^[0-9a-f]{40}$/i),
+  asOfUtc: z.string().datetime({ offset: true }),
+  generatedAtUtc: z.string().datetime({ offset: true }),
+  predictions: z.array(FutureXResearchPredictionSchema).min(1)
+}).strict();
+
+export type FutureXResearchSnapshot = z.infer<typeof FutureXResearchSnapshotSchema>;
 
 export interface FutureXRoute {
   kind: FutureXTaskKind;

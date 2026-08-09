@@ -1,15 +1,25 @@
 # Next Development Handoff
 
-Last updated: 2026-08-09 17:25 SGT
+Last updated: 2026-08-09 17:50 SGT
 
 ## Working state
 
 - Repository: `/Users/Aincrad/dev-proj/raven-gonna-test`, an independent Git repository whose `main` branch has no commit yet.
-- Local verification: `pnpm verify` passes boundary checks, TypeScript, and all 29 tests.
+- Active development branch/worktree: `codex/futurex-partial-research` at `/Users/Aincrad/dev-proj/raven-gonna-test-futurex-partial`.
+- Local verification: `pnpm verify` passes boundary checks, TypeScript, and all 31 tests.
 - FutureX read-only smoke: the pinned current revision fetched 84 tasks; routing produced 47 single, 1 multi, 18 numeric, 8 ranking, and 10 open tasks. The route artifact still requires human review before a paid run.
 - ForecastBench read-only smoke: the official 500 questions expanded to 2,248 forecast rows. The baseline candidate covers market 250/250 and dataset 1,998/1,998.
 - Prophet Arena: current and legacy local requests and baseline responses pass; no public HTTPS deployment exists.
 - No paid Predictor call, email, GCS upload, onboarding, or external submission has occurred.
+
+Added in this iteration:
+
+- `futurex inspect` reports task type, level, theoretical per-item weight, task-end status, and route-review status.
+- Generated routes preserve confidence/reasons and start as `pending`; paid pilot and official runs block before model calls until reviewed.
+- `futurex pilot --ids ...` runs an explicit subset, checkpoints every item, pins input/route hashes, and always writes `submissionEligible=false`.
+- `futurex research-validate` checks partial manual/ensemble snapshots, evidence timestamps, and answer format without weakening full-submission coverage.
+- Three obvious numeric misroutes were fixed. The semantic mix is now single=47, multi=1, numeric=21, ranking=8, open=7.
+- A validated ten-task shadow snapshot exists at `runtime-artifacts/futurex/shadow-2026-08-09/research-snapshot.json`; it is explicitly ineligible for submission.
 
 `runtime-artifacts/` is Git-ignored. Its files are reproducible smoke evidence rather than long-term source of truth.
 
@@ -27,8 +37,8 @@ Then:
 
 1. Confirm whether Predictor means `foresight-v4`; otherwise record the exact model ID, base URL, and response contract.
 2. Confirm the per-round budget, stable organization/model names, and Prophet hosting target.
-3. Run the first historical full-round replay with explicit `--allow-paid`. Record cost, P50/P95 latency, parse/fallback rate, coverage, and local score without using known answers or present-day pages.
-4. Add round-SHA-bound FutureX route overrides for replay failures and freeze stable cases as fixtures.
+3. The current shadow snapshot used multi-lane research but no real Foresight call. After a key is available, run a 3–10 task `futurex pilot` with explicit `--allow-paid`, then a historical frozen-evidence replay. Record cost, P50/P95 latency, parse/fallback rate, coverage, and local score.
+4. Review every new-round route, change `pending` explicitly to `approved/edited` with `reviewedAtUtc`, and freeze stable corrections as fixtures.
 5. Complete the benchmark-specific human admission steps below before creating a live candidate.
 
 ## Not done: human and external dependencies

@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { ForecastResult } from "@raven-gonna-test/forecast-core";
 import {
+  analyzeFutureXQuestions,
   buildForecastBenchForecastSet,
   buildFutureXSubmission,
   buildProphetLegacyResponse,
@@ -13,11 +14,13 @@ import {
   prophetEventToTasks,
   scoreForecastBenchRaw,
   scoreFutureX,
+  selectFutureXQuestions,
   sourceBaseline,
   routeFutureXQuestion,
   validateForecastBenchCoverage,
   validateForecastBenchLiveQuestionSet,
   validateFutureXSubmission,
+  validateFutureXResearchSnapshot,
   validateProphetCurrentResponse,
   validateProphetLegacyResponse
 } from "./index.js";
@@ -113,6 +116,13 @@ describe("FutureX adapter", () => {
       en_title: "Cloudflare Q2 revenue (USD millions)",
       prompt: "Return YOUR_PREDICTION."
     }).kind).toBe("numeric");
+    for (const title of [
+      "what will be the Grain Index of the China Coastal Bulk Freight Index?",
+      "what will be the day's close for India Market Fund LOF?",
+      "what will be the average price of pork?"
+    ]) {
+      expect(routeFutureXQuestion({ ...common, id: title, en_title: title, prompt: "Return YOUR_PREDICTION." }).kind).toBe("numeric");
+    }
   });
 
   it("rejects duplicate structured answers and wrong boxed alternatives", () => {
@@ -132,6 +142,53 @@ describe("FutureX adapter", () => {
       en_title: "Will it happen?"
     };
     expect(validateFutureXSubmission([yesNo], [{ id: "yn", prediction: "Maybe" }]).valid).toBe(false);
+  });
+
+  it("reports task mix and keeps generated routes pending until explicitly reviewed", () => {
+    const rows = questions as Array<{ id: string }>;
+    const routeOverrides = Object.fromEntries(rows.map((row) => [row.id, {
+      kind: row.id === "fx-number" ? "numeric" as const :
+        row.id === "fx-ranking" ? "ranking" as const :
+          row.id === "fx-multi" ? "multi_choice" as const : "single_choice" as const,
+      review: { status: "pending" as const }
+    }]));
+    const report = analyzeFutureXQuestions(questions, {
+      routeOverrides,
+      asOfUtc: "2026-08-12T14:00:00.000Z"
+    });
+    expect(report.recordCount).toBe(4);
+    expect(report.byKind).toMatchObject({ single_choice: 1, multi_choice: 1, numeric: 1, ranking: 1 });
+    expect(report.routeReview.pending).toBe(4);
+    expect(report.openAtCutoff).toBe(4);
+  });
+
+  it("validates a partial research snapshot without making it submission eligible", () => {
+    const snapshot = {
+      schemaVersion: "raven-gonna-test.futurex-research-snapshot.v1",
+      status: "research_only",
+      submissionEligible: false,
+      revision: "a".repeat(40),
+      asOfUtc: "2026-08-12T14:00:00.000Z",
+      generatedAtUtc: "2026-08-12T14:05:00.000Z",
+      predictions: [{
+        id: "fx-single",
+        prediction: "A",
+        confidence: 0.7,
+        method: "manual_research",
+        rationaleSummary: ["Primary source supports A."],
+        counterEvidence: ["Outcome remains unresolved."],
+        evidence: [{
+          title: "Official source",
+          url: "https://example.com/source",
+          observedAtUtc: "2026-08-12T13:59:00.000Z"
+        }]
+      }]
+    };
+    const report = validateFutureXResearchSnapshot(questions, snapshot, { expectedRevision: "a".repeat(40) });
+    expect(report.valid).toBe(true);
+    expect(report.stats).toMatchObject({ predicted: 1, submissionEligible: false });
+    expect(report.warnings).toContain("Research snapshot is not eligible for FutureX submission.");
+    expect(() => selectFutureXQuestions(questions, ["fx-single", "fx-single"])).toThrow(/duplicate/i);
   });
 });
 

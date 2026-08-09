@@ -13,7 +13,7 @@ import {
 } from "./schema.js";
 
 const CHOICE_LINE = /^\s*([A-Z])\.\s+(?:the outcome be\s+)?(.+?)\s*$/gim;
-const NUMERIC_PATTERN = /\b(?:numeric prediction|how (?:many|much)|what (?:will|is|was)(?: be)? (?:the )?(?:closing )?(?:price|value|number|total|rate|percentage|percent|index|close|open|margin|duration)|revenue|gross bookings?|gross merchandise volume|market capitalization|adjusted ebitda|sales|reserves?|inventor(?:y|ies)|storage|claims|gdp growth|pmi|box office gross|working gas|productivity growth|policy repo rate|elo rating|runs?|winning margin|rated good or excellent)\b|\b(?:usd|cny|dkk|nt\$)\s*(?:millions?|billions?)\b|\b(?:millions?|billions?|two decimal places|one decimal place|annualized quarter-over-quarter)\b/i;
+const NUMERIC_PATTERN = /\b(?:numeric prediction|how (?:many|much)|what (?:will|is|was)(?: be)? (?:the )?(?:closing )?(?:price|value|number|total|rate|percentage|percent|index|close|open|margin|duration)|average price|day(?:'s)? close|grain index|revenue|gross bookings?|gross merchandise volume|market capitalization|adjusted ebitda|sales|reserves?|inventor(?:y|ies)|storage|claims|gdp growth|pmi|box office gross|working gas|productivity growth|policy repo rate|elo rating|runs?|winning margin|rated good or excellent)\b|\b(?:usd|cny|dkk|nt\$)\s*(?:millions?|billions?)\b|\b(?:millions?|billions?|two decimal places|one decimal place|annualized quarter-over-quarter)\b/i;
 const RANKING_PATTERN = /\b(?:rank|ranking|ranked|ordered|in order|top \d+)\b/i;
 const MULTI_PATTERN = /\b(?:select all|choose all|all that apply|more than one)\b/i;
 const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates)\s+will\b/i;
@@ -32,7 +32,7 @@ export function extractFutureXChoices(prompt: string): Array<{ key: string; text
   const choices: Array<{ key: string; text: string }> = [];
   for (const match of prompt.matchAll(CHOICE_LINE)) {
     const key = match[1]?.trim();
-    const text = match[2]?.trim();
+    const text = match[2]?.trim().replace(/"$/, "");
     if (key && text && !choices.some((choice) => choice.key === key)) choices.push({ key, text });
   }
   return choices;
@@ -107,7 +107,7 @@ export function routeFutureXQuestion(
   return { kind: "open_text", choices: [], confidence: 0.8, reasons: ["canonical entity/category/score response"] };
 }
 
-function endTimeUtc(value: string): string | undefined {
+export function futureXEndTimeUtc(value: string): string | undefined {
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return `${value}T15:59:59.000Z`;
   const parsed = new Date(value);
   return Number.isFinite(parsed.getTime()) ? parsed.toISOString() : undefined;
@@ -140,7 +140,7 @@ export function futureXQuestionsToTasks(
       asOfUtc: options.asOfUtc,
       resolution: {
         criteria: question.prompt,
-        ...(endTimeUtc(question.end_time) ? { dateUtc: endTimeUtc(question.end_time) } : {})
+        ...(futureXEndTimeUtc(question.end_time) ? { dateUtc: futureXEndTimeUtc(question.end_time) } : {})
       },
       metadata: { level: question.level, title: question.en_title, revision: options.revision, route },
       ...(options.deadlineUtc ? { deadlineUtc: options.deadlineUtc } : {})

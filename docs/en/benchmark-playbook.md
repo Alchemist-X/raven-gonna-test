@@ -8,6 +8,8 @@ Sources: [site](https://futurex.live/), [online dataset](https://huggingface.co/
 
 The currently published SHA, `b7457c4d4229458767c666be72435c3afe45b0fd`, covers August 5–11 but its August 5 submission deadline has passed. Wait for a new SHA and README.
 
+After the deadline, this SHA is suitable only for explicitly labeled shadow/pilot work. Even unresolved tasks may now contain extra information unavailable on August 5, so pilot artifacts must remain `submissionEligible=false`.
+
 Human actions still required:
 
 1. Email `FutureX-ai@outlook.com` to confirm the next deadline, replacement policy, ensemble/human-review policy, and production numeric scorer.
