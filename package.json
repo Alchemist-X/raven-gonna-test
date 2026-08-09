@@ -1,0 +1,33 @@
+{
+  "name": "raven-gonna-test",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint:boundaries": "node scripts/check-boundaries.mjs",
+    "verify": "pnpm lint:boundaries && pnpm typecheck && pnpm test",
+    "cli": "pnpm build && node apps/benchmark-cli/dist/main.js",
+    "doctor": "pnpm cli doctor",
+    "futurex:run": "pnpm cli futurex run",
+    "futurex:validate": "pnpm cli futurex validate",
+    "forecastbench:run": "pnpm cli forecastbench run",
+    "forecastbench:validate": "pnpm cli forecastbench validate",
+    "prophet:predict": "pnpm cli prophet predict",
+    "prophet:serve": "pnpm build && node apps/prophet-arena-api/dist/main.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
+

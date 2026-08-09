@@ -1,0 +1,39 @@
+{
+  "forecast_due_date": "2026-08-16",
+  "question_set": "2026-08-16-llm.json",
+  "questions": [
+    {
+      "id": "market-1",
+      "source": "manifold",
+      "question": "Will the event happen?",
+      "resolution_criteria": "Resolves YES if the event happens.",
+      "background": "",
+      "market_info_open_datetime": "2026-01-01T00:00:00Z",
+      "market_info_close_datetime": "2027-01-01T00:00:00Z",
+      "market_info_resolution_criteria": "N/A",
+      "url": "https://manifold.markets/example",
+      "freeze_datetime": "2026-08-06T00:00:00Z",
+      "freeze_datetime_value": "0.7",
+      "freeze_datetime_value_explanation": "The market value.",
+      "source_intro": "Predict P(YES).",
+      "resolution_dates": "N/A"
+    },
+    {
+      "id": "SERIES",
+      "source": "fred",
+      "question": "Will the series be higher on {resolution_date} than on {forecast_due_date}?",
+      "resolution_criteria": "Compare the published values.",
+      "background": "",
+      "market_info_open_datetime": "2026-01-01T00:00:00Z",
+      "market_info_close_datetime": "2027-01-01T00:00:00Z",
+      "market_info_resolution_criteria": "N/A",
+      "url": "https://fred.stlouisfed.org/series/SERIES",
+      "freeze_datetime": "2026-08-06T00:00:00Z",
+      "freeze_datetime_value": "100",
+      "freeze_datetime_value_explanation": "The series value.",
+      "source_intro": "Predict P(YES).",
+      "resolution_dates": ["2026-08-23", "2026-09-16"]
+    }
+  ]
+}
+

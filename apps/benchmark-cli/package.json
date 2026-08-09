@@ -1,0 +1,13 @@
+{
+  "name": "@raven-gonna-test/benchmark-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@raven-gonna-test/forecast-core": "workspace:*",
+    "@raven-gonna-test/runtime": "workspace:*",
+    "@raven-gonna-test/benchmarks": "workspace:*",
+    "@raven-gonna-test/eval": "workspace:*"
+  }
+}
+

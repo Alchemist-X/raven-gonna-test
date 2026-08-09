@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/forecast-core" },
+    { "path": "./packages/runtime" },
+    { "path": "./packages/benchmarks" },
+    { "path": "./packages/eval" },
+    { "path": "./apps/benchmark-cli" },
+    { "path": "./apps/prophet-arena-api" }
+  ]
+}
+

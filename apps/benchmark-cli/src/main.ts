@@ -1,0 +1,729 @@
+#!/usr/bin/env node
+import { access } from "node:fs/promises";
+import path from "node:path";
+import {
+  ForecastEngine,
+  ForecastResultSchema,
+  type ForecastAnswer,
+  type ForecastResult,
+  type ForecastTask
+} from "@raven-gonna-test/forecast-core";
+import {
+  buildForecastBenchForecastSet,
+  buildFutureXSubmission,
+  buildProphetLegacyResponse,
+  buildProphetCurrentResponse,
+  discoverFutureXRevision,
+  expandForecastBenchQuestionSet,
+  ForecastBenchMarketSnapshotSchema,
+  ForecastBenchForecastSetSchema,
+  ForecastBenchQuestionSetSchema,
+  fetchForecastBenchQuestionSet,
+  fetchFutureXOnlinePinned,
+  futureXQuestionsToTasks,
+  FutureXQuestionsSchema,
+  FutureXRouteOverrideFileSchema,
+  normalizeProphetRequest,
+  policyForForecastBenchTask,
+  policyForFutureXTask,
+  policyForProphetTask,
+  prophetEventToTasks,
+  prophetFallbackAnswer,
+  routeFutureXQuestion,
+  scoreForecastBenchRaw,
+  scoreFutureX,
+  sourceBaseline,
+  validateForecastBenchCoverage,
+  validateForecastBenchLiveQuestionSet,
+  validateFutureXSubmission,
+  validateProphetCurrentResponse,
+  validateProphetLegacyResponse
+} from "@raven-gonna-test/benchmarks";
+import {
+  OpenAICompatiblePredictor,
+  loadPredictorConfig,
+  readJson,
+  readJsonLines,
+  runForecastBatch,
+  sha256File,
+  writeJsonAtomic,
+  writeJsonLinesAtomic
+} from "@raven-gonna-test/runtime";
+
+interface Args {
+  positional: string[];
+  flags: Map<string, string | true>;
+}
+
+function parseArgs(argv: string[]): Args {
+  const positional: string[] = [];
+  const flags = new Map<string, string | true>();
+  for (let index = 0; index < argv.length; index += 1) {
+    const value = argv[index]!;
+    if (!value.startsWith("--")) {
+      positional.push(value);
+      continue;
+    }
+    const equals = value.indexOf("=");
+    if (equals > 2) {
+      flags.set(value.slice(2, equals), value.slice(equals + 1));
+      continue;
+    }
+    const name = value.slice(2);
+    const next = argv[index + 1];
+    if (next && !next.startsWith("--")) {
+      flags.set(name, next);
+      index += 1;
+    } else {
+      flags.set(name, true);
+    }
+  }
+  return { positional, flags };
+}
+
+function flag(args: Args, name: string): string | undefined {
+  const value = args.flags.get(name);
+  return typeof value === "string" ? value : undefined;
+}
+
+function required(args: Args, name: string): string {
+  const value = flag(args, name);
+  if (!value) throw new Error(`--${name} is required.`);
+  return value;
+}
+
+function numberFlag(args: Args, name: string, fallback: number): number {
+  const value = flag(args, name);
+  if (value === undefined) return fallback;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) throw new Error(`--${name} must be a finite number.`);
+  return parsed;
+}
+
+function enabled(args: Args, name: string): boolean {
+  return args.flags.get(name) === true;
+}
+
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function preflightOutput(
+  args: Args,
+  output: string,
+  inputs: readonly string[] = [],
+  sidecars: readonly string[] = [`${output}.manifest.json`]
+): Promise<void> {
+  const target = path.resolve(output);
+  const conflicts = inputs.map((input) => path.resolve(input)).filter((input) => input === target);
+  if (conflicts.length > 0) throw new Error(`Output path must not equal an input path: ${output}`);
+  if (!enabled(args, "force")) {
+    for (const candidate of [output, ...sidecars]) {
+      if (await fileExists(candidate)) throw new Error(`${candidate} already exists; choose a new path or pass --force explicitly.`);
+    }
+  }
+}
+
+function requirePaidOptIn(args: Args, estimatedCalls: number): void {
+  if (!enabled(args, "allow-paid")) {
+    throw new Error(`This run may make about ${estimatedCalls} paid model calls. Re-run with --allow-paid after reviewing the estimate.`);
+  }
+  info(`paid-call estimate: ${estimatedCalls}; explicit --allow-paid present`);
+}
+
+function safeProviderUrl(value: string): string {
+  try {
+    const url = new URL(value);
+    url.username = "";
+    url.password = "";
+    url.search = "";
+    url.hash = "";
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    return "<invalid>";
+  }
+}
+
+function assertForecastBenchFilename(
+  output: string,
+  dueDate: string,
+  organization: string,
+  submissionNumber: number
+): void {
+  if (!Number.isInteger(submissionNumber) || submissionNumber < 1 || submissionNumber > 3) {
+    throw new Error("ForecastBench submission number must be 1, 2, or 3.");
+  }
+  const expected = `${dueDate}.${organization}.${submissionNumber}.json`;
+  if (path.basename(output) !== expected) {
+    throw new Error(`ForecastBench upload filename must be ${expected}; got ${path.basename(output)}.`);
+  }
+}
+
+async function loadRows(filePath: string): Promise<unknown[]> {
+  return filePath.endsWith(".jsonl") ? readJsonLines(filePath) : readJson<unknown[]>(filePath);
+}
+
+function info(message: string): void {
+  process.stderr.write(`[INFO] ${message}\n`);
+}
+
+function ok(message: string): void {
+  process.stderr.write(`[OK] ${message}\n`);
+}
+
+function showHelp(): void {
+  process.stdout.write(`raven-gonna-test benchmark CLI
+
+Commands:
+  doctor
+  futurex discover
+  futurex fetch --revision <sha> --output questions.json
+  futurex route --input questions.json --revision <sha> --output routes.json
+  futurex run --input questions.json --routes routes.json --revision <sha> --round <id> --as-of <ISO> --deadline <ISO> --output submission.jsonl --allow-paid
+  futurex validate --input questions.json --submission submission.jsonl [--routes routes.json] [--deadline <ISO>]
+  futurex score --gold resolved.json[l] --submission submission.jsonl [--profile github|paper]
+  forecastbench fetch --question-set YYYY-MM-DD-llm.json --output questions.json
+  forecastbench run --input questions.json --output submission.json --organization <name> --model-name <name> --model-organization <name> [--baseline-only | --allow-paid]
+  forecastbench validate --input questions.json --submission submission.json
+  forecastbench score --input questions.json --submission submission.json --resolutions resolutions.json[l]
+  prophet predict --input request.json --output response.json [--baseline-only | --allow-paid] [--residual-cap 0.05]
+
+No command uploads, emails, trades, or submits externally.
+`);
+}
+
+function createEngine() {
+  const config = loadPredictorConfig();
+  return {
+    config,
+    engine: new ForecastEngine(new OpenAICompatiblePredictor(config))
+  };
+}
+
+function baselineResult(task: ForecastTask, answer: ForecastAnswer, model: string, warning: string): ForecastResult {
+  return {
+    schemaVersion: "raven-gonna-test.forecast-result.v1",
+    taskId: task.taskId,
+    answer,
+    trials: [],
+    model,
+    strategyId: "deterministic-baseline-v1",
+    policyId: "baseline",
+    generatedAtUtc: new Date().toISOString(),
+    fallbackUsed: true,
+    warnings: [warning]
+  };
+}
+
+async function writeManifest(output: string, value: Record<string, unknown>): Promise<void> {
+  await writeJsonAtomic(`${output}.manifest.json`, {
+    schemaVersion: "raven-gonna-test.artifact-manifest.v1",
+    createdAtUtc: new Date().toISOString(),
+    output: path.basename(output),
+    sha256: await sha256File(output),
+    ...value
+  });
+}
+
+async function loadFutureXRouteOverrides(args: Args, expectedRevision?: string) {
+  const filePath = flag(args, "routes");
+  if (!filePath) return undefined;
+  const parsed = FutureXRouteOverrideFileSchema.parse(await readJson(filePath));
+  if (expectedRevision && parsed.revision.toLowerCase() !== expectedRevision.toLowerCase()) {
+    throw new Error(`FutureX route file is bound to ${parsed.revision}, not ${expectedRevision}.`);
+  }
+  return parsed;
+}
+
+async function loadForecastBenchMarketSnapshot(args: Args, questionSet: string, asOfUtc: string) {
+  const filePath = flag(args, "market-snapshot");
+  if (!filePath) return undefined;
+  const snapshot = ForecastBenchMarketSnapshotSchema.parse(await readJson(filePath));
+  if (snapshot.questionSet !== questionSet) throw new Error("ForecastBench market snapshot targets a different question set.");
+  const cutoff = new Date(asOfUtc).getTime();
+  if (new Date(snapshot.capturedAtUtc).getTime() > cutoff) throw new Error("Market snapshot was captured after the evidence cutoff.");
+  const priors = new Map<string, number>();
+  for (const quote of snapshot.quotes) {
+    if (new Date(quote.observedAtUtc).getTime() > cutoff) throw new Error(`Market quote ${quote.source}/${quote.id} is after the cutoff.`);
+    const key = JSON.stringify([quote.source, quote.id]);
+    if (priors.has(key)) throw new Error(`Duplicate market snapshot quote: ${key}`);
+    priors.set(key, quote.probability);
+  }
+  return { filePath, snapshot, priors };
+}
+
+async function loadResumeResults(
+  args: Args,
+  checkpointPath: string,
+  tasks: readonly ForecastTask[],
+  identity: Record<string, string | number | boolean>
+): Promise<Map<string, ForecastResult> | undefined> {
+  if (!enabled(args, "resume")) return undefined;
+  const checkpoint = await readJson<{
+    schemaVersion?: string;
+    identity?: Record<string, string | number | boolean>;
+    results?: unknown[];
+  }>(checkpointPath);
+  if (checkpoint.schemaVersion !== "raven-gonna-test.checkpoint.v1") throw new Error("Unsupported checkpoint schema.");
+  if (JSON.stringify(checkpoint.identity ?? {}) !== JSON.stringify(identity)) {
+    throw new Error("Checkpoint identity does not match this round/model/cutoff configuration.");
+  }
+  const allowed = new Set(tasks.map((task) => task.taskId));
+  const results = new Map<string, ForecastResult>();
+  for (const raw of checkpoint.results ?? []) {
+    const result = ForecastResultSchema.parse(raw);
+    if (!allowed.has(result.taskId)) throw new Error(`Checkpoint contains a task from another run: ${result.taskId}`);
+    if (results.has(result.taskId)) throw new Error(`Checkpoint contains duplicate result: ${result.taskId}`);
+    results.set(result.taskId, result);
+  }
+  info(`resume checkpoint accepted: ${results.size}/${tasks.length} tasks`);
+  return results;
+}
+
+async function commandDoctor(): Promise<void> {
+  const providerReady = Boolean(process.env.PREDICTOR_API_KEY?.trim());
+  process.stdout.write(`${JSON.stringify({
+    repository: "raven-gonna-test",
+    node: process.version,
+    executionMode: "inspect",
+    predictor: {
+      ready: providerReady,
+      model: process.env.PREDICTOR_MODEL ?? "foresight-v4",
+      baseUrl: safeProviderUrl(process.env.PREDICTOR_BASE_URL ?? "https://api.lightningrod.ai/v1/openai")
+    },
+    externalSubmission: "disabled-by-design",
+    trading: "not-present"
+  }, null, 2)}\n`);
+}
+
+async function commandFutureX(action: string | undefined, args: Args): Promise<void> {
+  if (action === "discover") {
+    info("execution mode: inspect; decision source: official Hugging Face metadata");
+    process.stdout.write(`${JSON.stringify(await discoverFutureXRevision(), null, 2)}\n`);
+    return;
+  }
+  if (action === "fetch") {
+    info("execution mode: inspect; decision source: pinned FutureX revision");
+    const revision = required(args, "revision");
+    const output = required(args, "output");
+    await preflightOutput(args, output);
+    const { questions, provenance } = await fetchFutureXOnlinePinned({ revision });
+    await writeJsonAtomic(output, questions);
+    await writeManifest(output, { benchmark: "futurex", revision, records: questions.length, provenance });
+    ok(`FutureX questions written: ${output}`);
+    return;
+  }
+  if (action === "route") {
+    info("execution mode: inspect; decision source: prompt parser plus required human review");
+    const input = required(args, "input");
+    const revision = required(args, "revision");
+    const output = required(args, "output");
+    if (!/^[0-9a-f]{40}$/i.test(revision)) throw new Error("--revision must be a full 40-character SHA.");
+    await preflightOutput(args, output, [input]);
+    const questions = FutureXQuestionsSchema.parse(await loadRows(input));
+    const routes = Object.fromEntries(questions.map((question) => {
+      const route = routeFutureXQuestion(question);
+      return [question.id, {
+        kind: route.kind,
+        ...(route.choices.length > 0 ? { choices: route.choices } : {}),
+        ...(route.rankCount ? { rankCount: route.rankCount } : {})
+      }];
+    }));
+    const artifact = FutureXRouteOverrideFileSchema.parse({
+      schemaVersion: "raven-gonna-test.futurex-routes.v1",
+      revision,
+      routes
+    });
+    await writeJsonAtomic(output, artifact);
+    await writeManifest(output, { benchmark: "futurex", revision, records: questions.length, kind: "route-review" });
+    ok(`FutureX revision-bound route review written: ${output}`);
+    return;
+  }
+  if (action === "validate") {
+    info("execution mode: inspect; decision source: FutureX submission contract");
+    const questions = await loadRows(required(args, "input"));
+    const submission = await loadRows(required(args, "submission"));
+    const deadline = flag(args, "deadline");
+    const routeFile = await loadFutureXRouteOverrides(args);
+    const options = {
+      ...(deadline ? { deadlineUtc: deadline } : {}),
+      ...(routeFile ? { routeOverrides: routeFile.routes } : {})
+    };
+    const report = validateFutureXSubmission(questions, submission, options);
+    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    if (!report.valid) process.exitCode = 6;
+    return;
+  }
+  if (action === "score") {
+    info("execution mode: inspect; decision source: pinned local scorer profile");
+    const gold = await loadRows(required(args, "gold"));
+    const submission = await loadRows(required(args, "submission"));
+    const profile = flag(args, "profile") === "paper"
+      ? { id: "paper-7d-sigma" as const, kind: "provided_sigma" as const }
+      : { id: "github-5pct-truth" as const, kind: "truth_relative" as const, ratio: 0.05 as const, zeroSigma: 0.01 as const };
+    process.stdout.write(`${JSON.stringify(scoreFutureX(gold, submission, profile), null, 2)}\n`);
+    return;
+  }
+  if (action === "run") {
+    info("execution mode: benchmark-run; decision source: user command; external submission disabled");
+    const input = required(args, "input");
+    const output = required(args, "output");
+    const revision = required(args, "revision");
+    const roundId = required(args, "round");
+    const asOfUtc = required(args, "as-of");
+    const deadlineUtc = required(args, "deadline");
+    const mode = flag(args, "mode") ?? "submission-candidate";
+    if (mode === "backtest") {
+      throw new Error("Live Predictor research is disabled for FutureX backtests; use frozen evidence replay instead.");
+    }
+    const asOf = new Date(asOfUtc).getTime();
+    const deadline = new Date(deadlineUtc).getTime();
+    if (!Number.isFinite(asOf) || !Number.isFinite(deadline) || asOf >= deadline) {
+      throw new Error("FutureX requires valid timestamps with --as-of earlier than --deadline.");
+    }
+    if (asOf > Date.now() + 60_000) throw new Error("FutureX --as-of cannot be in the future.");
+    if (Date.now() >= deadline) {
+      throw new Error("FutureX deadline has passed. Live-research replay is blocked; use a frozen-evidence backtest pipeline.");
+    }
+    const routeFile = await loadFutureXRouteOverrides(args, revision);
+    if (!routeFile) throw new Error("FutureX paid runs require a human-reviewed, revision-bound --routes file.");
+    const checkpointPath = `${output}.checkpoint.json`;
+    await preflightOutput(
+      args,
+      output,
+      [input, required(args, "routes")],
+      [`${output}.manifest.json`, ...(enabled(args, "resume") ? [] : [checkpointPath])]
+    );
+    const questions = await loadRows(input);
+    const { tasks } = futureXQuestionsToTasks(questions, {
+      revision,
+      roundId,
+      asOfUtc,
+      deadlineUtc,
+      routeOverrides: routeFile.routes
+    });
+    const { config, engine } = createEngine();
+    requirePaidOptIn(args, tasks.length * config.trials);
+    const checkpointIdentity = {
+      benchmark: "futurex",
+      revision,
+      roundId,
+      asOfUtc,
+      deadlineUtc,
+      model: config.model,
+      trials: config.trials
+    };
+    const resumeResults = await loadResumeResults(args, checkpointPath, tasks, checkpointIdentity);
+    const results = await runForecastBatch(tasks, engine, policyForFutureXTask, {
+      concurrency: config.concurrency,
+      checkpointPath,
+      checkpointIdentity,
+      ...(resumeResults ? { resumeResults } : {}),
+      forecastOptions: {
+        trials: config.trials,
+        concurrency: Math.min(config.trials, 3),
+        timeoutMs: config.timeoutMs,
+        reasoningEffort: config.reasoningEffort,
+        researchSources: config.researchSources,
+        probabilityFloor: 0.01
+      },
+      onProgress: (completed, total, task) => info(`FutureX ${completed}/${total}: ${task.origin.externalId}`)
+    });
+    const submission = buildFutureXSubmission(questions, results);
+    const report = validateFutureXSubmission(questions, submission, {
+      deadlineUtc,
+      routeOverrides: routeFile.routes,
+      requireComplete: true
+    });
+    if (!report.valid) throw new Error(report.errors.join("\n"));
+    await writeJsonLinesAtomic(output, submission);
+    await writeManifest(output, {
+      benchmark: "futurex",
+      revision,
+      roundId,
+      model: config.model,
+      records: submission.length,
+      mode,
+      evidenceCutoff: asOfUtc,
+      routeFile: path.basename(required(args, "routes")),
+      validation: report
+    });
+    ok(`FutureX validated artifact written: ${output}`);
+    return;
+  }
+  throw new Error(`Unknown FutureX action: ${action ?? "(missing)"}`);
+}
+
+async function commandForecastBench(action: string | undefined, args: Args): Promise<void> {
+  if (action === "fetch") {
+    info("execution mode: inspect; decision source: official dated ForecastBench question set");
+    const name = required(args, "question-set");
+    const output = required(args, "output");
+    await preflightOutput(args, output);
+    const set = await fetchForecastBenchQuestionSet(name);
+    await writeJsonAtomic(output, set);
+    await writeManifest(output, { benchmark: "forecastbench", questionSet: name, questions: set.questions.length });
+    ok(`ForecastBench questions written: ${output}`);
+    return;
+  }
+  if (action === "validate") {
+    info("execution mode: inspect; decision source: ForecastBench submission contract");
+    const questionSet = ForecastBenchQuestionSetSchema.parse(await readJson(required(args, "input")));
+    const submissionPath = required(args, "submission");
+    const submission = ForecastBenchForecastSetSchema.parse(await readJson(submissionPath));
+    const report = validateForecastBenchCoverage(questionSet, submission);
+    if ((flag(args, "mode") ?? "submission-candidate") !== "backtest") {
+      const profile = validateForecastBenchLiveQuestionSet(questionSet);
+      if (!profile.valid) report.errors.push(...profile.errors);
+      try {
+        assertForecastBenchFilename(
+          submissionPath,
+          questionSet.forecast_due_date,
+          submission.organization,
+          numberFlag(args, "submission-number", 1)
+        );
+      } catch (error) {
+        report.errors.push(error instanceof Error ? error.message : String(error));
+      }
+      report.valid = report.errors.length === 0;
+    }
+    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    if (!report.valid) process.exitCode = 6;
+    return;
+  }
+  if (action === "score") {
+    info("execution mode: inspect; decision source: raw local Brier (not official difficulty-adjusted)");
+    const questionSet = await readJson(required(args, "input"));
+    const submission = await readJson(required(args, "submission"));
+    const resolutionPath = required(args, "resolutions");
+    const resolutions = resolutionPath.endsWith(".jsonl")
+      ? await readJsonLines(resolutionPath)
+      : await readJson(resolutionPath);
+    process.stdout.write(`${JSON.stringify(scoreForecastBenchRaw(questionSet, submission, resolutions), null, 2)}\n`);
+    return;
+  }
+  if (action === "run") {
+    info("execution mode: benchmark-run; decision source: user command; GCS upload disabled");
+    const input = required(args, "input");
+    const output = required(args, "output");
+    const organization = required(args, "organization");
+    const modelOrganization = required(args, "model-organization");
+    const requestedModelName = flag(args, "model-name") ?? process.env.PREDICTOR_MODEL ?? "foresight-v4";
+    const mode = flag(args, "mode") ?? "submission-candidate";
+    const submissionNumber = numberFlag(args, "submission-number", 1);
+    const maximumFallbackRate = numberFlag(args, "max-fallback-rate", 0.02);
+    if (maximumFallbackRate < 0 || maximumFallbackRate > 1) throw new Error("--max-fallback-rate must be in [0,1].");
+    const questionSet = ForecastBenchQuestionSetSchema.parse(await readJson(input));
+    if (mode !== "backtest") {
+      const profile = validateForecastBenchLiveQuestionSet(questionSet);
+      if (!profile.valid) throw new Error(profile.errors.join("\n"));
+      assertForecastBenchFilename(output, questionSet.forecast_due_date, organization, submissionNumber);
+    }
+    const opening = new Date(`${questionSet.forecast_due_date}T00:00:00.000Z`).getTime();
+    const deadline = new Date(`${questionSet.forecast_due_date}T23:59:59.000Z`).getTime();
+    const asOfUtc = flag(args, "as-of") ?? (mode === "backtest"
+      ? new Date(opening).toISOString()
+      : new Date().toISOString());
+    const asOf = new Date(asOfUtc).getTime();
+    if (!Number.isFinite(asOf)) throw new Error("--as-of must be a valid ISO timestamp.");
+    if (mode !== "backtest" && asOf > Date.now() + 60_000) throw new Error("ForecastBench --as-of cannot be in the future.");
+    if (mode !== "backtest" && (asOf < opening || asOf >= deadline || Date.now() >= deadline)) {
+      throw new Error(`ForecastBench submission runs require ${new Date(opening).toISOString()} <= as-of < ${new Date(deadline).toISOString()} and an open deadline.`);
+    }
+    if (mode === "backtest" && !args.flags.has("baseline-only")) {
+      throw new Error("Live Predictor research is disabled for ForecastBench backtests; use --baseline-only or frozen evidence replay.");
+    }
+    const marketSnapshot = await loadForecastBenchMarketSnapshot(args, questionSet.question_set, asOfUtc);
+    const checkpointPath = `${output}.checkpoint.json`;
+    await preflightOutput(
+      args,
+      output,
+      [input, ...(marketSnapshot ? [marketSnapshot.filePath] : [])],
+      [`${output}.manifest.json`, ...(enabled(args, "resume") ? [] : [checkpointPath])]
+    );
+    const expanded = expandForecastBenchQuestionSet(questionSet, {
+      asOfUtc,
+      ...(marketSnapshot ? { marketPriorByQuestion: marketSnapshot.priors } : {})
+    });
+    let results: ForecastResult[];
+    let modelName = requestedModelName;
+    if (args.flags.has("baseline-only")) {
+      modelName = "source-safety-baseline-v1";
+      results = expanded.map((item) => {
+        const baseline = sourceBaseline(item, marketSnapshot?.priors);
+        return baselineResult(item.task, { kind: "binary", pYes: baseline.probability }, modelName, baseline.reason);
+      });
+    } else {
+      const { config, engine } = createEngine();
+      modelName = flag(args, "model-name") ?? config.model;
+      requirePaidOptIn(args, expanded.length * config.trials);
+      const checkpointIdentity = {
+        benchmark: "forecastbench",
+        questionSet: questionSet.question_set,
+        asOfUtc,
+        model: config.model,
+        trials: config.trials
+      };
+      const resumeResults = await loadResumeResults(
+        args,
+        checkpointPath,
+        expanded.map((item) => item.task),
+        checkpointIdentity
+      );
+      const byTask = new Map(expanded.map((item) => [item.task.taskId, item]));
+      results = await runForecastBatch(expanded.map((item) => item.task), engine, policyForForecastBenchTask, {
+        concurrency: config.concurrency,
+        checkpointPath,
+        checkpointIdentity,
+        ...(resumeResults ? { resumeResults } : {}),
+        fallbackFor: (task) => {
+          const item = byTask.get(task.taskId);
+          return item ? { kind: "binary", pYes: sourceBaseline(item, marketSnapshot?.priors).probability } : undefined;
+        },
+        forecastOptions: {
+          trials: config.trials,
+          concurrency: Math.min(config.trials, 3),
+          timeoutMs: config.timeoutMs,
+          reasoningEffort: config.reasoningEffort,
+          researchSources: config.researchSources,
+          priorWeight: numberFlag(args, "prior-weight", 0.6),
+          probabilityFloor: 0.01
+        },
+        onProgress: (completed, total, task, result) =>
+          info(`ForecastBench ${completed}/${total}: ${task.origin.source}/${task.origin.externalId}${result.fallbackUsed ? " [fallback]" : ""}`)
+      });
+    }
+    const forecastSet = buildForecastBenchForecastSet(questionSet, {
+      organization,
+      model: modelName,
+      modelOrganization
+    }, results);
+    const report = validateForecastBenchCoverage(questionSet, forecastSet);
+    if (!report.valid) throw new Error(report.errors.join("\n"));
+    const fallbackIds = results.filter((result) => result.fallbackUsed).map((result) => result.taskId);
+    const fallbackRate = results.length ? fallbackIds.length / results.length : 0;
+    if (!args.flags.has("baseline-only") && fallbackRate > maximumFallbackRate) {
+      throw new Error(`Fallback rate ${fallbackRate.toFixed(4)} exceeds maximum ${maximumFallbackRate.toFixed(4)}.`);
+    }
+    await writeJsonAtomic(output, forecastSet);
+    await writeManifest(output, {
+      benchmark: "forecastbench",
+      questionSet: forecastSet.question_set,
+      model: modelName,
+      rows: forecastSet.forecasts.length,
+      mode,
+      evidenceCutoff: asOfUtc,
+      questionSetSha256: await sha256File(input),
+      marketSnapshot: marketSnapshot ? {
+        file: path.basename(marketSnapshot.filePath),
+        sha256: await sha256File(marketSnapshot.filePath),
+        capturedAtUtc: marketSnapshot.snapshot.capturedAtUtc,
+        quotes: marketSnapshot.snapshot.quotes.length
+      } : null,
+      fallback: { count: fallbackIds.length, rate: fallbackRate, taskIds: fallbackIds },
+      validation: report
+    });
+    ok(`ForecastBench validated artifact written: ${output}`);
+    return;
+  }
+  throw new Error(`Unknown ForecastBench action: ${action ?? "(missing)"}`);
+}
+
+async function commandProphet(action: string | undefined, args: Args): Promise<void> {
+  if (action !== "predict") throw new Error(`Unknown Prophet action: ${action ?? "(missing)"}`);
+  info("execution mode: benchmark-run; decision source: supplied Prophet event; no trading");
+  const input = required(args, "input");
+  const output = required(args, "output");
+  const checkpointPath = `${output}.checkpoint.json`;
+  await preflightOutput(
+    args,
+    output,
+    [input],
+    [`${output}.manifest.json`, ...(enabled(args, "resume") ? [] : [checkpointPath])]
+  );
+  const residualCap = numberFlag(args, "residual-cap", 0.05);
+  if (residualCap < 0 || residualCap > 1) throw new Error("--residual-cap must be in [0,1].");
+  const event = normalizeProphetRequest(await readJson(input), "auto");
+  const asOfUtc = flag(args, "as-of") ?? new Date().toISOString();
+  const asOf = new Date(asOfUtc).getTime();
+  if (!Number.isFinite(asOf)) throw new Error("--as-of must be a valid ISO timestamp.");
+  if (asOf > Date.now() + 60_000) throw new Error("Prophet --as-of cannot be in the future.");
+  if (event.closeTime && asOf >= new Date(event.closeTime).getTime()) throw new Error("Prophet event is already closed at the requested as-of time.");
+  const tasks = prophetEventToTasks(event, asOfUtc);
+  let results: ForecastResult[] = [];
+  if (!args.flags.has("baseline-only")) {
+    const { config, engine } = createEngine();
+    requirePaidOptIn(args, tasks.length * config.trials);
+    const checkpointIdentity = {
+      benchmark: "prophet-arena",
+      eventId: event.eventId,
+      asOfUtc,
+      model: config.model,
+      trials: config.trials
+    };
+    const resumeResults = await loadResumeResults(args, checkpointPath, tasks, checkpointIdentity);
+    results = await runForecastBatch(tasks, engine, policyForProphetTask, {
+      concurrency: config.concurrency,
+      checkpointPath,
+      checkpointIdentity,
+      ...(resumeResults ? { resumeResults } : {}),
+      fallbackFor: prophetFallbackAnswer,
+      forecastOptions: {
+        trials: config.trials,
+        concurrency: Math.min(config.trials, 3),
+        timeoutMs: config.timeoutMs,
+        reasoningEffort: config.reasoningEffort,
+        researchSources: config.researchSources,
+        priorWeight: numberFlag(args, "prior-weight", 0.7),
+        probabilityFloor: 0.001
+      },
+      onProgress: (completed, total, task, result) =>
+        info(`Prophet ${completed}/${total}: ${task.metadata.outcome as string}${result.fallbackUsed ? " [fallback]" : ""}`)
+    });
+  }
+  const response = event.wireVersion === "legacy"
+    ? buildProphetLegacyResponse(event, results, { residualCap })
+    : buildProphetCurrentResponse(event, results, { residualCap });
+  const report = event.wireVersion === "legacy"
+    ? validateProphetLegacyResponse(event, response)
+    : validateProphetCurrentResponse(event, response);
+  if (!report.valid) throw new Error(report.errors.join("\n"));
+  await writeJsonAtomic(output, response);
+  await writeManifest(output, {
+    benchmark: "prophet-arena",
+    eventId: event.eventId,
+    wireVersion: event.wireVersion,
+    evidenceCutoff: asOfUtc,
+    mode: args.flags.has("baseline-only") ? "market-prior-baseline" : "predictor-bounded-residual",
+    fallback: {
+      count: results.filter((result) => result.fallbackUsed).length,
+      taskIds: results.filter((result) => result.fallbackUsed).map((result) => result.taskId)
+    },
+    validation: report
+  });
+  ok(`Prophet response written: ${output}`);
+}
+
+async function main(): Promise<void> {
+  const args = parseArgs(process.argv.slice(2));
+  const [command, action] = args.positional;
+  if (!command || command === "help" || args.flags.has("help")) {
+    showHelp();
+    return;
+  }
+  if (command === "doctor") return commandDoctor();
+  if (command === "futurex") return commandFutureX(action, args);
+  if (command === "forecastbench") return commandForecastBench(action, args);
+  if (command === "prophet") return commandProphet(action, args);
+  throw new Error(`Unknown command: ${command}`);
+}
+
+main().catch((error) => {
+  process.stderr.write(`[ERR] ${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
+  process.exitCode = 1;
+});

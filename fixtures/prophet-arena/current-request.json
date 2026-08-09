@@ -1,0 +1,14 @@
+{
+  "event_ticker": "EXAMPLE-2026",
+  "title": "Example event",
+  "category": "macro",
+  "rules": "Each market resolves independently according to the named outcome.",
+  "close_time": "2026-12-31T23:59:59Z",
+  "outcomes": ["Outcome A", "Outcome B"],
+  "resolved_outcome": null,
+  "market_stats": {
+    "Outcome A": { "last_price": 0.6, "yes_ask": 0.62, "no_ask": 0.42 },
+    "Outcome B": { "last_price": 0.3, "yes_ask": 0.32, "no_ask": 0.72 }
+  }
+}
+

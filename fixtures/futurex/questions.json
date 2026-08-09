@@ -1,0 +1,31 @@
+[
+  {
+    "id": "fx-single",
+    "prompt": "Who will win?\nA. Alpha\nB. Beta\nFinal answer must be boxed.",
+    "end_time": "2026-08-18",
+    "level": 1,
+    "en_title": "Who will win?"
+  },
+  {
+    "id": "fx-multi",
+    "prompt": "Select all that apply.\nA. Alpha\nB. Beta\nC. Gamma",
+    "end_time": "2026-08-18",
+    "level": 2,
+    "en_title": "Which outcomes occur?"
+  },
+  {
+    "id": "fx-number",
+    "prompt": "What will the closing price be? Return a numeric prediction.",
+    "end_time": "2026-08-18",
+    "level": 3,
+    "en_title": "What will the closing price be?"
+  },
+  {
+    "id": "fx-ranking",
+    "prompt": "Rank the top 3 in order.\nA. Alpha\nB. Beta\nC. Gamma",
+    "end_time": "2026-08-18",
+    "level": 4,
+    "en_title": "Rank the top 3"
+  }
+]
+
