@@ -17,6 +17,7 @@ As of 2026-08-09, the first runnable version includes:
 - independent trials, logit pooling, prior shrinkage, probability constraints, and Platt calibration;
 - explicit information policies and evidence cutoffs;
 - true pinned-revision FutureX Parquet ingestion through `/resolve/<SHA>/...`, source hashing, routing, JSONL export/validation, and a versioned local scorer;
+- FutureX inventory, explicit route-review state, a research-snapshot validator, and an ID-selected research-only pilot that never emits an official attachment;
 - ForecastBench dynamic-horizon expansion, source safety baselines, 100% coverage validation, and raw Brier scoring;
 - Prophet Arena current/legacy schemas, two-sided-ask midpoint priors, bounded residuals, geometry projection, and a Bearer-authenticated HTTP service;
 - resumable validated checkpoints, no-clobber outputs, explicit paid-call opt-in, hashes, a process-wide concurrency gate, boundary checks, and offline fixtures.
@@ -52,6 +53,12 @@ pnpm cli futurex discover
 pnpm cli futurex fetch --revision <40-char-sha> --output <questions.json>
 pnpm cli futurex route --input <questions.json> --revision <40-char-sha> \
   --output <routes.json>
+pnpm cli futurex inspect --input <questions.json> --routes <routes.json> --as-of <ISO>
+pnpm cli futurex pilot --input <questions.json> --routes <routes.json> \
+  --revision <sha> --round <id> --as-of <ISO> --ids <id-1,id-2> \
+  --output <pilot.json> --allow-paid
+pnpm cli futurex research-validate --input <questions.json> --routes <routes.json> \
+  --snapshot <research-snapshot.json> --revision <sha>
 pnpm cli futurex run --input <questions.json> --routes <routes.json> \
   --revision <sha> --round <id> --as-of <ISO> --deadline <ISO> \
   --output <submission.jsonl> --allow-paid
@@ -72,6 +79,8 @@ pnpm prophet:serve
 ```
 
 Remove `--baseline-only` to call the configured Predictor. The CLI still does not perform an external submission.
+
+Generated FutureX routes start as `pending`; review each item before changing it to `approved` or `edited` with `reviewedAtUtc`. Paid pilot and official-candidate runs fail before model calls when selected routes remain pending. Pilot and research-snapshot artifacts always carry `submissionEligible=false` and reject live research at or after a task's `end_time`.
 
 Paid model calls additionally require `--allow-paid`. Existing outputs are not overwritten unless `--force` is explicit. The Prophet service binds to `127.0.0.1` by default; a non-loopback bind requires a 32+ byte Bearer token, and startup without a Predictor key requires explicit `PROPHET_ALLOW_BASELINE_ONLY=1`. Production onboarding still requires HTTPS and a compatibility test.
 

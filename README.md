@@ -17,6 +17,7 @@
 - 多次独立 trial、logit pooling、市场先验收缩、概率约束和 Platt calibration；
 - 显式 `InformationPolicy`、证据截止时间与 market-data 隔离；
 - FutureX 从 `/resolve/<SHA>/...parquet` 真正固定版本拉题并记录文件 hash，提供题型路由、JSONL 导出/校验和版本化本地 scorer；
+- FutureX inventory、显式 route-review 状态、研究快照 validator，以及只跑指定 ID 且永不生成官方附件的 research-only pilot；
 - ForecastBench 动态 horizon 展开、source safety baseline、100% coverage validator 和 raw Brier scorer；
 - Prophet Arena current/legacy schema、双边 ask 中点先验、±5pp residual、几何投影、Bearer HTTP 服务；
 - 可校验恢复的 checkpoint、默认禁止覆盖、付费显式确认、artifact hash、全局并发闸门、边界检查和离线 fixtures。
@@ -63,6 +64,33 @@ pnpm cli futurex route \
   --revision <40-char-sha> \
   --output runtime-artifacts/futurex/<round>/routes.json
 
+# 查看题型、Level 权重、未到结算时点数量和 route-review 状态
+pnpm cli futurex inspect \
+  --input runtime-artifacts/futurex/<round>/questions.json \
+  --routes runtime-artifacts/futurex/<round>/routes.json \
+  --as-of <ISO-8601>
+
+# route 命令生成的条目默认为 pending；逐题核对后才能改为 approved/edited，
+# 并填写 reviewedAtUtc。正式 run 与付费 pilot 都会在调用模型前阻断 pending route。
+
+# 仅研究指定 ID；输出包含完整 ForecastResult，且固定 submissionEligible=false
+pnpm cli futurex pilot \
+  --input runtime-artifacts/futurex/<round>/questions.json \
+  --routes runtime-artifacts/futurex/<round>/routes.json \
+  --revision <40-char-sha> \
+  --round <round-id> \
+  --as-of <ISO-8601> \
+  --ids <id-1,id-2,id-3> \
+  --output runtime-artifacts/futurex/<round>/pilot.json \
+  --allow-paid
+
+# 校验人工/ensemble 研究快照；允许部分覆盖，但永远不可作为提交附件
+pnpm cli futurex research-validate \
+  --input runtime-artifacts/futurex/<round>/questions.json \
+  --routes runtime-artifacts/futurex/<round>/routes.json \
+  --snapshot runtime-artifacts/futurex/<round>/research-snapshot.json \
+  --revision <40-char-sha>
+
 pnpm cli futurex run \
   --input runtime-artifacts/futurex/<round>/questions.json \
   --routes runtime-artifacts/futurex/<round>/routes.json \
@@ -80,6 +108,7 @@ pnpm cli futurex validate \
 ```
 
 当前 FutureX 没有官方提交 API。最终文件需要人工邮件发送。
+`pilot` 和 research snapshot 与正式 submission candidate 是不同协议：它们固定写入 `submissionEligible=false`，并拒绝在 `as-of` 已达到题目 `end_time` 后继续 live research。
 
 ### ForecastBench
 

@@ -8,6 +8,8 @@
 
 当前 SHA `b7457c4d4229458767c666be72435c3afe45b0fd` 对应 8/5–8/11 事件，但提交截止已经在 8 月 5 日过去，不能补交。下一轮必须等官方 SHA/README 更新。
 
+此 SHA 在截止后只能用于明确标记的 shadow/pilot。即使题目尚未结算，也不能把现在获得的额外信息冒充 8 月 5 日前的正式预测；pilot 必须保持 `submissionEligible=false`。
+
 ### 还需人工完成
 
 1. 发信 `FutureX-ai@outlook.com`，确认下一轮 deadline、重提覆盖、ensemble/人工 review 和 production numeric scorer。

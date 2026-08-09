@@ -9,6 +9,7 @@ import {
   type ForecastTask
 } from "@raven-gonna-test/forecast-core";
 import {
+  analyzeFutureXQuestions,
   buildForecastBenchForecastSet,
   buildFutureXSubmission,
   buildProphetLegacyResponse,
@@ -20,6 +21,7 @@ import {
   ForecastBenchQuestionSetSchema,
   fetchForecastBenchQuestionSet,
   fetchFutureXOnlinePinned,
+  futureXEndTimeUtc,
   futureXQuestionsToTasks,
   FutureXQuestionsSchema,
   FutureXRouteOverrideFileSchema,
@@ -32,10 +34,12 @@ import {
   routeFutureXQuestion,
   scoreForecastBenchRaw,
   scoreFutureX,
+  selectFutureXQuestions,
   sourceBaseline,
   validateForecastBenchCoverage,
   validateForecastBenchLiveQuestionSet,
   validateFutureXSubmission,
+  validateFutureXResearchSnapshot,
   validateProphetCurrentResponse,
   validateProphetLegacyResponse
 } from "@raven-gonna-test/benchmarks";
@@ -184,6 +188,9 @@ Commands:
   futurex discover
   futurex fetch --revision <sha> --output questions.json
   futurex route --input questions.json --revision <sha> --output routes.json
+  futurex inspect --input questions.json [--routes routes.json] [--as-of <ISO>]
+  futurex research-validate --input questions.json --routes routes.json --snapshot snapshot.json --revision <sha>
+  futurex pilot --input questions.json --routes routes.json --revision <sha> --round <id> --as-of <ISO> --ids <id,id,...> --output pilot.json --allow-paid
   futurex run --input questions.json --routes routes.json --revision <sha> --round <id> --as-of <ISO> --deadline <ISO> --output submission.jsonl --allow-paid
   futurex validate --input questions.json --submission submission.jsonl [--routes routes.json] [--deadline <ISO>]
   futurex score --gold resolved.json[l] --submission submission.jsonl [--profile github|paper]
@@ -238,6 +245,52 @@ async function loadFutureXRouteOverrides(args: Args, expectedRevision?: string) 
     throw new Error(`FutureX route file is bound to ${parsed.revision}, not ${expectedRevision}.`);
   }
   return parsed;
+}
+
+function futureXIds(args: Args): string[] {
+  const raw = required(args, "ids");
+  const ids = raw.split(",").map((value) => value.trim()).filter(Boolean);
+  if (ids.length === 0) throw new Error("--ids must contain at least one FutureX id.");
+  if (new Set(ids).size !== ids.length) throw new Error("--ids contains duplicate FutureX ids.");
+  return ids;
+}
+
+function assertFutureXRoutesReviewed(
+  questionIds: readonly string[],
+  routes: Awaited<ReturnType<typeof loadFutureXRouteOverrides>>
+): void {
+  if (!routes) throw new Error("A revision-bound --routes file is required.");
+  const problems: string[] = [];
+  for (const id of questionIds) {
+    const route = routes.routes[id];
+    if (!route) {
+      problems.push(`${id}: missing route`);
+      continue;
+    }
+    if (route.review?.status !== "approved" && route.review?.status !== "edited") {
+      problems.push(`${id}: route review is ${route.review?.status ?? "missing"}`);
+    } else if (!route.review.reviewedAtUtc) {
+      problems.push(`${id}: approved route has no reviewedAtUtc`);
+    }
+  }
+  if (problems.length > 0) {
+    throw new Error(`FutureX requires explicit route review before model calls:\n${problems.join("\n")}`);
+  }
+}
+
+function assertFutureXTasksOpenAt(
+  questions: readonly { id: string; end_time: string }[],
+  asOfUtc: string
+): void {
+  const asOf = new Date(asOfUtc).getTime();
+  if (!Number.isFinite(asOf)) throw new Error("FutureX --as-of must be a valid timestamp.");
+  const closed = questions.flatMap((question) => {
+    const endUtc = futureXEndTimeUtc(question.end_time);
+    return !endUtc || asOf >= new Date(endUtc).getTime() ? [question.id] : [];
+  });
+  if (closed.length > 0) {
+    throw new Error(`FutureX live research cannot include tasks at/after end_time: ${closed.join(", ")}`);
+  }
 }
 
 async function loadForecastBenchMarketSnapshot(args: Args, questionSet: string, asOfUtc: string) {
@@ -331,7 +384,9 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       return [question.id, {
         kind: route.kind,
         ...(route.choices.length > 0 ? { choices: route.choices } : {}),
-        ...(route.rankCount ? { rankCount: route.rankCount } : {})
+        ...(route.rankCount ? { rankCount: route.rankCount } : {}),
+        inference: { kind: route.kind, confidence: route.confidence, reasons: route.reasons },
+        review: { status: "pending" as const }
       }];
     }));
     const artifact = FutureXRouteOverrideFileSchema.parse({
@@ -342,6 +397,31 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     await writeJsonAtomic(output, artifact);
     await writeManifest(output, { benchmark: "futurex", revision, records: questions.length, kind: "route-review" });
     ok(`FutureX revision-bound route review written: ${output}`);
+    return;
+  }
+  if (action === "inspect") {
+    info("execution mode: inspect; decision source: pinned questions plus route detector");
+    const questions = FutureXQuestionsSchema.parse(await loadRows(required(args, "input")));
+    const routeFile = await loadFutureXRouteOverrides(args);
+    const report = analyzeFutureXQuestions(questions, {
+      ...(routeFile ? { routeOverrides: routeFile.routes } : {}),
+      ...(flag(args, "as-of") ? { asOfUtc: flag(args, "as-of")! } : {})
+    });
+    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    return;
+  }
+  if (action === "research-validate") {
+    info("execution mode: inspect; decision source: research-only snapshot contract");
+    const revision = required(args, "revision");
+    const questions = FutureXQuestionsSchema.parse(await loadRows(required(args, "input")));
+    const routeFile = await loadFutureXRouteOverrides(args, revision);
+    const snapshot = await readJson(required(args, "snapshot"));
+    const report = validateFutureXResearchSnapshot(questions, snapshot, {
+      expectedRevision: revision,
+      ...(routeFile ? { routeOverrides: routeFile.routes } : {})
+    });
+    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    if (!report.valid) process.exitCode = 6;
     return;
   }
   if (action === "validate") {
@@ -399,7 +479,9 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       [input, required(args, "routes")],
       [`${output}.manifest.json`, ...(enabled(args, "resume") ? [] : [checkpointPath])]
     );
-    const questions = await loadRows(input);
+    const questions = FutureXQuestionsSchema.parse(await loadRows(input));
+    assertFutureXTasksOpenAt(questions, asOfUtc);
+    assertFutureXRoutesReviewed(questions.map((question) => question.id), routeFile);
     const { tasks } = futureXQuestionsToTasks(questions, {
       revision,
       roundId,
@@ -454,6 +536,94 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       validation: report
     });
     ok(`FutureX validated artifact written: ${output}`);
+    return;
+  }
+  if (action === "pilot") {
+    info("execution mode: research-pilot; decision source: explicit id selection; submission eligibility: false");
+    const input = required(args, "input");
+    const output = required(args, "output");
+    const revision = required(args, "revision");
+    const roundId = required(args, "round");
+    const asOfUtc = required(args, "as-of");
+    const ids = futureXIds(args);
+    const asOf = new Date(asOfUtc).getTime();
+    if (!Number.isFinite(asOf) || asOf > Date.now() + 60_000) throw new Error("FutureX pilot --as-of must be valid and not in the future.");
+    const routePath = required(args, "routes");
+    const routeFile = await loadFutureXRouteOverrides(args, revision);
+    const allQuestions = FutureXQuestionsSchema.parse(await loadRows(input));
+    const questions = selectFutureXQuestions(allQuestions, ids);
+    assertFutureXTasksOpenAt(questions, asOfUtc);
+    assertFutureXRoutesReviewed(ids, routeFile);
+    const checkpointPath = `${output}.checkpoint.json`;
+    await preflightOutput(args, output, [input, routePath], [`${output}.manifest.json`, checkpointPath]);
+    const inputSha256 = await sha256File(input);
+    const routesSha256 = await sha256File(routePath);
+    const { tasks } = futureXQuestionsToTasks(questions, {
+      revision,
+      roundId,
+      asOfUtc,
+      routeOverrides: routeFile!.routes
+    });
+    const { config, engine } = createEngine();
+    requirePaidOptIn(args, tasks.length * config.trials);
+    const checkpointIdentity = {
+      benchmark: "futurex-pilot",
+      revision,
+      roundId,
+      asOfUtc,
+      inputSha256,
+      routesSha256,
+      selection: ids.join(","),
+      model: config.model,
+      trials: config.trials,
+      reasoningEffort: config.reasoningEffort,
+      researchSources: config.researchSources.join(",")
+    };
+    const results = await runForecastBatch(tasks, engine, policyForFutureXTask, {
+      concurrency: config.concurrency,
+      checkpointPath,
+      checkpointEvery: 1,
+      checkpointIdentity,
+      forecastOptions: {
+        trials: config.trials,
+        concurrency: Math.min(config.trials, 3),
+        timeoutMs: config.timeoutMs,
+        reasoningEffort: config.reasoningEffort,
+        researchSources: config.researchSources,
+        probabilityFloor: 0.01
+      },
+      onProgress: (completed, total, task, result) =>
+        info(`FutureX pilot ${completed}/${total}: ${task.origin.externalId}${result.fallbackUsed ? " [fallback]" : ""}`)
+    });
+    const artifact = {
+      schemaVersion: "raven-gonna-test.futurex-pilot.v1",
+      status: "research_only",
+      submissionEligible: false,
+      evidenceCutoffVerified: false,
+      revision,
+      roundId,
+      asOfUtc,
+      generatedAtUtc: new Date().toISOString(),
+      totalQuestionCount: allQuestions.length,
+      selectedIds: ids,
+      results
+    };
+    await writeJsonAtomic(output, artifact);
+    await writeManifest(output, {
+      benchmark: "futurex",
+      mode: "research-pilot",
+      submissionEligible: false,
+      evidenceCutoffVerified: false,
+      revision,
+      roundId,
+      model: config.model,
+      records: results.length,
+      inputSha256,
+      routesSha256,
+      selectedIds: ids,
+      checkpoint: path.basename(checkpointPath)
+    });
+    ok(`FutureX research-only pilot written: ${output}`);
     return;
   }
   throw new Error(`Unknown FutureX action: ${action ?? "(missing)"}`);

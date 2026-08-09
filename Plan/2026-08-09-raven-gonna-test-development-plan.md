@@ -22,6 +22,7 @@
 - [x] independent trials、logit aggregation、prior shrinkage、Platt calibration。
 - [x] baseline-first、timeout、AbortSignal、并发、checkpoint、hash manifest。
 - [x] FutureX fetch/route/run/export/validate/score。
+- [x] FutureX inventory、显式 route-review gate、ID 子集 pilot、research snapshot validator 与 per-task end-time gate。
 - [x] ForecastBench fetch/expand/run/export/coverage/raw score/source baselines。
 - [x] Prophet current/legacy normalize、market prior、bounded residual、geometry、HTTP service。
 - [x] 禁交易依赖和 core boundary gate。
@@ -93,4 +94,3 @@
 - 基础代码已经实现并通过本地验收。
 - P0.5 的外部注册、付费整轮和公网部署需要用户提供账号/secret/预算或明确授权。
 - P1/P2 可继续本地开发，但任何外部提交、公开部署或付费大批量运行前必须再次确认。
-
