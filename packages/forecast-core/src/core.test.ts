@@ -110,3 +110,48 @@ describe("evidence policy", () => {
     }, policy)).toThrow(/forbids prediction-market prices/);
   });
 });
+
+describe("numeric vs probability parsing", () => {
+  const numericTask = (unit?: string): ForecastTask =>
+    ForecastTaskSchema.parse({
+      ...base,
+      taskId: "n1",
+      kind: "numeric",
+      prompt: "What exact CPI rate will be reported?",
+      ...(unit ? { unit } : {})
+    });
+
+  const response = (content: string) => ({ content, citations: [] });
+
+  it("keeps a measured percentage at its published scale", () => {
+    // Gold for "what exact CPI rate" is 2.7. Converting to 0.027 scores exactly
+    // 0 under sigma = 5% * |2.7| = 0.135.
+    expect(parseModelAnswer(numericTask(), response('<answer>{"value": "2.7%"}</answer>'))).toMatchObject({
+      kind: "numeric",
+      value: 2.7
+    });
+    expect(parseModelAnswer(numericTask(), response('<answer>{"value": "1,234.5"}</answer>'))).toMatchObject({
+      value: 1234.5
+    });
+  });
+
+  it("still reads a probability percentage as a fraction", () => {
+    const binaryTask = ForecastTaskSchema.parse({ ...base, taskId: "b1", kind: "binary_probability" });
+    expect(parseModelAnswer(binaryTask, response('<answer>{"probability": "62%"}</answer>'))).toMatchObject({
+      kind: "binary",
+      pYes: 0.62
+    });
+  });
+
+  it("salvages a figure from prose instead of deleting the trial", () => {
+    const prose = "After weighing the evidence I expect the rate to print at 3.1% next week.";
+    expect(parseModelAnswer(numericTask(), response(prose))).toMatchObject({ value: 3.1 });
+  });
+
+  it("carries the published field name through as the unit", () => {
+    expect(parseModelAnswer(numericTask("revenue_usd_millions"), response('<answer>{"value": 3900}</answer>'))).toMatchObject({
+      value: 3900,
+      unit: "revenue_usd_millions"
+    });
+  });
+});

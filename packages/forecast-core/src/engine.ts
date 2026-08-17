@@ -35,11 +35,31 @@ function extractJson(content: string): unknown {
   return extractJsonLenient(content);
 }
 
-function parseNumber(value: unknown): number {
+/**
+ * A probability written as a percentage means a fraction: "62%" is 0.62.
+ */
+function parseProbability(value: unknown): number {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value === "string") {
     const parsed = Number(value.replace(/%$/, ""));
     if (Number.isFinite(parsed)) return value.trim().endsWith("%") ? parsed / 100 : parsed;
+  }
+  throw new Error(`Expected a finite number, received ${JSON.stringify(value)}.`);
+}
+
+/**
+ * A measured quantity written as a percentage keeps its scale: an answer of
+ * "2.7%" to "what exact CPI rate" is 2.7, because the published value — and so
+ * the grading truth — is 2.7. Dividing by 100 here yields 0.027 against a
+ * tolerance of sigma = 5% * |2.7| = 0.135, which scores exactly 0. Percentage-
+ * valued questions dominate the L3/L4 numeric pool, so this distinction is
+ * worth a great deal of score.
+ */
+function parseQuantity(value: unknown): number {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value.trim().replace(/%$/, "").replace(/(\d),(\d{3})/g, "$1$2"));
+    if (Number.isFinite(parsed)) return parsed;
   }
   throw new Error(`Expected a finite number, received ${JSON.stringify(value)}.`);
 }
@@ -57,7 +77,7 @@ export function parseModelAnswer(task: ForecastTask, response: ModelResponse): F
       const source = typeof parsed === "object" && parsed !== null
         ? (parsed as Record<string, unknown>).pYes ?? (parsed as Record<string, unknown>).probability ?? parsed
         : parsed;
-      return ForecastAnswerSchema.parse({ kind: "binary", pYes: Math.min(1, Math.max(0, parseNumber(source))) });
+      return ForecastAnswerSchema.parse({ kind: "binary", pYes: Math.min(1, Math.max(0, parseProbability(source))) });
     }
     case "categorical": {
       const raw = typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : {};
@@ -116,11 +136,11 @@ export function parseModelAnswer(task: ForecastTask, response: ModelResponse): F
     case "numeric": {
       const raw = typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : {};
       const supplied = raw.mean ?? raw.value ?? parsed;
-      // parseNumber throws on prose. Scrape a figure out of the reply instead of
-      // deleting the trial — and via salvageNumber, which keeps a percentage at
-      // its point value (gold for "what exact CPI rate" is 2.7, not 0.027).
+      // parseQuantity throws on prose. Scrape a figure out of the reply instead
+      // of deleting the trial — and via salvageNumber, which likewise keeps a
+      // percentage at its point value.
       const salvaged = typeof supplied === "string" ? salvageNumber(supplied) : null;
-      const value = salvaged ?? parseNumber(supplied);
+      const value = salvaged ?? parseQuantity(supplied);
       const standardDeviation = Number(raw.standard_deviation ?? raw.standardDeviation);
       const answer: ForecastAnswer = { kind: "numeric", value };
       if (task.unit !== undefined) answer.unit = task.unit;
@@ -214,10 +234,11 @@ export class ForecastEngine {
       if (options.signal?.aborted) abortFromParent();
       else options.signal?.addEventListener("abort", abortFromParent, { once: true });
       const timeout = setTimeout(() => controller.abort(new Error(`Trial timed out after ${timeoutMs}ms.`)), timeoutMs);
+      const role = roles[trial % roles.length] ?? "";
       try {
         const request: ModelRequest = {
           ...baseRequest,
-          userPrompt: `${baseRequest.userPrompt}\n\nIndependent trial role: ${roles[trial % roles.length]}. Do the analysis independently before returning the required answer.`
+          userPrompt: `${baseRequest.userPrompt}\n\nIndependent trial role: ${role}. Do the analysis independently before returning the required answer.`
         };
         const response = await withAbort(this.model.generate(request, controller.signal), controller.signal);
         const answer = parseModelAnswer(task, response);
@@ -228,6 +249,10 @@ export class ForecastEngine {
           rawResponse: response.content,
           latencyMs: Math.max(0, this.clock.now().getTime() - started)
         };
+        // Reasoning is the only thing that makes a resolved miss diagnosable,
+        // so keep whatever the provider exposed rather than dropping it here.
+        if (response.thinking !== undefined) result.thinking = response.thinking;
+        if (role) result.role = role;
         if (response.usage !== undefined) result.usage = response.usage;
         return { ok: true as const, result };
       } catch (error) {

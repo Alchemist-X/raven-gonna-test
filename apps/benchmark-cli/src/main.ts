@@ -251,6 +251,52 @@ async function writeManifest(output: string, value: Record<string, unknown>): Pr
   });
 }
 
+/**
+ * Persist the reasoning behind each submitted answer as a first-class artifact.
+ *
+ * The submission itself is only `{id, prediction}`, and the full ForecastResult
+ * previously survived solely inside the resume checkpoint — a file that exists
+ * to restart a crashed run, gets overwritten, and is keyed by run identity. So
+ * once a round resolved there was no supported way to ask "why did we answer
+ * that". This writes the trials, their per-trial roles, reasoning and citations
+ * next to the submission so a miss is diagnosable after the fact.
+ */
+async function writeReasoningArtifact(
+  output: string,
+  tasks: readonly ForecastTask[],
+  results: readonly ForecastResult[],
+  submission: readonly { id: string; prediction: string }[]
+): Promise<string> {
+  const taskById = new Map(tasks.map((task) => [task.taskId, task]));
+  const predictionByExternalId = new Map(submission.map((row) => [row.id, row.prediction]));
+  const records = results.map((result) => {
+    const task = taskById.get(result.taskId);
+    const externalId = task?.origin.externalId ?? result.taskId;
+    return {
+      id: externalId,
+      taskId: result.taskId,
+      kind: task?.kind ?? "unknown",
+      level: (task?.metadata as { level?: unknown } | undefined)?.level ?? null,
+      submittedPrediction: predictionByExternalId.get(externalId) ?? null,
+      answer: result.answer,
+      fallbackUsed: result.fallbackUsed,
+      warnings: result.warnings,
+      trials: result.trials.map((trial) => ({
+        trial: trial.trial,
+        role: trial.role ?? null,
+        answer: trial.answer,
+        citations: trial.citations,
+        thinking: trial.thinking ?? null,
+        rawResponse: trial.rawResponse,
+        latencyMs: trial.latencyMs
+      }))
+    };
+  });
+  const reasoningPath = `${output.replace(/\.jsonl?$/i, "")}.reasoning.jsonl`;
+  await writeJsonLinesAtomic(reasoningPath, records);
+  return reasoningPath;
+}
+
 async function loadFutureXRouteOverrides(args: Args, expectedRevision?: string) {
   const filePath = flag(args, "routes");
   if (!filePath) return undefined;
@@ -545,18 +591,23 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     });
     if (!report.valid) throw new Error(report.errors.join("\n"));
     await writeJsonLinesAtomic(output, submission);
+    const reasoningPath = await writeReasoningArtifact(output, tasks, results, submission);
     await writeManifest(output, {
       benchmark: "futurex",
       revision,
       roundId,
       model: config.model,
+      provider: config.provider,
       records: submission.length,
       mode,
       evidenceCutoff: asOfUtc,
       routeFile: path.basename(required(args, "routes")),
+      reasoning: path.basename(reasoningPath),
+      fallbackAnswers: results.filter((result) => result.fallbackUsed).length,
       validation: report
     });
     ok(`FutureX validated artifact written: ${output}`);
+    ok(`FutureX reasoning trace written: ${reasoningPath}`);
     return;
   }
   if (action === "pilot") {

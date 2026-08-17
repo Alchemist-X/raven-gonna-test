@@ -86,6 +86,33 @@ describe("parseClaudeStream", () => {
     expect(parsed.isError).toBe(false);
   });
 
+  it("keeps extended-thinking blocks, which are what make a resolved miss diagnosable", () => {
+    const stream = [
+      JSON.stringify({
+        type: "assistant",
+        message: {
+          content: [
+            { type: "thinking", thinking: "Guidance midpoint is 3.30 against a 3.00 threshold." },
+            { type: "text", text: "visible prose" }
+          ]
+        }
+      }),
+      JSON.stringify({
+        type: "assistant",
+        // A redacted block carries no readable text and must not become "undefined".
+        message: { content: [{ type: "thinking", data: "redacted-blob" }, { type: "thinking", thinking: "second block" }] }
+      }),
+      resultEvent("done")
+    ].join("\n");
+    const parsed = parseClaudeStream(stream);
+    expect(parsed.thinking).toBe("Guidance midpoint is 3.30 against a 3.00 threshold.\n\nsecond block");
+    expect(parsed.content).toBe("done");
+  });
+
+  it("reports thinking as empty rather than undefined when the model emitted none", () => {
+    expect(parseClaudeStream(resultEvent("done")).thinking).toBe("");
+  });
+
   it("falls back to the last assistant turn when the stream ends without a result", () => {
     const stream = [
       JSON.stringify({ type: "assistant", message: { content: [{ type: "text", text: "first" }] } }),
@@ -122,6 +149,18 @@ describe("ClaudeCliPredictor", () => {
     expect(response.citations).toEqual(["https://s.example"]);
     expect(response.usage).toMatchObject({ output_tokens: 4 });
     expect(response.model).toBe("claude-opus-5");
+  });
+
+  it("surfaces thinking on the response, and omits the field when there is none", async () => {
+    const withThinking = [
+      JSON.stringify({ type: "assistant", message: { content: [{ type: "thinking", thinking: "weighing base rates" }] } }),
+      resultEvent("<answer>0.4</answer>")
+    ].join("\n");
+    const port = new ClaudeCliPredictor({ model: "m", executable: fakeClaude(withThinking) });
+    expect((await port.generate(request(), new AbortController().signal)).thinking).toBe("weighing base rates");
+
+    const bare = new ClaudeCliPredictor({ model: "m", executable: fakeClaude(resultEvent("<answer>0.4</answer>")) });
+    expect((await bare.generate(request(), new AbortController().signal)).thinking).toBeUndefined();
   });
 
   it("fails the trial when the CLI exits non-zero", async () => {

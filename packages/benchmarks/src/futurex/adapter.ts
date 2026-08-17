@@ -19,6 +19,14 @@ const MULTI_PATTERN = /\b(?:select all|choose all|all that apply|more than one)\
 const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates)\s+will\b/i;
 const STRONG_SINGLE_PATTERN = /\b(?:who will win|winner of|which (?:candidate|ticket|club|team|player|person) will (?:win|receive)|most votes|\bvs\.?\b)\b/i;
 const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)\}/i;
+// The prompt often DECLARES its answer type outright ("Return only the exact
+// published numeric value for x_percent", "MUST end with exactly one boxed
+// numeric value"). That is authoritative, unlike NUMERIC_PATTERN's enumeration
+// of domain nouns, which misses phrasings such as "what exact <rate> will X
+// report" and leaves those questions routed as free text — where they are
+// aggregated by exact-string vote and tie-broken alphabetically.
+const NUMERIC_CONTRACT_PATTERN =
+  /boxed numeric value|exact published numeric value|only the exact numeric|numeric prediction only/i;
 
 export interface FutureXAdapterOptions {
   revision: string;
@@ -53,6 +61,15 @@ function semanticPrompt(prompt: string): string {
   return prompt.split(/\bIMPORTANT:/i)[0] ?? prompt;
 }
 
+const NUMERIC_TARGET_FIELD = /numeric value for\s+([A-Za-z0-9_]+)/i;
+
+/** The snake_case field FutureX will publish the answer under, when the prompt
+ *  names one. It encodes both the quantity and its scale (usd_millions,
+ *  yoy_percent), which is exactly what the model must be told. */
+export function numericTargetField(prompt: string): string | undefined {
+  return prompt.match(NUMERIC_TARGET_FIELD)?.[1];
+}
+
 export function routeFutureXQuestion(
   question: FutureXQuestion,
   override?: FutureXRouteOverride | FutureXTaskKind
@@ -80,16 +97,28 @@ export function routeFutureXQuestion(
       reasons: ["explicit boxed alternative contract"]
     };
   }
+  // Checked before the title heuristics: an explicit output contract beats any
+  // inference drawn from how the question is phrased.
+  if (NUMERIC_CONTRACT_PATTERN.test(question.prompt)) {
+    return { kind: "numeric", choices: [], confidence: 0.97, reasons: ["explicit numeric output contract"] };
+  }
   if (RANKING_PATTERN.test(question.en_title) || RANKING_PATTERN.test(question.prompt)) {
     const count = rankingCount(semantic);
-    const route: FutureXRoute = {
-      kind: "ranking",
-      choices: extractedChoices,
-      confidence: count ? 0.95 : 0.65,
-      reasons: ["explicit ranking language"]
-    };
-    if (count) route.rankCount = count;
-    return route;
+    // "ranking" is frequently a noun for the standings rather than an
+    // instruction to order things — "which club will be FIRST in the final
+    // championship ranking?" wants one entity. With neither a rank count nor a
+    // candidate set there is nothing to order, so this is not a ranking task;
+    // routing it as one previously threw and killed the whole run.
+    if (count || extractedChoices.length > 0) {
+      const route: FutureXRoute = {
+        kind: "ranking",
+        choices: extractedChoices,
+        confidence: count ? 0.95 : 0.65,
+        reasons: ["explicit ranking language"]
+      };
+      if (count) route.rankCount = count;
+      return route;
+    }
   }
   if (extractedChoices.length >= 2) {
     const multi = MULTI_PATTERN.test(semantic) || STRONG_MULTI_PATTERN.test(semantic);
@@ -166,8 +195,14 @@ export function futureXQuestionsToTasks(
           rankCount: candidates.length > 0 ? Math.min(route.rankCount, candidates.length) : route.rankCount
         };
       }
-      case "numeric":
-        return { ...common, kind: "numeric" as const };
+      case "numeric": {
+        // The prompt names the exact field it wants ("...numeric value for
+        // revenue_usd_millions"), which carries the scale and unit. Passing it
+        // through is the difference between the model answering in millions and
+        // answering in billions — an error no downstream aggregation can repair.
+        const targetField = numericTargetField(question.prompt);
+        return { ...common, kind: "numeric" as const, ...(targetField ? { unit: targetField } : {}) };
+      }
       case "open_text":
         return { ...common, kind: "free_response" as const };
     }

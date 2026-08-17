@@ -183,6 +183,15 @@ export const TrialPredictionSchema = z.object({
   answer: ForecastAnswerSchema,
   confidence: z.number().min(0).max(1).optional(),
   rationale: z.string().optional(),
+  /**
+   * The model's extended-thinking trace, when the provider exposes one.
+   * Distinct from rawResponse, which is the visible reply: a model can reach a
+   * number in thinking and never justify it in prose. Once a round resolves,
+   * this is what makes "why was this wrong" answerable.
+   */
+  thinking: z.string().optional(),
+  /** The independent-trial persona this trial was run under, so disagreement between trials is interpretable. */
+  role: z.string().optional(),
   citations: z.array(z.string().url()).default([]),
   rawResponse: z.string(),
   latencyMs: z.number().nonnegative(),

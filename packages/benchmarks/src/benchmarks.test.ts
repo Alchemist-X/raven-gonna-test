@@ -125,6 +125,54 @@ describe("FutureX adapter", () => {
     }
   });
 
+  it("trusts an explicit numeric output contract over title phrasing", () => {
+    const common = { end_time: "2026-08-19", level: 4 as const };
+    // "what exact <rate> will X report" is the dominant phrasing in this round
+    // and matches none of NUMERIC_PATTERN's domain nouns; the prompt's own
+    // contract does. Routed as free text these are aggregated by exact-string
+    // vote and tie-broken alphabetically, which decides them at random.
+    const route = routeFutureXQuestion({
+      ...common,
+      id: "cpi",
+      en_title: "South Africa July 2026 CPI: what exact year-on-year headline consumer inflation rate will be reported?",
+      prompt:
+        "Return only the exact published numeric value for headline_cpi_yoy_percent. Do not include units.\n" +
+        "IMPORTANT: Your final answer MUST end with exactly one boxed numeric value."
+    });
+    expect(route).toMatchObject({ kind: "numeric", confidence: 0.97 });
+
+    // Questions with no such declaration must still route by the old heuristics.
+    expect(routeFutureXQuestion({
+      ...common,
+      id: "runs",
+      en_title: "How many combined runs will be scored in White Sox at Cubs?",
+      prompt: "Return YOUR_PREDICTION."
+    }).kind).toBe("numeric");
+  });
+
+  it("does not call a question a ranking when there is nothing to order", () => {
+    const common = { end_time: "2026-08-19", level: 3 as const };
+    // "ranking" here is a noun for the standings, not an instruction to order.
+    // With neither a rank count nor candidates this used to route to ranking and
+    // then throw in task building, taking the entire run down with it.
+    const route = routeFutureXQuestion({
+      ...common,
+      id: "esports",
+      en_title: "Which club will be first in the final 2026 Esports World Cup Club Championship ranking?",
+      prompt: "IMPORTANT: Your final answer MUST end with exactly one \\boxed{YOUR_PREDICTION}."
+    });
+    expect(route.kind).not.toBe("ranking");
+    expect(route.kind).toBe("open_text");
+
+    // A genuine ranking request is unaffected.
+    expect(routeFutureXQuestion({
+      ...common,
+      id: "rank-real",
+      en_title: "Who will be ranked from 1 to 3?",
+      prompt: "Give the three names in order."
+    })).toMatchObject({ kind: "ranking", rankCount: 3 });
+  });
+
   it("rejects duplicate structured answers and wrong boxed alternatives", () => {
     const question = {
       id: "multi",

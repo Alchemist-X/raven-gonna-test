@@ -95,6 +95,13 @@ function collectToolUrls(node: unknown, urls: Set<string>): void {
 
 export interface ParsedClaudeStream {
   content: string;
+  /**
+   * Extended-thinking blocks, concatenated. Kept because after a round
+   * resolves, "why was this wrong" is answerable only from the reasoning that
+   * produced the number — and a benchmark that discards it can be scored but
+   * not improved.
+   */
+  thinking: string;
   citations: string[];
   usage: Record<string, unknown> | undefined;
   model: string | undefined;
@@ -104,6 +111,7 @@ export interface ParsedClaudeStream {
 export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   const urls = new Set<string>();
   const assistantTexts: string[] = [];
+  const thinkingBlocks: string[] = [];
   let content = "";
   let usage: Record<string, unknown> | undefined;
   let model: string | undefined;
@@ -125,6 +133,9 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
       for (const block of (message?.content as unknown[]) ?? []) {
         const part = block as Record<string, unknown>;
         if (part.type === "text" && typeof part.text === "string") assistantTexts.push(part.text);
+        // Redacted thinking arrives as an opaque block with no readable text;
+        // there is nothing to keep in that case.
+        if (part.type === "thinking" && typeof part.thinking === "string") thinkingBlocks.push(part.thinking);
       }
     } else if (event.type === "result") {
       if (typeof event.result === "string") content = event.result;
@@ -141,7 +152,7 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   // The CLI omits the result event when it dies mid-stream; the last assistant
   // turn is still usable, and a salvageable answer beats a deleted trial.
   if (!content && assistantTexts.length) content = assistantTexts[assistantTexts.length - 1] ?? "";
-  return { content, citations: [...urls], usage, model, isError };
+  return { content, thinking: thinkingBlocks.join("\n\n"), citations: [...urls], usage, model, isError };
 }
 
 export class ClaudeCliPredictor implements ModelPort {
@@ -196,6 +207,7 @@ export class ClaudeCliPredictor implements ModelPort {
         }
         resolve({
           content: parsed.content,
+          ...(parsed.thinking ? { thinking: parsed.thinking } : {}),
           citations: parsed.citations,
           ...(parsed.usage ? { usage: parsed.usage } : {}),
           model: parsed.model ?? this.model
