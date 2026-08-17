@@ -9,6 +9,13 @@ export interface AggregationOptions {
   priorWeight?: number;
   multiLabelThreshold?: number;
   probabilityFloor?: number;
+  /**
+   * Sink for conditions the aggregate answer alone cannot express — chiefly a
+   * numeric decision whose declared bounds excluded every trial, where the
+   * emitted value comes from the bounds rather than from any forecast. Silently
+   * answering there hides a data problem behind a well-formed number.
+   */
+  diagnostics?: string[];
 }
 
 function compatibleAnswers(task: ForecastTask, trials: readonly TrialPrediction[]): ForecastAnswer[] {
@@ -114,6 +121,12 @@ export function aggregateTrialPredictions(
         ...(task.minimum !== undefined ? { minimum: task.minimum } : {}),
         ...(task.maximum !== undefined ? { maximum: task.maximum } : {})
       });
+      if (decision.method === "bounds-collapsed") {
+        options.diagnostics?.push(
+          `numeric bounds [${task.minimum ?? "-inf"}, ${task.maximum ?? "+inf"}] excluded every trial ` +
+            `(${values.join(", ")}); answer ${decision.value} comes from the bounds, not a forecast`
+        );
+      }
       const numericAnswer: ForecastAnswer = { kind: "numeric", value: decision.value };
       if (task.unit !== undefined) numericAnswer.unit = task.unit;
       return numericAnswer;

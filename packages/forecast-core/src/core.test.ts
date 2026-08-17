@@ -155,3 +155,37 @@ describe("numeric vs probability parsing", () => {
     });
   });
 });
+
+describe("aggregation diagnostics", () => {
+  const numericTrial = (value: number): TrialPrediction => ({
+    trial: 0,
+    answer: { kind: "numeric", value },
+    citations: [],
+    rawResponse: "",
+    latencyMs: 1
+  });
+
+  it("reports when declared bounds excluded every trial, instead of answering silently", () => {
+    const task = ForecastTaskSchema.parse({
+      ...base,
+      taskId: "n-bounds",
+      kind: "numeric",
+      minimum: 1000,
+      maximum: 2000
+    });
+    const diagnostics: string[] = [];
+    const answer = aggregateTrialPredictions(task, [numericTrial(3), numericTrial(4)], { diagnostics });
+    // An answer still ships — a missing row scores 0 — but it is flagged as
+    // manufactured from the bounds rather than forecast.
+    expect(answer.kind).toBe("numeric");
+    expect(diagnostics).toHaveLength(1);
+    expect(diagnostics[0]).toMatch(/excluded every trial/);
+  });
+
+  it("stays silent when the trials fall inside the bounds", () => {
+    const task = ForecastTaskSchema.parse({ ...base, taskId: "n-ok", kind: "numeric", minimum: 0, maximum: 10 });
+    const diagnostics: string[] = [];
+    aggregateTrialPredictions(task, [numericTrial(3), numericTrial(4)], { diagnostics });
+    expect(diagnostics).toEqual([]);
+  });
+});

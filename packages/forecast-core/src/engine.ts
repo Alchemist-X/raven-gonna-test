@@ -276,7 +276,11 @@ export class ForecastEngine {
     let fallbackUsed = false;
     let answer: ForecastAnswer;
     if (successful.length > 0) {
-      answer = aggregateTrialPredictions(task, successful, options);
+      // Aggregation can detect problems the answer alone cannot express, so it
+      // reports them here rather than emitting a plausible number in silence.
+      const diagnostics: string[] = [];
+      answer = aggregateTrialPredictions(task, successful, { ...options, diagnostics });
+      warnings.push(...diagnostics);
     } else if (options.fallback) {
       answer = options.fallback;
       fallbackUsed = true;
