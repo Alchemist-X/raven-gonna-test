@@ -16,9 +16,9 @@ model tiers**, to measure what the tier difference actually buys.
 
 | Tier | Model | Effort | Max evidence rounds |
 | --- | --- | --- | --- |
-| Urd / low | `claude-haiku-4-5-20251001` | low | 1 |
-| Verdandi / medium | `claude-sonnet-5` | medium | 2 |
-| Skuld / high | `claude-opus-5` | high | 3 |
+| `raven_labs / claude-haiku-4.5` | `claude-haiku-4-5-20251001` | low | 1 |
+| `raven_labs / claude-sonnet-5` | `claude-sonnet-5` | medium | 2 |
+| `raven_labs / claude-opus-5` | `claude-opus-5` | high | 3 |
 
 12 binary questions × 3 tiers = 36 jobs. All completed, zero failures.
 
@@ -32,22 +32,22 @@ pole vault?*
 
 | Tier | P(Yes) | Answer | Sources |
 | --- | --- | --- | --- |
-| Urd | 94.3% | A = Yes | 4 |
-| Verdandi | 2.7% | B = No | 7 |
-| Skuld | 2.0% | B = No | 16 |
+| `claude-haiku-4.5` | 94.3% | A = Yes | 4 |
+| `claude-sonnet-5` | 2.7% | B = No | 7 |
+| `claude-opus-5` | 2.0% | B = No | 16 |
 
 A 92.3pp spread. 6.20m is world-record territory, so the high tiers' ~2% is
-the defensible read; Urd ran one round, found four sources, and returned 94% —
+the defensible read; claude-haiku-4.5 ran one round, found four sources, and returned 94% —
 directionally wrong. **The value of the tier is not a few points of accuracy;
 it is avoiding one badly wrong call.**
 
 Other observations:
 
-- Source count rises monotonically with tier (Urd 3–6 / Verdandi 5–9 / Skuld 8–20).
-- Skuld pinned 0.99 on 5 questions — a saturation tendency worth watching.
-- Nominal cost: Urd $8.37 / Verdandi $38.21 / Skuld $53.94 (the CLI's
+- Source count rises monotonically with tier (haiku 3–6 / sonnet-5 5–9 / opus-5 8–20).
+- opus-5 pinned 0.99 on 5 questions — a saturation tendency worth watching.
+- Nominal cost: haiku $8.37 / sonnet-5 $38.21 / opus-5 $53.94 (the CLI's
   API-equivalent accounting; the run drew on a Max subscription).
-- Wall clock: Urd 56.6 min / Verdandi 56.0 min / Skuld 136.8 min (tiers run in parallel).
+- Wall clock: haiku 56.6 min / sonnet-5 56.0 min / opus-5 136.8 min (tiers run in parallel).
 
 ## Why this cannot be submitted
 
@@ -67,7 +67,7 @@ All three gaps must close before any of this becomes a submission candidate.
 
 | File | Contents |
 | --- | --- |
-| `submission-{urd,verdandi,skuld}.jsonl` | Per-tier answers, official `{id, prediction}` shape, 12 lines each |
+| `submission-claude-{haiku-4-5,sonnet-5,opus-5}.jsonl` | Per-tier answers, official `{id, prediction}` shape, 12 lines each |
 | `manifest.json` | Provenance, coverage, eligibility, both repos' HEAD SHAs |
 | `three-tier-report.pdf` | Full report: adaptation method, 80-task classification, the 12×3 grid, per-tier cost |
 
@@ -82,7 +82,7 @@ npx tsx scripts/forecast/futurex.ts \
   --questions <raven-gonna-test>/runtime-artifacts/futurex/2026-08-19/questions.json \
   --revision 2841bff13f6d2f679298ce7007e91ae585f4ade1 \
   --as-of 2026-08-17T19:14:57+08:00 \
-  --binary-all --profile <urd|verdandi|skuld> --run-id futurex-20260817T191457 \
+  --binary-all --profile <claude-haiku-4-5|claude-sonnet-5|claude-opus-5> --run-id futurex-20260817T191457 \
   --artifact-root runtime-artifacts/futurex-adapter --allow-paid
 ```
 

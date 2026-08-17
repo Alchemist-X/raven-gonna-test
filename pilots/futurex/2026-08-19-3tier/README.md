@@ -11,11 +11,11 @@
 
 用 `predict-raven` 的 FutureX adapter，把同一批题目在**三个模型档位**上各跑一遍，看档位差异到底买到了什么。
 
-| 档位 | 模型 | effort | 证据轮上限 |
+| 档位(raven_labs) | 模型 | effort | 证据轮上限 |
 | --- | --- | --- | --- |
-| Urd / low | `claude-haiku-4-5-20251001` | low | 1 |
-| Verdandi / medium | `claude-sonnet-5` | medium | 2 |
-| Skuld / high | `claude-opus-5` | high | 3 |
+| `raven_labs / claude-haiku-4.5` | `claude-haiku-4-5-20251001` | low | 1 |
+| `raven_labs / claude-sonnet-5` | `claude-sonnet-5` | medium | 2 |
+| `raven_labs / claude-opus-5` | `claude-opus-5` | high | 3 |
 
 12 道二元题 × 3 档 = 36 个作业，全部完成，零失败。
 
@@ -27,18 +27,18 @@
 
 | 档位 | P(Yes) | 答案 | 证据数 |
 | --- | --- | --- | --- |
-| Urd | 94.3% | A = Yes | 4 |
-| Verdandi | 2.7% | B = No | 7 |
-| Skuld | 2.0% | B = No | 16 |
+| `claude-haiku-4.5` | 94.3% | A = Yes | 4 |
+| `claude-sonnet-5` | 2.7% | B = No | 7 |
+| `claude-opus-5` | 2.0% | B = No | 16 |
 
-极差 92.3pp。6.20m 是世界纪录级高度，高档位判 2% 是合理的；Urd 只跑 1 轮、找到 4 条证据就给了 94%，方向完全反了。**档位的价值不在于精度提升几个点，而在于避免一次离谱的错误。**
+极差 92.3pp。6.20m 是世界纪录级高度，高档位判 2% 是合理的；haiku 只跑 1 轮、找到 4 条证据就给了 94%，方向完全反了。**档位的价值不在于精度提升几个点，而在于避免一次离谱的错误。**
 
 其余观察：
 
-- 证据数随档位单调上升（Urd 3–6 / Verdandi 5–9 / Skuld 8–20）。
-- Skuld 有 5 道题顶到 0.99，存在饱和倾向，值得盯。
-- 账面成本 Urd $8.37 / Verdandi $38.21 / Skuld $53.94（CLI 按 API 等价价格计，实际走 Max 订阅额度）。
-- 耗时 Urd 56.6 分 / Verdandi 56.0 分 / Skuld 136.8 分（三档并行）。
+- 证据数随档位单调上升（haiku 3–6 / sonnet-5 5–9 / opus-5 8–20）。
+- opus-5 有 5 道题顶到 0.99，存在饱和倾向，值得盯。
+- 账面成本 haiku $8.37 / sonnet-5 $38.21 / opus-5 $53.94（CLI 按 API 等价价格计，实际走 Max 订阅额度）。
+- 耗时 haiku 56.6 分 / sonnet-5 56.0 分 / opus-5 136.8 分（三档并行）。
 
 ## 为什么不能提交
 
@@ -52,7 +52,7 @@
 
 | 文件 | 说明 |
 | --- | --- |
-| `submission-{urd,verdandi,skuld}.jsonl` | 各档答案，官方 `{id, prediction}` 格式，每份 12 行 |
+| `submission-claude-{haiku-4-5,sonnet-5,opus-5}.jsonl` | 各档答案，官方 `{id, prediction}` 格式，每份 12 行 |
 | `manifest.json` | 出处、覆盖率、eligibility、两个仓库的 HEAD SHA |
 | `three-tier-report.pdf` | 完整对比报告：适配方法、80 题分类、12×3 网格、各档开销 |
 
@@ -66,7 +66,7 @@ npx tsx scripts/forecast/futurex.ts \
   --questions <raven-gonna-test>/runtime-artifacts/futurex/2026-08-19/questions.json \
   --revision 2841bff13f6d2f679298ce7007e91ae585f4ade1 \
   --as-of 2026-08-17T19:14:57+08:00 \
-  --binary-all --profile <urd|verdandi|skuld> --run-id futurex-20260817T191457 \
+  --binary-all --profile <claude-haiku-4-5|claude-sonnet-5|claude-opus-5> --run-id futurex-20260817T191457 \
   --artifact-root runtime-artifacts/futurex-adapter --allow-paid
 ```
 

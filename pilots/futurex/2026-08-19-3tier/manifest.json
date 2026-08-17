@@ -7,45 +7,45 @@
   "questionsFile": "/Users/Aincrad/dev-proj/raven-gonna-test/runtime-artifacts/futurex/2026-08-19/questions.json",
   "questionsSha256": "1efb0dfd1f659482cf69d3d8fbb225fec9de92b7a1f8b72ede6fa40fdcf0a465",
   "asOfEvidenceCutoff": "2026-08-17T19:14:57+08:00",
-  "generatedAt": "2026-08-17T13:32:51.890Z",
+  "generatedAt": "2026-08-17T14:34:38.526Z",
   "coverage": {
     "questionsInRound": 80,
     "questionsAttempted": 12,
     "questionsAnsweredPerProfile": {
-      "urd": 12,
-      "verdandi": 12,
-      "skuld": 12
+      "claude-haiku-4-5": 12,
+      "claude-sonnet-5": 12,
+      "claude-opus-5": 12
     },
     "unattemptedQuestions": 68
   },
   "profiles": [
     {
-      "id": "urd",
+      "id": "claude-haiku-4-5",
       "model": "claude-haiku-4-5-20251001",
       "effort": "low",
       "maxRounds": 1
     },
     {
-      "id": "verdandi",
+      "id": "claude-sonnet-5",
       "model": "claude-sonnet-5",
       "effort": "medium",
       "maxRounds": 2
     },
     {
-      "id": "skuld",
+      "id": "claude-opus-5",
       "model": "claude-opus-5",
       "effort": "high",
       "maxRounds": 3
     }
   ],
   "skipped": {
-    "urd": [],
-    "verdandi": [],
-    "skuld": []
+    "claude-haiku-4-5": [],
+    "claude-sonnet-5": [],
+    "claude-opus-5": []
   },
   "provenance": {
-    "predictRavenSha": "327f646cda2e6b77cf3057d609f9a70972657d3a",
-    "ravenGonnaTestSha": "d82843f0e206098d7ae46ebbcc619abc8aa6e33e",
+    "predictRavenSha": "dd5022bfdd3b25cfff97241834c949a13d968f14",
+    "ravenGonnaTestSha": "a22814df8392d218315083007501d83f163c18a0",
     "routesFile": "/Users/Aincrad/dev-proj/raven-gonna-test/runtime-artifacts/futurex/2026-08-19/routes.json",
     "routesReviewStatus": "80/80 pending"
   }
