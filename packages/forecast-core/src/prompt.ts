@@ -10,6 +10,29 @@ export function answerTypeForTask(
   return "free_response";
 }
 
+/**
+ * The literal shape each kind must emit. Stating this is not cosmetic: the
+ * parser looks for an <answer> block containing JSON, but nothing used to ask
+ * the model for one. A model that reasons in prose and never emits the block
+ * fails to parse, and a failed parse deletes the trial entirely.
+ */
+function answerShape(task: ForecastTask): string {
+  switch (task.kind) {
+    case "binary_probability":
+      return '{"probability": 0.62}';
+    case "categorical":
+      return `{"probabilities": {${task.choices.map((choice) => `"${choice}": 0.5`).join(", ")}}}`;
+    case "multi_label":
+      return '{"probabilities": {"A": 0.7, "B": 0.2}, "selected": ["A"]}';
+    case "ranking":
+      return '{"ranking": ["first", "second"]}';
+    case "numeric":
+      return '{"value": 123.45}';
+    case "free_response":
+      return '{"answer": "Official Entity Name"}';
+  }
+}
+
 function taskContract(task: ForecastTask): string {
   switch (task.kind) {
     case "binary_probability":
@@ -51,7 +74,9 @@ export function buildPrompts(task: ForecastTask, policy: InformationPolicy): { s
     `Question:\n${task.prompt}`,
     `Resolution criteria:\n${task.resolution.criteria || "Use the question's explicit criteria."}`,
     task.resolution.dateUtc ? `Resolution date: ${task.resolution.dateUtc}` : "",
-    taskContract(task)
+    taskContract(task),
+    // Research freely above, but the final line must be machine-readable.
+    `Reason first if useful, then END your reply with the answer wrapped in <answer> tags, containing only JSON:\n<answer>${answerShape(task)}</answer>`
   ]
     .filter(Boolean)
     .join("\n\n");

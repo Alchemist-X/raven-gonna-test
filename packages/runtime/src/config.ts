@@ -1,4 +1,15 @@
+/**
+ * "openai-compatible" talks HTTP to a completions endpoint and needs an API
+ * key. "claude-cli" shells out to the Claude Code CLI, which holds its own
+ * credential and spends a subscription rather than API credit — so it must not
+ * demand PREDICTOR_API_KEY.
+ */
+export type PredictorProvider = "openai-compatible" | "claude-cli";
+
+export const PREDICTOR_PROVIDERS: readonly PredictorProvider[] = ["openai-compatible", "claude-cli"];
+
 export interface PredictorConfig {
+  provider: PredictorProvider;
   baseUrl: string;
   apiKey: string;
   model: string;
@@ -6,6 +17,11 @@ export interface PredictorConfig {
   trials: number;
   concurrency: number;
   reasoningEffort: "low" | "medium" | "high";
+  /**
+   * Claude CLI effort, which reaches two levels above ModelRequest's
+   * low|medium|high. Only meaningful for the claude-cli provider.
+   */
+  claudeEffort?: "low" | "medium" | "high" | "xhigh" | "max";
   researchSources: string[];
   maxRetries?: number;
   retryBaseMs?: number;
@@ -41,12 +57,24 @@ function isSafeBaseUrl(value: string, allowPrivate: boolean): boolean {
 }
 
 export function loadPredictorConfig(env: NodeJS.ProcessEnv = process.env): PredictorConfig {
+  const provider = (env.PREDICTOR_PROVIDER ?? "openai-compatible") as PredictorProvider;
+  if (!PREDICTOR_PROVIDERS.includes(provider)) {
+    throw new Error(`PREDICTOR_PROVIDER must be one of ${PREDICTOR_PROVIDERS.join(", ")}.`);
+  }
   const baseUrl = (env.PREDICTOR_BASE_URL ?? "https://api.lightningrod.ai/v1/openai").replace(/\/+$/, "");
   if (!isSafeBaseUrl(baseUrl, env.PREDICTOR_ALLOW_PRIVATE_BASE_URL === "1")) {
     throw new Error("PREDICTOR_BASE_URL must be credential-free HTTPS without query/fragment; private IPs require explicit opt-in.");
   }
   const apiKey = env.PREDICTOR_API_KEY?.trim() ?? "";
-  if (!apiKey) throw new Error("PREDICTOR_API_KEY is required for live model calls.");
+  // The CLI provider resolves its own credential; demanding a key here would
+  // block the only model access a subscription-based run has.
+  if (!apiKey && provider === "openai-compatible") {
+    throw new Error("PREDICTOR_API_KEY is required for live model calls.");
+  }
+  const claudeEffort = env.PREDICTOR_CLAUDE_EFFORT;
+  if (claudeEffort && !["low", "medium", "high", "xhigh", "max"].includes(claudeEffort)) {
+    throw new Error("PREDICTOR_CLAUDE_EFFORT must be low, medium, high, xhigh, or max.");
+  }
   const effort = env.PREDICTOR_REASONING_EFFORT ?? "medium";
   if (!(["low", "medium", "high"] as const).includes(effort as "low" | "medium" | "high")) {
     throw new Error("PREDICTOR_REASONING_EFFORT must be low, medium, or high.");
@@ -58,13 +86,17 @@ export function loadPredictorConfig(env: NodeJS.ProcessEnv = process.env): Predi
   if (trials > 20) throw new Error("PREDICTOR_TRIALS must not exceed 20.");
   if (concurrency > 120) throw new Error("PREDICTOR_CONCURRENCY must not exceed 120.");
   return {
+    provider,
     baseUrl,
     apiKey,
-    model: env.PREDICTOR_MODEL?.trim() || "foresight-v4",
+    // The default model is provider-specific: "foresight-v4" is meaningless to
+    // the Claude CLI and would fail every call.
+    model: env.PREDICTOR_MODEL?.trim() || (provider === "claude-cli" ? "claude-sonnet-5" : "foresight-v4"),
     timeoutMs,
     trials,
     concurrency,
     reasoningEffort: effort as "low" | "medium" | "high",
+    ...(claudeEffort ? { claudeEffort: claudeEffort as Exclude<PredictorConfig["claudeEffort"], undefined> } : {}),
     researchSources: (env.PREDICTOR_RESEARCH_SOURCES ?? "perplexity,google_news")
       .split(",")
       .map((source) => source.trim())

@@ -13,6 +13,7 @@ import { ForecastAnswerSchema, ForecastTaskSchema, InformationPolicySchema } fro
 import { aggregateTrialPredictions, type AggregationOptions } from "./aggregation.js";
 import { validatePolicyForTask } from "./policy.js";
 import { answerTypeForTask, buildPrompts } from "./prompt.js";
+import { extractJsonLenient, salvageChoice, salvageNumber } from "./parse.js";
 import { normalizeProbabilities } from "./probability.js";
 
 export interface ForecastEngineOptions extends AggregationOptions {
@@ -28,21 +29,10 @@ export interface ForecastEngineOptions extends AggregationOptions {
 
 const systemClock: ClockPort = { now: () => new Date() };
 
-function extractTag(content: string): string | null {
-  const match = content.match(/<answer>([\s\S]*?)<\/answer>/i);
-  return match?.[1]?.trim() ?? null;
-}
-
+// Delegates to the tolerant scanner: a stray brace in prose must not throw,
+// because a thrown trial is deleted and deleted trials produce no answer at all.
 function extractJson(content: string): unknown {
-  const tagged = extractTag(content);
-  const candidate = tagged ?? content;
-  const start = candidate.indexOf("{");
-  const end = candidate.lastIndexOf("}");
-  if (start >= 0 && end > start) return JSON.parse(candidate.slice(start, end + 1));
-  const arrayStart = candidate.indexOf("[");
-  const arrayEnd = candidate.lastIndexOf("]");
-  if (arrayStart >= 0 && arrayEnd > arrayStart) return JSON.parse(candidate.slice(arrayStart, arrayEnd + 1));
-  return candidate.trim();
+  return extractJsonLenient(content);
 }
 
 function parseNumber(value: unknown): number {
@@ -74,10 +64,21 @@ export function parseModelAnswer(task: ForecastTask, response: ModelResponse): F
       const candidate = "probabilities" in raw && typeof raw.probabilities === "object" && raw.probabilities !== null
         ? (raw.probabilities as Record<string, unknown>)
         : raw;
-      const probabilities = normalizeProbabilities(
-        Object.fromEntries(task.choices.map((choice) => [choice, Number(candidate[choice] ?? 0)])),
-        task.choices
-      );
+      const supplied = Object.fromEntries(task.choices.map((choice) => [choice, Number(candidate[choice] ?? 0)]));
+      // A prose-only reply leaves every weight at 0, which would normalize to a
+      // uniform vector and pick a choice alphabetically — discarding a verdict
+      // the model actually stated. Read the conclusion out of the prose instead.
+      if (Object.values(supplied).every((weight) => !Number.isFinite(weight) || weight === 0)) {
+        const salvaged = salvageChoice(response.content, task.choices);
+        if (salvaged) {
+          const probabilities = normalizeProbabilities(
+            Object.fromEntries(task.choices.map((choice) => [choice, choice === salvaged ? 1 : 0])),
+            task.choices
+          );
+          return ForecastAnswerSchema.parse({ kind: "categorical", choice: salvaged, probabilities });
+        }
+      }
+      const probabilities = normalizeProbabilities(supplied, task.choices);
       const choice = task.choices.reduce((best, current) =>
         (probabilities[current] ?? 0) > (probabilities[best] ?? 0) ? current : best
       );
@@ -114,7 +115,12 @@ export function parseModelAnswer(task: ForecastTask, response: ModelResponse): F
     }
     case "numeric": {
       const raw = typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : {};
-      const value = parseNumber(raw.mean ?? raw.value ?? parsed);
+      const supplied = raw.mean ?? raw.value ?? parsed;
+      // parseNumber throws on prose. Scrape a figure out of the reply instead of
+      // deleting the trial — and via salvageNumber, which keeps a percentage at
+      // its point value (gold for "what exact CPI rate" is 2.7, not 0.027).
+      const salvaged = typeof supplied === "string" ? salvageNumber(supplied) : null;
+      const value = salvaged ?? parseNumber(supplied);
       const standardDeviation = Number(raw.standard_deviation ?? raw.standardDeviation);
       const answer: ForecastAnswer = { kind: "numeric", value };
       if (task.unit !== undefined) answer.unit = task.unit;

@@ -15,6 +15,35 @@ describe("runtime configuration", () => {
       PREDICTOR_BASE_URL: "http://provider.example/v1"
     })).toThrow(/HTTPS/);
   });
+
+  it("defaults to the HTTP provider and still requires its key", () => {
+    expect(loadPredictorConfig({ PREDICTOR_API_KEY: "secret" }).provider).toBe("openai-compatible");
+    expect(() => loadPredictorConfig({})).toThrow(/PREDICTOR_API_KEY is required/);
+  });
+
+  it("runs the claude-cli provider without an API key, since the CLI holds the credential", () => {
+    const config = loadPredictorConfig({ PREDICTOR_PROVIDER: "claude-cli" });
+    expect(config.provider).toBe("claude-cli");
+    expect(config.apiKey).toBe("");
+    // A provider-specific default: "foresight-v4" would fail every CLI call.
+    expect(config.model).toBe("claude-sonnet-5");
+  });
+
+  it("accepts CLI effort levels above what ModelRequest can express, and rejects junk", () => {
+    expect(loadPredictorConfig({
+      PREDICTOR_PROVIDER: "claude-cli",
+      PREDICTOR_CLAUDE_EFFORT: "max"
+    }).claudeEffort).toBe("max");
+    expect(loadPredictorConfig({ PREDICTOR_PROVIDER: "claude-cli" }).claudeEffort).toBeUndefined();
+    expect(() => loadPredictorConfig({
+      PREDICTOR_PROVIDER: "claude-cli",
+      PREDICTOR_CLAUDE_EFFORT: "turbo"
+    })).toThrow(/PREDICTOR_CLAUDE_EFFORT/);
+  });
+
+  it("rejects an unknown provider instead of silently falling back to HTTP", () => {
+    expect(() => loadPredictorConfig({ PREDICTOR_PROVIDER: "ollama" })).toThrow(/PREDICTOR_PROVIDER must be one of/);
+  });
 });
 
 describe("OpenAICompatiblePredictor", () => {
@@ -34,6 +63,7 @@ describe("OpenAICompatiblePredictor", () => {
       }), { status: 200, headers: { "content-type": "application/json" } });
     };
     const client = new OpenAICompatiblePredictor({
+      provider: "openai-compatible",
       baseUrl: "https://example.com/v1/openai",
       apiKey: "secret",
       model: "foresight-v4",
@@ -83,6 +113,7 @@ describe("OpenAICompatiblePredictor", () => {
       }), { status: 200 });
     };
     const client = new OpenAICompatiblePredictor({
+      provider: "openai-compatible",
       baseUrl: "https://example.com/v1",
       apiKey: "secret",
       model: "foresight-v4",

@@ -44,6 +44,8 @@ import {
   validateProphetLegacyResponse
 } from "@raven-gonna-test/benchmarks";
 import {
+  ClaudeCliPredictor,
+  ConcurrencyLimitedModel,
   OpenAICompatiblePredictor,
   loadPredictorConfig,
   readJson,
@@ -204,12 +206,24 @@ No command uploads, emails, trades, or submits externally.
 `);
 }
 
+function createPort(config: ReturnType<typeof loadPredictorConfig>) {
+  if (config.provider === "claude-cli") {
+    return new ClaudeCliPredictor({
+      model: config.model,
+      timeoutMs: config.timeoutMs,
+      ...(config.claudeEffort ? { effort: config.claudeEffort } : {})
+    });
+  }
+  return new OpenAICompatiblePredictor(config);
+}
+
 function createEngine() {
   const config = loadPredictorConfig();
-  return {
-    config,
-    engine: new ForecastEngine(new OpenAICompatiblePredictor(config))
-  };
+  // Cap real in-flight calls. Without this the fan-out is concurrency x trials,
+  // which is why ConcurrencyLimitedModel exists; it was simply never applied on
+  // this path.
+  const port = new ConcurrencyLimitedModel(createPort(config), config.concurrency);
+  return { config, engine: new ForecastEngine(port) };
 }
 
 function baselineResult(task: ForecastTask, answer: ForecastAnswer, model: string, warning: string): ForecastResult {
@@ -339,15 +353,22 @@ async function loadResumeResults(
 }
 
 async function commandDoctor(): Promise<void> {
-  const providerReady = Boolean(process.env.PREDICTOR_API_KEY?.trim());
+  const provider = process.env.PREDICTOR_PROVIDER ?? "openai-compatible";
+  const claudeCli = provider === "claude-cli";
+  // The CLI provider is ready when the CLI itself is authenticated, which this
+  // process cannot see; reporting an API-key check for it would be misleading.
+  const providerReady = claudeCli ? "check `claude auth status`" : Boolean(process.env.PREDICTOR_API_KEY?.trim());
   process.stdout.write(`${JSON.stringify({
     repository: "raven-gonna-test",
     node: process.version,
     executionMode: "inspect",
     predictor: {
+      provider,
       ready: providerReady,
-      model: process.env.PREDICTOR_MODEL ?? "foresight-v4",
-      baseUrl: safeProviderUrl(process.env.PREDICTOR_BASE_URL ?? "https://api.lightningrod.ai/v1/openai")
+      model: process.env.PREDICTOR_MODEL ?? (claudeCli ? "claude-sonnet-5" : "foresight-v4"),
+      ...(claudeCli
+        ? {}
+        : { baseUrl: safeProviderUrl(process.env.PREDICTOR_BASE_URL ?? "https://api.lightningrod.ai/v1/openai") })
     },
     externalSubmission: "disabled-by-design",
     trading: "not-present"
