@@ -208,3 +208,18 @@ describe("clusterAnswers", () => {
     expect(clusters).toHaveLength(3);
   });
 });
+
+describe("clusterAnswers counts support the way the grader does", () => {
+  it("picks the spelling with the most support after case folding, not per surface", () => {
+    // The grader lowercases before comparing, so these three are ONE answer to
+    // it with 3 votes, against "Fed" with 2. Counting case-preserving surfaces
+    // splits the 3 into singletons and hands the cluster to the weaker form.
+    const [winner] = clusterAnswers(["The Fed", "the fed", "THE FED", "Fed", "Fed"]);
+    expect(winner?.representative.toLowerCase()).toBe("the fed");
+  });
+
+  it("still prefers the better-cased surface within the winning fold class", () => {
+    const [winner] = clusterAnswers(["real madrid", "Real Madrid", "REAL MADRID"]);
+    expect(winner?.representative).toBe("Real Madrid");
+  });
+});

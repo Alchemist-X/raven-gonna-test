@@ -9,7 +9,14 @@ export type FutureXNumericProfile =
 export interface FutureXScoreReport {
   profileId: string;
   compatibility: "deterministic-subset" | "approximate";
+  /** Null when any row was unjudgeable locally. Prefer the bounds below in that case. */
   overall: number | null;
+  /** Charges every locally unjudgeable row 0 — the pessimistic bound. */
+  overallLowerBound: number | null;
+  /** Credits every locally unjudgeable row 1 — the optimistic bound. */
+  overallUpperBound: number | null;
+  /** Rows this scorer could not grade without the production semantic judge. */
+  unjudgedQuestions: number;
   perLevel: Partial<Record<FutureXLevel, { mean: number | null; scored: number; total: number }>>;
   questions: Array<{ id: string; level: FutureXLevel; score: number | null; method: string }>;
   warnings: string[];
@@ -115,6 +122,26 @@ export function scoreFutureX(
   }
   const weights: Record<FutureXLevel, number> = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4 };
   const allLevels = [1, 2, 3, 4] as const;
+
+  // A null row means THIS scorer cannot grade it — open_text falls back to a
+  // production semantic judge we do not have — not that the benchmark awards
+  // nothing. Collapsing the whole report to null on one such row makes offline
+  // evaluation useless, since an open_text answer is rarely an exact string
+  // match. Report the bounds instead: `lower` charges every unjudged row 0,
+  // `upper` credits it 1, and the truth lies between. Do NOT read this as a
+  // reason to abstain — on the real benchmark a wrong answer and a missing one
+  // both score 0, so answering is still weakly dominant.
+  const boundedLevelMean = (level: FutureXLevel, unjudged: 0 | 1): number | null => {
+    const rows = questions.filter((question) => question.level === level);
+    if (rows.length === 0) return null;
+    return rows.reduce((sum, question) => sum + (question.score ?? unjudged), 0) / rows.length;
+  };
+  const boundedOverall = (unjudged: 0 | 1): number | null => {
+    if (!allLevels.every((level) => perLevel[level] !== undefined)) return null;
+    return allLevels.reduce((sum, level) => sum + (boundedLevelMean(level, unjudged) ?? 0) * weights[level], 0);
+  };
+  const unjudgedCount = questions.filter((question) => question.score === null).length;
+
   const complete = allLevels.every((level) => perLevel[level]?.mean !== null && perLevel[level]?.mean !== undefined);
   const overall = complete
     ? allLevels.reduce((sum, level) => sum + (perLevel[level]?.mean ?? 0) * weights[level], 0)
@@ -123,6 +150,9 @@ export function scoreFutureX(
     profileId: profile.id,
     compatibility: warnings.length ? "approximate" : "deterministic-subset",
     overall,
+    overallLowerBound: boundedOverall(0),
+    overallUpperBound: boundedOverall(1),
+    unjudgedQuestions: unjudgedCount,
     perLevel,
     questions,
     warnings

@@ -156,9 +156,28 @@ describe("defaultAnswerForTask ranking", () => {
 });
 
 describe("defaultAnswerForTask numeric", () => {
-  it("uses the midpoint when both bounds are present", () => {
+  it("minimises worst-case RELATIVE error between bounds, since sigma scales with |truth|", () => {
     const answer = defaultAnswerForTask(buildTask({ kind: "numeric", minimum: 10, maximum: 30 }));
-    expect(answer).toEqual({ kind: "numeric", value: 20 });
+    if (answer.kind !== "numeric") throw new Error("expected a numeric answer");
+    // Harmonic mean of [10,30] = 15, not the arithmetic midpoint 20.
+    expect(answer.value).toBeCloseTo(15, 10);
+
+    // Assert the property rather than the constant: no point in the interval
+    // has a lower worst-case relative error than the one we return.
+    const worstRelative = (guess: number): number =>
+      Math.max(Math.abs(guess - 10) / 10, Math.abs(guess - 30) / 30);
+    const ours = worstRelative(answer.value);
+    for (let candidate = 10; candidate <= 30; candidate += 0.05) {
+      expect(worstRelative(candidate)).toBeGreaterThanOrEqual(ours - 1e-9);
+    }
+    // The arithmetic midpoint is strictly worse, which is why this changed.
+    expect(worstRelative(20)).toBeGreaterThan(ours);
+  });
+
+  it("falls back to the arithmetic midpoint when the interval touches zero", () => {
+    // Relative error is undefined at the crossing, so the harmonic form does not apply.
+    const answer = defaultAnswerForTask(buildTask({ kind: "numeric", minimum: -10, maximum: 30 }));
+    expect(answer).toEqual({ kind: "numeric", value: 10 });
   });
 
   it("answers zero when unbounded", () => {

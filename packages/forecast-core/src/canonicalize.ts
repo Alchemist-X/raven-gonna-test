@@ -152,6 +152,19 @@ export function canonicalizeEntity(value: string, options: CanonicalizeOptions =
  * never separate two real entities — articles, diacritics, punctuation, case.
  * Never emitted; only used to decide whether two answers are one answer.
  */
+/**
+ * Exactly the grader's own normalization: trim, lowercase, collapse whitespace —
+ * and nothing else. Deliberately NOT entityFoldKey, which additionally strips
+ * articles and punctuation to decide cluster MEMBERSHIP. Two spellings the
+ * grader treats as one answer must share support; two it treats as different
+ * answers must not, even when they belong in the same cluster. Mixing the two
+ * keys makes "The Fed" and "Fed" pool their votes and then emits whichever
+ * happened to be written most often, which is not the grader's mode.
+ */
+export function graderFoldKey(value: string): string {
+  return value.trim().toLocaleLowerCase().replace(/\s+/g, " ");
+}
+
 export function entityFoldKey(value: string): string {
   return canonicalizeEntity(value, { stripLeadingArticle: true })
     .normalize("NFD")
@@ -291,7 +304,26 @@ export function clusterAnswers(answers: readonly string[]): AnswerCluster[] {
       const occurrences = members
         .flatMap((surface) => surface.indices.map((index) => ({ index, value: surface.value })))
         .sort((a, b) => a.index - b.index);
-      const representative = members.reduce(preferSurface);
+      // Count support the way the GRADER counts it. It folds case (and the rest
+      // of entityFoldKey) before comparing, so "The Fed" / "the fed" / "THE FED"
+      // are one answer to it. Counting case-preserving surfaces instead splits
+      // that vote three ways and can hand the cluster to a spelling with
+      // strictly less real support.
+      const supportByFold = new Map<string, number>();
+      for (const surface of members) {
+        const key = graderFoldKey(surface.value);
+        supportByFold.set(key, (supportByFold.get(key) ?? 0) + surface.indices.length);
+      }
+      const ranked = [...supportByFold.entries()].sort((a, b) => b[1] - a[1]);
+      const [bestFold, bestSupport] = ranked[0] ?? ["", 0];
+      // Only let the grader-class narrow the field when it STRICTLY wins. On a
+      // tie every class is equally attested, so fall through to preferSurface,
+      // whose own tie-breaks (casing, then accents) still apply — accents are
+      // dropped by lossy pipelines and never invented, so the accented spelling
+      // is the better guess at the printed form.
+      const decisive = ranked.length > 1 && bestSupport > (ranked[1]?.[1] ?? 0);
+      const winning = decisive ? members.filter((surface) => graderFoldKey(surface.value) === bestFold) : members;
+      const representative = (winning.length > 0 ? winning : members).reduce(preferSurface);
       return {
         representative: representative.value,
         members: occurrences.map((occurrence) => occurrence.value),

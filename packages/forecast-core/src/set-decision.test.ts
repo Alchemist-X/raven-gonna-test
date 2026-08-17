@@ -255,3 +255,25 @@ describe("chooseF1Subset plug-in fallback", () => {
     expect(decision.expectedF1).toBe(1);
   });
 });
+
+describe("plug-in branch handles the empty-gold mass", () => {
+  it("can select nothing when every candidate is unlikely", () => {
+    // The scorer treats both-empty as a perfect 1, so the empty prediction is
+    // worth P(gold empty). Without that term the empty set scored 0 and could
+    // never win, however unlikely the candidates were.
+    const candidates = Array.from({ length: 40 }, (_, index) => ({ key: `k${index}`, probability: 0.001 }));
+    const decision = chooseF1Subset(candidates, { exactCandidateLimit: 0, minimumSelections: 0 });
+    expect(decision.method).toBe("plugin-expected-counts");
+    expect(decision.selected).toEqual([]);
+    // P(all 40 absent) = 0.999^40 ~ 0.96, far above anything a non-empty set earns here.
+    expect(decision.expectedF1).toBeGreaterThan(0.9);
+  });
+
+  it("still selects a confident candidate", () => {
+    const decision = chooseF1Subset(
+      [{ key: "a", probability: 0.95 }, { key: "b", probability: 0.02 }],
+      { exactCandidateLimit: 0, minimumSelections: 0 }
+    );
+    expect(decision.selected).toEqual(["a"]);
+  });
+});

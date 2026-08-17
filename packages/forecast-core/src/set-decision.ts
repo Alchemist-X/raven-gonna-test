@@ -27,9 +27,12 @@
  *    That double sum is EXACT — no approximation — with both pmfs built by an O(n²)
  *    Bernoulli convolution. Cost is O(n³) overall, so past `exactCandidateLimit` this
  *    module falls back to the plug-in 2·Σ_{i<k} p_i / (Σ_i p_i + k), which substitutes
- *    expected counts into the ratio. That fallback is a ratio of expectations rather than
- *    the expectation of a ratio (Jensen bias, shrinking as n grows) and is always
- *    reported in `method` rather than passed off as the exact value.
+ *    expected counts into the ratio, plus an explicit P(gold empty) term at k = 0.
+ *    It is a ratio of expectations rather than the expectation of a ratio, and that
+ *    error does NOT reliably shrink with n — on many low-probability candidates it
+ *    stays large. It is always reported in `method` rather than passed off as exact,
+ *    and its `expectedF1` can overstate the true expectation, so treat that number as
+ *    a ranking signal rather than a calibrated estimate.
  */
 
 export interface CandidateProbability {
@@ -130,11 +133,22 @@ function exactPrefixScores(probabilities: readonly number[], lowest: number, hig
 
 function pluginPrefixScores(probabilities: readonly number[], lowest: number, highest: number): number[] {
   const expectedGoldSize = probabilities.reduce((sum, probability) => sum + probability, 0);
+  // The scorer treats both-sets-empty as a perfect 1, so the empty prediction is
+  // worth P(gold is empty) — not 0. The plug-in ratio has no term for that mass,
+  // so without this the empty set scores 0 whenever any probability is positive
+  // and can never be chosen, which is catastrophic when the candidates are all
+  // unlikely (every p = 0.001 over many candidates: true E[F1] of the empty set
+  // is 0.82, while selecting everything scores 0.002).
+  const probabilityGoldEmpty = probabilities.reduce((product, probability) => product * (1 - probability), 1);
   const scores: number[] = [];
   let expectedHits = 0;
   for (let size = 0; size <= highest; size += 1) {
     if (size > 0) expectedHits += probabilities[size - 1] ?? 0;
     if (size < lowest) continue;
+    if (size === 0) {
+      scores.push(probabilityGoldEmpty);
+      continue;
+    }
     const denominator = expectedGoldSize + size;
     scores.push(denominator === 0 ? 1 : (2 * expectedHits) / denominator);
   }

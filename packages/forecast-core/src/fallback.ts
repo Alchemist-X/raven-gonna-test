@@ -1,12 +1,20 @@
 // Per-kind default answers for tasks whose model trials all failed.
 //
-// The scoring rule this exists for (FutureX, packages/benchmarks/src/futurex/
-// scorer.ts): a missing submission row scores 0, and a wrong row is scored on
-// the same 0..1 scale with no penalty below zero. So abstaining is weakly
-// dominated by guessing — there is no state of the world in which throwing
-// beats shipping an uninformative row. Today the engine throws an AggregateError
-// when every trial fails unless the caller supplies options.fallback, which
-// turns one flaky provider call into a permanent zero.
+// The scoring rule this exists for (FutureX): a missing submission row scores 0,
+// and a wrong row is scored on the same 0..1 scale with no penalty below zero.
+// So abstaining is weakly dominated by guessing — there is no state of the world
+// in which throwing beats shipping an uninformative row. Today the engine throws
+// an AggregateError when every trial fails unless the caller supplies
+// options.fallback, which turns one flaky provider call into a permanent zero.
+//
+// One caveat about the LOCAL scorer, which is a measuring instrument and not the
+// benchmark: for open_text it returns null on a non-exact match, meaning "a
+// production semantic judge is required, and this copy does not have one". Under
+// the old code a single null collapsed the whole local report. That is a
+// limitation of our offline estimate — it is NOT the benchmark awarding null,
+// and it is not a reason to abstain. Optimising for a nicer local report at the
+// cost of real score would be optimising the instrument. scoreFutureX now
+// reports bounds instead of collapsing.
 //
 // Every value here is derived from the task alone: no clock, no randomness, so
 // a replayed run reproduces the same submission. The answers are deliberately
@@ -42,6 +50,18 @@ function allEqual(values: readonly number[]): boolean {
 
 function constantOver(labels: readonly string[], value: number): Record<string, number> {
   return Object.fromEntries(labels.map((label) => [label, value]));
+}
+
+/**
+ * The point minimising worst-case RELATIVE error over [minimum, maximum].
+ * Falls back to the arithmetic midpoint when the interval spans or touches zero,
+ * where relative error is undefined at the crossing.
+ */
+function harmonicMidpoint(minimum: number, maximum: number): number {
+  const arithmetic = (minimum + maximum) / 2;
+  if (minimum <= 0 || maximum <= 0) return arithmetic;
+  const harmonic = (2 * minimum * maximum) / (minimum + maximum);
+  return Number.isFinite(harmonic) ? harmonic : arithmetic;
 }
 
 export function defaultAnswerForTask(task: ForecastTask): ForecastAnswer {
@@ -88,10 +108,14 @@ export function defaultAnswerForTask(task: ForecastTask): ForecastAnswer {
       // proportional to |truth|, so only a near-exact answer scores at all. The
       // one exception is truth === 0, where sigma is an absolute floor and an
       // answer of 0 scores 1 — which makes 0 the only unbounded guess with any
-      // expected value. Bounds change that: a midpoint minimises worst-case
-      // relative error across the admissible interval.
-      const midpoint = task.minimum !== undefined && task.maximum !== undefined
-        ? (task.minimum + task.maximum) / 2
+      // expected value. With bounds, use the geometric-style midpoint: because
+      // sigma is RELATIVE to |truth|, the point minimising worst-case relative
+      // error over [min,max] is the harmonic mean, not the arithmetic one. On
+      // [10,30] the arithmetic midpoint 20 is 100% off at truth=10 but the
+      // harmonic mean 15 is at most 50% off at either end.
+      const bounded = task.minimum !== undefined && task.maximum !== undefined;
+      const midpoint = bounded
+        ? harmonicMidpoint(task.minimum as number, task.maximum as number)
         : undefined;
       const value = midpoint ?? Math.min(
         task.maximum ?? Number.POSITIVE_INFINITY,
