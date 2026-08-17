@@ -1,4 +1,7 @@
 import type { ForecastAnswer, ForecastTask, TrialPrediction } from "./contracts.js";
+import { canonicalizeEntity, clusterAnswers } from "./canonicalize.js";
+import { chooseNumericPoint } from "./numeric-decision.js";
+import { chooseF1Subset } from "./set-decision.js";
 import { blendLogOdds, clampProbability, logitPool, normalizeProbabilities } from "./probability.js";
 
 export interface AggregationOptions {
@@ -66,18 +69,17 @@ export function aggregateTrialPredictions(
       const probabilities = Object.fromEntries(
         task.choices.map((choice) => [choice, (totals[choice] ?? 0) / answers.length])
       );
-      const threshold = options.multiLabelThreshold ?? 0.5;
-      let selected = task.choices.filter((choice) => (probabilities[choice] ?? 0) >= threshold);
-      selected.sort((a, b) => (probabilities[b] ?? 0) - (probabilities[a] ?? 0));
-      const min = task.minimumSelections;
-      const max = task.maximumSelections ?? task.choices.length;
-      if (selected.length < min) {
-        selected = [...task.choices]
-          .sort((a, b) => (probabilities[b] ?? 0) - (probabilities[a] ?? 0))
-          .slice(0, min);
-      }
-      selected = selected.slice(0, max);
-      selected.sort((a, b) => task.choices.indexOf(a) - task.choices.indexOf(b));
+      // A fixed 0.5 cut is provably suboptimal for F1: when the gold set is
+      // large, including a candidate below 0.5 can still raise expected F1.
+      // Choose the prefix size that maximizes it instead.
+      const decision = chooseF1Subset(
+        task.choices.map((choice) => ({ key: choice, probability: probabilities[choice] ?? 0 })),
+        {
+          minimumSelections: task.minimumSelections,
+          ...(task.maximumSelections !== undefined ? { maximumSelections: task.maximumSelections } : {})
+        }
+      );
+      const selected = [...decision.selected].sort((a, b) => task.choices.indexOf(a) - task.choices.indexOf(b));
       return { kind: "multi_label", selected, probabilities };
     }
     case "ranking": {
@@ -101,29 +103,32 @@ export function aggregateTrialPredictions(
     case "numeric": {
       const values = answers
         .flatMap((answer) => (answer.kind === "numeric" ? [answer.value] : []))
-        .filter(Number.isFinite)
-        .sort((a, b) => a - b);
+        .filter(Number.isFinite);
       if (values.length === 0) throw new Error("No finite numeric predictions.");
-      const trim = values.length >= 5 ? Math.floor(values.length * 0.2) : 0;
-      const trimmed = values.slice(trim, values.length - trim || values.length);
-      let value = trimmed.reduce((sum, candidate) => sum + candidate, 0) / trimmed.length;
-      if (task.minimum !== undefined) value = Math.max(task.minimum, value);
-      if (task.maximum !== undefined) value = Math.min(task.maximum, value);
-      const numericAnswer: ForecastAnswer = { kind: "numeric", value };
+      // A trimmed mean is a central-tendency estimator, and the grader's score
+      // is not maximized there. max(0, 1-((x-t)/sigma)^2) has bounded support,
+      // so on a split trial set the mean can land in a dead zone scoring 0
+      // while either cluster would score well. Pick the point that maximizes
+      // expected score over the trials instead.
+      const decision = chooseNumericPoint(values, {
+        ...(task.minimum !== undefined ? { minimum: task.minimum } : {}),
+        ...(task.maximum !== undefined ? { maximum: task.maximum } : {})
+      });
+      const numericAnswer: ForecastAnswer = { kind: "numeric", value: decision.value };
       if (task.unit !== undefined) numericAnswer.unit = task.unit;
       return numericAnswer;
     }
     case "free_response": {
-      const counts = new Map<string, { value: string; count: number }>();
-      for (const answer of answers) {
-        if (answer.kind !== "free_response") continue;
-        const key = answer.value.trim().toLocaleLowerCase();
-        const current = counts.get(key);
-        counts.set(key, { value: answer.value.trim(), count: (current?.count ?? 0) + 1 });
-      }
-      const winner = [...counts.values()].sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))[0];
+      const raw = answers.flatMap((answer) => (answer.kind === "free_response" ? [answer.value] : []));
+      if (raw.length === 0) throw new Error("No free-response prediction.");
+      // The old vote keyed on lowercase+trim, so "Real Madrid." and "Real
+      // Madrid" were rivals rather than the same answer, and ties broke
+      // ALPHABETICALLY rather than by support. Cluster equivalent spellings
+      // first, then take the largest cluster's canonical representative.
+      const clusters = clusterAnswers(raw);
+      const winner = clusters[0];
       if (!winner) throw new Error("No free-response prediction.");
-      return { kind: "free_response", value: winner.value };
+      return { kind: "free_response", value: winner.representative };
     }
   }
 }

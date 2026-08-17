@@ -14,6 +14,11 @@ export interface BatchOptions {
   checkpointIdentity?: Record<string, string | number | boolean>;
   resumeResults?: ReadonlyMap<string, ForecastResult>;
   forecastOptions?: Parameters<ForecastEngine["forecast"]>[2];
+  /**
+   * Per-task overrides merged over forecastOptions. Exists so spend can follow
+   * a benchmark's own weighting instead of being uniform across every task.
+   */
+  forecastOptionsFor?: (task: ForecastTask) => Parameters<ForecastEngine["forecast"]>[2];
   fallbackFor?: (task: ForecastTask) => ForecastAnswer | undefined;
   onProgress?: (completed: number, total: number, task: ForecastTask, result: ForecastResult) => void;
 }
@@ -52,9 +57,30 @@ export async function runForecastBatch(
       const task = pending[index];
       if (!task) return;
       const fallback = options.fallbackFor?.(task);
-      const forecastOptions = { ...(options.forecastOptions ?? {}) };
+      const forecastOptions = { ...(options.forecastOptions ?? {}), ...(options.forecastOptionsFor?.(task) ?? {}) };
       if (fallback !== undefined) forecastOptions.fallback = fallback;
-      const result = await engine.forecast(task, policyFor(task), forecastOptions);
+      let result: ForecastResult;
+      try {
+        result = await engine.forecast(task, policyFor(task), forecastOptions);
+      } catch (error) {
+        // One pathological task must not reject Promise.all and abandon the
+        // other 79. Where a fallback answer is available the batch degrades to
+        // it and says so; without one there is nothing to submit for this task
+        // and the failure is genuinely fatal.
+        if (fallback === undefined) throw error;
+        result = {
+          schemaVersion: "raven-gonna-test.forecast-result.v1",
+          taskId: task.taskId,
+          answer: fallback,
+          trials: [],
+          model: engine.modelId,
+          strategyId: "batch-fallback",
+          policyId: policyFor(task).id,
+          generatedAtUtc: new Date().toISOString(),
+          fallbackUsed: true,
+          warnings: [`Forecast threw; substituted fallback answer: ${error instanceof Error ? error.message : String(error)}`]
+        };
+      }
       resultById.set(task.taskId, result);
       completed += 1;
       options.onProgress?.(completed, tasks.length, task, result);

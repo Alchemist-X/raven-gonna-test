@@ -192,6 +192,11 @@ export class ForecastEngine {
     private readonly clock: ClockPort = systemClock
   ) {}
 
+  /** The port's model id, so a caller synthesising a degraded result can label it accurately. */
+  get modelId(): string {
+    return this.model.model;
+  }
+
   async forecast(
     task: ForecastTask,
     policy: InformationPolicy,

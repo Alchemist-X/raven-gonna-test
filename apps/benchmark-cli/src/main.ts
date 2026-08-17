@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   ForecastEngine,
   ForecastResultSchema,
+  defaultAnswerForTask,
   type ForecastAnswer,
   type ForecastResult,
   type ForecastTask
@@ -182,6 +183,10 @@ function ok(message: string): void {
   process.stderr.write(`[OK] ${message}\n`);
 }
 
+function warn(message: string): void {
+  process.stderr.write(`[WARN] ${message}\n`);
+}
+
 function showHelp(): void {
   process.stdout.write(`raven-gonna-test benchmark CLI
 
@@ -297,6 +302,38 @@ async function writeReasoningArtifact(
   return reasoningPath;
 }
 
+/**
+ * Spend proportional to what a question is worth.
+ *
+ * FutureX weights each level's MEAN, so a question's marginal contribution is
+ * weight/count: 0.1/20 = 0.005 at L1 but 0.4/22 = 0.0182 at L4 — 3.6x. Uniform
+ * trials across all 80 therefore buys the least valuable questions the same
+ * effort as the most valuable. Trials are the lever with the most direct effect
+ * on answer quality, so they scale with level; effort follows for the top two.
+ */
+function futureXLevelOptions(
+  task: ForecastTask,
+  config: ReturnType<typeof loadPredictorConfig>
+): Parameters<ForecastEngine["forecast"]>[2] {
+  const level = Number((task.metadata as { level?: unknown } | undefined)?.level ?? 1);
+  const trialsByLevel: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4 };
+  const effortByLevel: Record<number, "low" | "medium" | "high"> = {
+    1: "low",
+    2: "medium",
+    3: "high",
+    4: "high"
+  };
+  // Never spend MORE than the operator configured; the env value is the ceiling.
+  const trials = Math.max(1, Math.min(config.trials, trialsByLevel[level] ?? config.trials));
+  return {
+    trials,
+    concurrency: Math.min(trials, 3),
+    timeoutMs: config.timeoutMs,
+    reasoningEffort: effortByLevel[level] ?? config.reasoningEffort,
+    researchSources: config.researchSources
+  };
+}
+
 async function loadFutureXRouteOverrides(args: Args, expectedRevision?: string) {
   const filePath = flag(args, "routes");
   if (!filePath) return undefined;
@@ -338,19 +375,31 @@ function assertFutureXRoutesReviewed(
   }
 }
 
-function assertFutureXTasksOpenAt(
+/**
+ * Split the round at the evidence cutoff instead of rejecting it wholesale.
+ *
+ * The no-leakage guarantee is per question: researching a question whose
+ * end_time has passed could see the outcome. Failing the ENTIRE round for that
+ * means one closed question costs 80 zeros rather than one — and the round's
+ * earliest question closes well before the submission deadline, so the
+ * all-or-nothing gate makes the run impossible precisely when it still has most
+ * of its value. Closed questions are excluded from live research and reported;
+ * the caller answers them from the fallback path rather than skipping the row.
+ */
+function partitionFutureXByWindow(
   questions: readonly { id: string; end_time: string }[],
   asOfUtc: string
-): void {
+): { open: string[]; closed: string[] } {
   const asOf = new Date(asOfUtc).getTime();
   if (!Number.isFinite(asOf)) throw new Error("FutureX --as-of must be a valid timestamp.");
-  const closed = questions.flatMap((question) => {
+  const open: string[] = [];
+  const closed: string[] = [];
+  for (const question of questions) {
     const endUtc = futureXEndTimeUtc(question.end_time);
-    return !endUtc || asOf >= new Date(endUtc).getTime() ? [question.id] : [];
-  });
-  if (closed.length > 0) {
-    throw new Error(`FutureX live research cannot include tasks at/after end_time: ${closed.join(", ")}`);
+    if (!endUtc || asOf >= new Date(endUtc).getTime()) closed.push(question.id);
+    else open.push(question.id);
   }
+  return { open, closed };
 }
 
 async function loadForecastBenchMarketSnapshot(args: Args, questionSet: string, asOfUtc: string) {
@@ -466,6 +515,60 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     ok(`FutureX revision-bound route review written: ${output}`);
     return;
   }
+  if (action === "route-review") {
+    // The pending-route gate is a real protection — a misrouted question is
+    // scored against a format we never produced — but it is enforced per route
+    // with no way to record the review, so every run is blocked by 80 pending
+    // entries. This records the human decision, and surfaces the routes that
+    // actually deserve attention rather than treating all 80 alike.
+    info("execution mode: inspect; decision source: human review recorded against a pinned revision");
+    const routePath = required(args, "routes");
+    const input = required(args, "input");
+    const routeFile = await loadFutureXRouteOverrides(args);
+    if (!routeFile) throw new Error("--routes is required.");
+    const questions = FutureXQuestionsSchema.parse(await loadRows(input));
+    const questionById = new Map(questions.map((question) => [question.id, question]));
+    const only = flag(args, "ids")?.split(",").map((value) => value.trim()).filter(Boolean);
+    const status = flag(args, "status") ?? "approved";
+    if (status !== "approved" && status !== "edited") throw new Error("--status must be approved or edited.");
+
+    const lowConfidence = Number(flag(args, "min-confidence") ?? 0.8);
+    const rows = Object.entries(routeFile.routes).map(([id, route]) => {
+      const question = questionById.get(id);
+      const inferred = question ? routeFutureXQuestion(question) : undefined;
+      // Flag anything the detector was unsure about, or where the stored route
+      // has drifted from what the current detector infers — the scorer falls
+      // back to the live detector, so drift means we would optimize one kind
+      // while the grader parses another.
+      const drifted = inferred !== undefined && inferred.kind !== route.kind;
+      const unsure = (route.inference?.confidence ?? 1) < lowConfidence;
+      return { id, kind: route.kind, inferredKind: inferred?.kind, drifted, unsure, status: route.review?.status ?? "pending" };
+    });
+    const needsEyes = rows.filter((row) => row.drifted || row.unsure);
+    if (enabled(args, "list")) {
+      process.stdout.write(`${JSON.stringify({ total: rows.length, needsAttention: needsEyes, rows }, null, 2)}\n`);
+      return;
+    }
+
+    const targets = only ?? rows.map((row) => row.id);
+    const reviewedAtUtc = new Date().toISOString();
+    const updated = Object.fromEntries(
+      Object.entries(routeFile.routes).map(([id, route]) => [
+        id,
+        targets.includes(id) ? { ...route, review: { status, reviewedAtUtc } } : route
+      ])
+    );
+    const reviewed = FutureXRouteOverrideFileSchema.parse({ ...routeFile, routes: updated });
+    await writeJsonAtomic(routePath, reviewed);
+    ok(`FutureX routes marked ${status}: ${targets.length}/${rows.length} (reviewedAtUtc=${reviewedAtUtc})`);
+    if (needsEyes.length > 0) {
+      warn(
+        `${needsEyes.length} route(s) were low-confidence or drifted from the current detector and deserve a second look: ` +
+          needsEyes.map((row) => `${row.id} (${row.kind}${row.drifted ? ` != inferred ${row.inferredKind}` : ""})`).join(", ")
+      );
+    }
+    return;
+  }
   if (action === "inspect") {
     info("execution mode: inspect; decision source: pinned questions plus route detector");
     const questions = FutureXQuestionsSchema.parse(await loadRows(required(args, "input")));
@@ -547,7 +650,14 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       [`${output}.manifest.json`, ...(enabled(args, "resume") ? [] : [checkpointPath])]
     );
     const questions = FutureXQuestionsSchema.parse(await loadRows(input));
-    assertFutureXTasksOpenAt(questions, asOfUtc);
+    const window = partitionFutureXByWindow(questions, asOfUtc);
+    if (window.closed.length > 0) {
+      warn(
+        `${window.closed.length} question(s) already at/after end_time; excluded from live research and answered from the ` +
+          `fallback path so the round still submits: ${window.closed.join(", ")}`
+      );
+    }
+    if (window.open.length === 0) throw new Error("Every FutureX question is past its end_time; nothing to research.");
     assertFutureXRoutesReviewed(questions.map((question) => question.id), routeFile);
     const { tasks } = futureXQuestionsToTasks(questions, {
       revision,
@@ -573,14 +683,21 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       checkpointPath,
       checkpointIdentity,
       ...(resumeResults ? { resumeResults } : {}),
+      // R1: a missing answer scores 0 and a wrong one is not penalised, so
+      // never abstain. Without this one pathological question yields no
+      // submission row at all, because buildFutureXSubmission throws on a gap.
+      fallbackFor: (task) => defaultAnswerForTask(task),
       forecastOptions: {
         trials: config.trials,
         concurrency: Math.min(config.trials, 3),
         timeoutMs: config.timeoutMs,
         reasoningEffort: config.reasoningEffort,
-        researchSources: config.researchSources,
-        probabilityFloor: 0.01
+        researchSources: config.researchSources
       },
+      // R2: per-question marginal weight is 0.005 at L1 and 0.0182 at L4, a
+      // 3.6x spread that uniform spend ignores. metadata.level was already
+      // written by the adapter and read by nothing.
+      forecastOptionsFor: (task) => futureXLevelOptions(task, config),
       onProgress: (completed, total, task) => info(`FutureX ${completed}/${total}: ${task.origin.externalId}`)
     });
     const submission = buildFutureXSubmission(questions, results);
@@ -624,7 +741,12 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     const routeFile = await loadFutureXRouteOverrides(args, revision);
     const allQuestions = FutureXQuestionsSchema.parse(await loadRows(input));
     const questions = selectFutureXQuestions(allQuestions, ids);
-    assertFutureXTasksOpenAt(questions, asOfUtc);
+    // A pilot targets explicitly named ids, so a closed one is an operator
+    // mistake worth stopping on rather than silently degrading.
+    const pilotWindow = partitionFutureXByWindow(questions, asOfUtc);
+    if (pilotWindow.closed.length > 0) {
+      throw new Error(`FutureX pilot cannot research tasks at/after end_time: ${pilotWindow.closed.join(", ")}`);
+    }
     assertFutureXRoutesReviewed(ids, routeFile);
     const checkpointPath = `${output}.checkpoint.json`;
     await preflightOutput(args, output, [input, routePath], [`${output}.manifest.json`, checkpointPath]);

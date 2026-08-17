@@ -51,6 +51,19 @@ describe("buildClaudeCliArgs", () => {
     );
   });
 
+  it("withholds retrieval tools when the policy forbids live research", () => {
+    // A prompt saying "do not use live web research" is guidance; not passing
+    // the tools is enforcement. Under a no-web policy the model must be unable
+    // to search, not merely asked not to.
+    const denied = buildClaudeCliArgs({ model: "m" }, request({ research: false }));
+    expect(denied).not.toContain("--allowedTools");
+    expect(denied.join(" ")).not.toMatch(/WebSearch|WebFetch/);
+
+    expect(buildClaudeCliArgs({ model: "m" }, request({ research: true }))).toContain("--allowedTools");
+    const scoped = buildClaudeCliArgs({ model: "m" }, request({ research: { sources: ["news"] } }));
+    expect(scoped[scoped.indexOf("--allowedTools") + 1]).toBe("WebSearch WebFetch");
+  });
+
   it("lets config reach xhigh/max, which ModelRequest.reasoningEffort cannot express", () => {
     expect(buildClaudeCliArgs({ model: "m" }, request({ reasoningEffort: "high" }))).toContain("high");
     const capped = buildClaudeCliArgs({ model: "m", effort: "max" }, request({ reasoningEffort: "high" }));

@@ -58,7 +58,18 @@ export function scoreFutureX(
     const kind = kindFor(question);
     const goldText = Array.isArray(question.ground_truth) ? question.ground_truth.join(", ") : String(question.ground_truth);
     if (kind === "single_choice") {
-      return { id: question.id, level: question.level, score: normalized(prediction) === normalized(goldText) ? 1 : 0, method: "exact" };
+      // We submit the route KEY (adapter.ts maps choices to choice.key), which
+      // is what the prompts ask for ("\boxed{A}"), while ground_truth may be
+      // recorded as the option TEXT. Comparing only against the text made the
+      // local scorer report 0 for correct answers, so offline tuning was
+      // optimizing against a lie. Accept either surface form of the gold option.
+      const route = routeFutureXQuestion(question);
+      const goldChoice = route.choices.find(
+        (choice) => normalized(choice.key) === normalized(goldText) || normalized(choice.text) === normalized(goldText)
+      );
+      const acceptable = goldChoice ? [goldChoice.key, goldChoice.text] : [goldText];
+      const hit = acceptable.some((candidate) => normalized(candidate) === normalized(prediction));
+      return { id: question.id, level: question.level, score: hit ? 1 : 0, method: "exact" };
     }
     if (kind === "multi_choice") {
       return { id: question.id, level: question.level, score: f1(labels(question.ground_truth as string | string[]), labels(prediction)), method: "set-f1" };

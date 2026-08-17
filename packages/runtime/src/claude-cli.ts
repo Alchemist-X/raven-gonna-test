@@ -51,15 +51,19 @@ const EFFORT_BY_REASONING: Record<ModelRequest["reasoningEffort"], ClaudeCliEffo
 
 export function buildClaudeCliArgs(
   config: ClaudeCliConfig,
-  request: Pick<ModelRequest, "reasoningEffort" | "systemPrompt">
+  request: Pick<ModelRequest, "reasoningEffort" | "systemPrompt" | "research">
 ): string[] {
+  // The information policy decides whether live research is permitted. Passing
+  // retrieval tools regardless would let a task run under a no-web policy
+  // search anyway — the prompt says not to, but a prompt is not an enforcement
+  // boundary. Withholding the tools is.
+  const allowedTools = request.research === false ? "" : (config.allowedTools ?? DEFAULT_ALLOWED_TOOLS);
   const args = [
     "--print",
     "--output-format",
     "stream-json",
     "--verbose",
-    "--allowedTools",
-    config.allowedTools ?? DEFAULT_ALLOWED_TOOLS,
+    ...(allowedTools ? ["--allowedTools", allowedTools] : []),
     "--model",
     config.model,
     "--effort",

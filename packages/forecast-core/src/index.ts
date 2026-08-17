@@ -1,7 +1,11 @@
 export * from "./aggregation.js";
+export * from "./canonicalize.js";
 export * from "./contracts.js";
 export * from "./engine.js";
+export * from "./fallback.js";
+export * from "./numeric-decision.js";
+export * from "./parse.js";
 export * from "./policy.js";
 export * from "./probability.js";
 export * from "./prompt.js";
-
+export * from "./set-decision.js";
