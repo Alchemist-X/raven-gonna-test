@@ -7,6 +7,16 @@
 
 Last updated: 2026-08-17
 
+## Outcome (updated 2026-08-18)
+
+**The plan was executed, but its architecture call was overturned once the code was read.** The proposed new `packages/raven-futurex` plus a 300-line harness port was ~70% redundant: the repo already had the full pipeline. Work was done by **extending three existing packages** along their seams; no new package (one would have broken the `check-boundaries.mjs` allowlist).
+
+Delivered in `ebfeb05` → `0541fce`, all on main: Claude CLI provider (promoted to P0 — no `PREDICTOR_API_KEY` exists, so the CLI's subscription is the only model access); explicit answer contract (the prompt never asked for the `<answer>` block the parser sought, which zeroed whole questions); tolerant `parse.ts`; reasoning preservation (`thinking`/`role` plus a first-class `.reasoning.jsonl`); the ranking misroute that crashed the run (now 0); contract-based numeric routing (9 questions, **0.1442** of score weight); the percent-scale bug (`2.7%` → `0.027` scored exactly 0); expected-score decisions for numeric/multi_label/free_response; never-abstain wiring; level-weighted spend; a `route-review` command (80/80 approved, **drift = 0**); a partitioned open-window gate; and fixes for four adversarially confirmed defects.
+
+Verified end to end across all three solver paths, including the Keysight numeric question this plan's own §1.3 used as the canonical *blocked* example, and the Esports question that previously crashed the run. 168 tests pass.
+
+**Not done**: the full 80-question live run and submission, which need the sign-offs in §7. The original §3 P0/P5 items and the new-package proposal are void.
+
 ## 0. Background and goal
 
 - Status quo: of the 80 questions in the 2026-08-19 round, the generic binary

@@ -5,6 +5,32 @@
 
 最后更新:2026-08-17
 
+## 执行结果（2026-08-18 更新）
+
+**计划已执行完毕，但架构结论在读代码后被推翻。** 原计划"新建 `packages/raven-futurex` + 移植 300 行 harness"约 70% 是重复造轮子：仓库已有完整管线（router、任务转换、提交构建与校验、scorer、带断点续跑的 worker pool、四道 CLI 门禁）。改为**沿现有接缝扩展**三个包，未新建包（新建会破坏 `check-boundaries.mjs` 的依赖白名单）。
+
+已交付（提交 `ebfeb05` → `0541fce`，均在 main）：
+
+| 项 | 状态 | 关键事实 |
+| --- | --- | --- |
+| Claude CLI provider | ✅ | 从"可选"提升为 P0：机器上无 `PREDICTOR_API_KEY`，CLI 持有的订阅是唯一可用模型access。带 AbortSignal→SIGTERM |
+| 输出契约 | ✅ | 提示从未要求过 `<answer>` 块而解析器一直在找；实测导致整题产出 0 行 |
+| 容错解析 `parse.ts` | ✅ | 平衡括号扫描替代无保护 `JSON.parse`，按题型抢救 |
+| 推理留存 | ✅ | `thinking`/`role` 进 trial，`<output>.reasoning.jsonl` 成为一等产物 |
+| ranking 误路由 | ✅ | 1 道题曾使整个 run 崩溃，现为 0 |
+| 数值契约路由 | ✅ | 9 道题重新路由，占总分 **0.1442** |
+| 数值尺度 | ✅ | `parseNumber` 拆为 probability/quantity；`2.7%` 不再变 `0.027`（原本精确得 0） |
+| 期望得分决策 | ✅ | numeric 网格搜索、multi_label 期望 F1、free_response 折叠聚类 |
+| never-abstain | ✅ | `fallbackFor` + batch worker try/catch |
+| 按 level 配算力 | ✅ | `metadata.level` 此前无人读取 |
+| `route-review` 命令 | ✅ | 80/80 已 approved，**drift = 0** |
+| open-window 门禁 | ✅ | 由全局否决改为分区 |
+| 对抗审查修复 | ✅ | 4 个确认缺陷，含 set-decision 空集 regret 0.82 |
+
+**端到端实证**：三条 solver 路径均跑通，含开场判定"不可执行"的 Keysight 数值题（1744.87）与曾使 run 崩溃的 Esports 题（Team Falcons）。168 测试通过。
+
+**未做**：全量 80 题 live run 与正式提交（需用户确认，见 §7）。原 §3 的 P0/P5 与新包方案作废。
+
 ## 0. 背景与目标
 
 - 现状:2026-08-19 轮 80 题,通用二元 Raven 只能接 12 题(见 [`pilots/futurex/2026-08-19-3tier/`](../pilots/futurex/2026-08-19-3tier/)),**总分理论上限约 0.13**——因为缺答记 0 分,且已跑的 12 题几乎全是权重最低的 L1。
