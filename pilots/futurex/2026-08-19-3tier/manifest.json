@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "predict-raven.futurex-pilot-submission.v1",
+  "submissionEligible": false,
+  "notSubmissionCandidateReason": "Binary-only Raven pilot: partial round coverage, produced outside the raven-gonna-test `futurex run` protocol, and generated while every routes.json entry was still review.status=pending.",
+  "runId": "futurex-20260817T191457",
+  "datasetRevision": "2841bff13f6d2f679298ce7007e91ae585f4ade1",
+  "questionsFile": "/Users/Aincrad/dev-proj/raven-gonna-test/runtime-artifacts/futurex/2026-08-19/questions.json",
+  "questionsSha256": "1efb0dfd1f659482cf69d3d8fbb225fec9de92b7a1f8b72ede6fa40fdcf0a465",
+  "asOfEvidenceCutoff": "2026-08-17T19:14:57+08:00",
+  "generatedAt": "2026-08-17T13:32:51.890Z",
+  "coverage": {
+    "questionsInRound": 80,
+    "questionsAttempted": 12,
+    "questionsAnsweredPerProfile": {
+      "urd": 12,
+      "verdandi": 12,
+      "skuld": 12
+    },
+    "unattemptedQuestions": 68
+  },
+  "profiles": [
+    {
+      "id": "urd",
+      "model": "claude-haiku-4-5-20251001",
+      "effort": "low",
+      "maxRounds": 1
+    },
+    {
+      "id": "verdandi",
+      "model": "claude-sonnet-5",
+      "effort": "medium",
+      "maxRounds": 2
+    },
+    {
+      "id": "skuld",
+      "model": "claude-opus-5",
+      "effort": "high",
+      "maxRounds": 3
+    }
+  ],
+  "skipped": {
+    "urd": [],
+    "verdandi": [],
+    "skuld": []
+  },
+  "provenance": {
+    "predictRavenSha": "327f646cda2e6b77cf3057d609f9a70972657d3a",
+    "ravenGonnaTestSha": "d82843f0e206098d7ae46ebbcc619abc8aa6e33e",
+    "routesFile": "/Users/Aincrad/dev-proj/raven-gonna-test/runtime-artifacts/futurex/2026-08-19/routes.json",
+    "routesReviewStatus": "80/80 pending"
+  }
+}
