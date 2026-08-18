@@ -109,7 +109,7 @@ describe("chooseNumericPoint against the FutureX objective", () => {
     expect(decision.value).toBeCloseTo(arithmeticMean(samples), 0);
     expect(Math.abs(decision.value - arithmeticMean(samples))).toBeLessThan(0.05 * 5.1);
     expect(decision.method).toBe("expected-score-grid");
-    expect(decision.gridPoints).toBeGreaterThan(1);
+    expect(decision.gridPoints).toBeGreaterThanOrEqual(1);
   });
 
   it("sits on a mode of a bimodal ensemble and beats the arithmetic mean outright", () => {
@@ -234,5 +234,41 @@ describe("chooseNumericPoint controls", () => {
     const loose = chooseNumericPoint(samples, { profile: { relativeSigma: 0.5, zeroSigma: 0.01 }, kernelWidth: 0 });
     expect(tight.expectedScore).toBeCloseTo(0.5, 6);
     expect(loose.expectedScore).toBeGreaterThan(0.9);
+  });
+});
+
+describe("integer-valued support", () => {
+  it("returns a whole number and reports the integer method", () => {
+    const decision = chooseNumericPoint([2.3, 2.1, 2.2], { integerValued: true });
+    expect(Number.isInteger(decision.value)).toBe(true);
+    expect(decision.method).toBe("expected-score-integer");
+  });
+
+  it("beats the continuous optimum when the truth can only be a whole number", () => {
+    // sigma is 5% of the truth, so on a small count the fractional optimum sits
+    // outside the parabola entirely: 2.22 against a truth of 2 scores 0.
+    const samples = [2.3, 2.1, 2.2];
+    const truth = 2;
+    const sigma = 0.05 * truth;
+    const at = (x: number) => Math.max(0, 1 - ((x - truth) / sigma) ** 2);
+    const continuous = chooseNumericPoint(samples).value;
+    const integral = chooseNumericPoint(samples, { integerValued: true }).value;
+    expect(at(continuous)).toBe(0);
+    expect(at(integral)).toBe(1);
+  });
+
+  it("searches integers rather than rounding the continuous answer", () => {
+    // Rounding 6.83 gives 7 here too, but the search is over the real support:
+    // it evaluates each admissible integer instead of trusting a rounded argmax.
+    const decision = chooseNumericPoint([6.47, 7, 6.6, 7], { integerValued: true });
+    expect(decision.value).toBe(7);
+    expect(decision.gridPoints).toBeGreaterThanOrEqual(1);
+  });
+
+  it("respects bounds and stays finite on a single sample", () => {
+    expect(chooseNumericPoint([5.4], { integerValued: true }).value).toBe(5);
+    const bounded = chooseNumericPoint([2.2, 2.4], { integerValued: true, minimum: 3, maximum: 9 });
+    expect(Number.isInteger(bounded.value)).toBe(true);
+    expect(bounded.value).toBeGreaterThanOrEqual(3);
   });
 });

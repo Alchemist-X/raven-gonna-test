@@ -119,7 +119,8 @@ export function aggregateTrialPredictions(
       // expected score over the trials instead.
       const decision = chooseNumericPoint(values, {
         ...(task.minimum !== undefined ? { minimum: task.minimum } : {}),
-        ...(task.maximum !== undefined ? { maximum: task.maximum } : {})
+        ...(task.maximum !== undefined ? { maximum: task.maximum } : {}),
+        ...(task.integerValued ? { integerValued: true } : {})
       });
       if (decision.method === "bounds-collapsed") {
         options.diagnostics?.push(

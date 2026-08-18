@@ -25,9 +25,17 @@ export interface NumericDecisionOptions {
   maximum?: number;
   gridResolution?: number;
   maximumGridPoints?: number;
+  /**
+   * The quantity can only be a whole number — a count of runs, wins, awards.
+   * This is the distribution's real support, not a formatting preference, and
+   * ignoring it is expensive: sigma is 5% of the truth, so on small counts a
+   * fractional answer lands outside the parabola entirely. Predicting 2.22 home
+   * runs when the truth is 2 scores 0, where 2 scores 1.
+   */
+  integerValued?: boolean;
 }
 
-export type NumericDecisionMethod = "single-atom" | "expected-score-grid" | "bounds-collapsed";
+export type NumericDecisionMethod = "single-atom" | "expected-score-grid" | "bounds-collapsed" | "expected-score-integer";
 
 export interface NumericDecision {
   value: number;
@@ -289,6 +297,24 @@ export function chooseNumericPoint(
   const pivot = weightedMedian(atoms);
 
   if (new Set(atoms.map((atom) => atom.value)).size === 1) {
+    // Integer support still applies here: a lone fractional trial on a count
+    // question must not escape as a fraction just because there is nothing to
+    // search over. Both neighbours are checked, since the nearer one is not
+    // always the better-scoring one once sigma scales with |truth|.
+    if (options.integerValued) {
+      const raw = clamp(pivot, bounds);
+      const candidates = [Math.floor(raw), Math.ceil(raw)]
+        .map((candidate) => clamp(candidate, bounds))
+        .filter((candidate) => Number.isInteger(candidate));
+      const best = candidates.length > 0 ? bestOf(candidates, atoms, profile, raw) : null;
+      const value = best ? best.value : Math.round(raw);
+      return {
+        value,
+        expectedScore: best ? best.score : mixtureScore(value, atoms, profile),
+        gridPoints: Math.max(1, candidates.length),
+        method: "expected-score-integer"
+      };
+    }
     const value = clamp(pivot, bounds);
     return { value, expectedScore: mixtureScore(value, atoms, profile), gridPoints: 1, method: "single-atom" };
   }
@@ -301,6 +327,30 @@ export function chooseNumericPoint(
   if (low > high) {
     const value = clamp(pivot, bounds);
     return { value, expectedScore: mixtureScore(value, atoms, profile), gridPoints: 1, method: "bounds-collapsed" };
+  }
+
+  // Integer support: evaluate every admissible whole number directly. The
+  // candidate set is small and the search becomes exact rather than a rounding
+  // of a continuous optimum — which matters because the best integer is not
+  // always the nearest one to the continuous argmax.
+  if (options.integerValued) {
+    const first = Math.ceil(low - 1e-9);
+    const last = Math.floor(high + 1e-9);
+    if (first > last) {
+      const value = clamp(Math.round(pivot), bounds);
+      return { value, expectedScore: mixtureScore(value, atoms, profile), gridPoints: 1, method: "bounds-collapsed" };
+    }
+    const cap = options.maximumGridPoints ?? 4097;
+    const total = last - first + 1;
+    // A span too wide to enumerate is one where the fractional part is
+    // negligible against sigma anyway, so plain rounding loses nothing.
+    if (total <= cap) {
+      const candidates = Array.from({ length: total }, (_, index) => first + index);
+      const best = bestOf(candidates, atoms, profile, pivot);
+      return { value: best.value, expectedScore: best.score, gridPoints: total, method: "expected-score-integer" };
+    }
+    const value = clamp(Math.round(pivot), bounds);
+    return { value, expectedScore: mixtureScore(value, atoms, profile), gridPoints: 1, method: "expected-score-integer" };
   }
 
   const resolution = options.gridResolution ?? 64;

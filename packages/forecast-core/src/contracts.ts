@@ -56,7 +56,9 @@ export const NumericTaskSchema = z.object({
   kind: z.literal("numeric"),
   unit: z.string().optional(),
   minimum: z.number().finite().optional(),
-  maximum: z.number().finite().optional()
+  maximum: z.number().finite().optional(),
+  /** The answer can only be a whole number (a count of discrete things). */
+  integerValued: z.boolean().optional()
 });
 
 export const FreeResponseTaskSchema = z.object({

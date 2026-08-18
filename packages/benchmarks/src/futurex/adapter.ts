@@ -41,6 +41,19 @@ const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\
 // "unknown" both score 0, so hedging forfeits the upside for nothing.
 const HEDGED_PREDICTION =
   /\b(?:not yet|unknown|unclear|cannot|can't|unable|to be (?:announced|confirmed|determined)|tbd|n\/a|no (?:public|official) )/i;
+// A count of discrete things: the truth is necessarily a whole number. Sigma is
+// 5% of it, so on a small count a fractional answer falls outside the parabola
+// completely — 2.22 against a truth of 2 scores 0 where 2 scores 1. Rates,
+// revenues and percentages are excluded: those are genuinely continuous.
+const COUNT_TITLE_PATTERN =
+  /\bhow many\b|\b(?:total |exact )?number of\b|\bhow many .*\bwins?\b/i;
+const NON_COUNT_PATTERN = /\b(?:rate|percentage|percent|inflation|revenue|price|index|balance|receipts|yield|change)\b/i;
+
+export function isCountQuestion(title: string, unit?: string): boolean {
+  if (unit && /_(?:count|items|patients|runs|wins|games)$/i.test(unit)) return true;
+  return COUNT_TITLE_PATTERN.test(title) && !NON_COUNT_PATTERN.test(title);
+}
+
 const NUMERIC_TITLE_PATTERN =
   /\bwhat exact\b[^?]*\b(?:rate|change|receipts|revenue|balance|value|number|count|price|total|level|index|yield|ratio|percentage|amount)\b/i;
 
@@ -220,7 +233,13 @@ export function futureXQuestionsToTasks(
         // through is the difference between the model answering in millions and
         // answering in billions — an error no downstream aggregation can repair.
         const targetField = numericTargetField(question.prompt);
-        return { ...common, kind: "numeric" as const, ...(targetField ? { unit: targetField } : {}) };
+        const integerValued = isCountQuestion(question.en_title, targetField);
+        return {
+          ...common,
+          kind: "numeric" as const,
+          ...(targetField ? { unit: targetField } : {}),
+          ...(integerValued ? { integerValued: true } : {})
+        };
       }
       case "open_text":
         return { ...common, kind: "free_response" as const };

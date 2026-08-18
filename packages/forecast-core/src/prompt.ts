@@ -46,6 +46,9 @@ function taskContract(task: ForecastTask): string {
         ? `Return exactly ${task.rankCount} candidates in predicted order. Candidates: ${task.candidates.join(", ")}.`
         : `Return exactly ${task.rankCount} canonical entity names in predicted order as a JSON array.`;
     case "numeric":
+      if (task.integerValued) {
+        return `Return a whole number — this quantity is a count and cannot be fractional${task.unit ? ` (field: \`${task.unit}\`)` : ""}. Bare integer only: no units, commas, decimals, or ranges.`;
+      }
       return task.unit
         ? `Return the value for the published field \`${task.unit}\`, in exactly that field's units and scale — read the field name carefully (for example _usd_millions means millions, _percent means percentage points such as 2.7, not 0.027). Bare number only: no units, commas, or ranges.`
         : "Return a single numeric value, not a prose-only answer. Bare number only: no units, commas, or ranges.";

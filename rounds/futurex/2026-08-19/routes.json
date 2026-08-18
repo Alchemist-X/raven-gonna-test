@@ -1,0 +1,1692 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-routes.v1",
+  "revision": "2841bff13f6d2f679298ce7007e91ae585f4ade1",
+  "routes": {
+    "a430f7920c8a544f428a57b1": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "012048cebd3b41f2a9e10fc3": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "1a7b455ee6b6976885a464e6": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "Yes",
+          "text": "Yes"
+        },
+        {
+          "key": "No",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 1,
+        "reasons": [
+          "explicit boxed alternative contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "a9ae2f366d8b24b223369688": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "f50d8202120ac657b4e625ab": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "below normal"
+        },
+        {
+          "key": "B",
+          "text": "equal chances"
+        },
+        {
+          "key": "C",
+          "text": "above normal"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "719f702dc4625f8494ddb22d": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "2.4% or lower"
+        },
+        {
+          "key": "B",
+          "text": "2.5% to 2.8%"
+        },
+        {
+          "key": "C",
+          "text": "2.9% to 3.2%"
+        },
+        {
+          "key": "D",
+          "text": "3.3% or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "d205c78fa5178eabd21da3a6": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "69b96e77257943c8174dab10": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "abb39554e29e3efd959c3011": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "c6296fc87064c823a9ddba11": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "19c069049ca42900bfce4f40": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "numeric unit or measurement contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "a7e85c8f85d8cdce52d1c877": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "7aabd77d0a67d72478370cb4": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "07294845bd8420b435a66c71": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "numeric unit or measurement contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "572e1034670e6852475886b6": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "Yes",
+          "text": "Yes"
+        },
+        {
+          "key": "No",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 1,
+        "reasons": [
+          "explicit boxed alternative contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "85b976d288bc63c8dae32cf9": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "003fed127c048a48efb48b19": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "efd0339ee87ce7b4785deb8f": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "numeric unit or measurement contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "66db24d107a61788327af82d": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "Yes",
+          "text": "Yes"
+        },
+        {
+          "key": "No",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 1,
+        "reasons": [
+          "explicit boxed alternative contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "84ee28338639a7dd1232b6eb": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "low"
+        },
+        {
+          "key": "B",
+          "text": "moderate"
+        },
+        {
+          "key": "C",
+          "text": "high"
+        },
+        {
+          "key": "D",
+          "text": "not reported"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "764f9b3d38b3d86e54561777": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "e6754e16e44c82e6a16fbe62": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "Yes",
+          "text": "Yes"
+        },
+        {
+          "key": "No",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 1,
+        "reasons": [
+          "explicit boxed alternative contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "1b6d76e521fadceac3de589b": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "4c4a0dc259f3ff7cc750b9dc": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "9720a5c7ae5550ec91e5c758": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0 to 4 occurrences"
+        },
+        {
+          "key": "B",
+          "text": "5 to 9 occurrences"
+        },
+        {
+          "key": "C",
+          "text": "10 to 14 occurrences"
+        },
+        {
+          "key": "D",
+          "text": "15 or more occurrences"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "2dc80caba5b812460d0441c9": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "higher"
+        },
+        {
+          "key": "B",
+          "text": "lower or unchanged"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "34aba12b8ebc93c15ab58c6f": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 2,000"
+        },
+        {
+          "key": "B",
+          "text": "2,000 to under 4,000"
+        },
+        {
+          "key": "C",
+          "text": "4,000 to under 6,000"
+        },
+        {
+          "key": "D",
+          "text": "6,000 or more"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "8e337eaca321f8c7754597e3": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "139170d8a10c090abb9ff4ec": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "antidiabetic drugs"
+        },
+        {
+          "key": "B",
+          "text": "diagnostic and monitoring devices"
+        },
+        {
+          "key": "C",
+          "text": "hypoglycaemia management products"
+        },
+        {
+          "key": "D",
+          "text": "other diabetes-related drugs and appliances"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "4061e3ea96652f76eef8d31a": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "08a5651971a145645609873e": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "f3aa82b164c853a78b89488d": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "84c402dc9117be094b9ba79c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Max Verstappen"
+        },
+        {
+          "key": "B",
+          "text": "Lando Norris"
+        },
+        {
+          "key": "C",
+          "text": "Oscar Piastri"
+        },
+        {
+          "key": "D",
+          "text": "Other driver"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "34af3f2959198cb9b2ed5aa6": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "25cd695a325d2ab9b3474844": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "dda4a55c9d3c092c5ac4aac2": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "Yes",
+          "text": "Yes"
+        },
+        {
+          "key": "No",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 1,
+        "reasons": [
+          "explicit boxed alternative contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "4807adb8d7d4f32844224360": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 2,000"
+        },
+        {
+          "key": "B",
+          "text": "2,000 to under 4,000"
+        },
+        {
+          "key": "C",
+          "text": "4,000 to under 6,000"
+        },
+        {
+          "key": "D",
+          "text": "6,000 or more"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "6638084379805b37d909f28e": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "144fb0fd2eca78f979d737d4": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "bbccd856afeae3c7d4e4db6e": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "Yes",
+          "text": "Yes"
+        },
+        {
+          "key": "No",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 1,
+        "reasons": [
+          "explicit boxed alternative contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "ae329a762f2b2a7c85f0ede2": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "8983ab2780ad2aae22d93948": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Jeeno Thitikul"
+        },
+        {
+          "key": "B",
+          "text": "Nelly Korda"
+        },
+        {
+          "key": "C",
+          "text": "Brooke Henderson"
+        },
+        {
+          "key": "D",
+          "text": "Other player"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "52a95f6dcdcfc2a4c8e1b19e": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "9c7a78c46ec458374fcda6d0": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "eadaa954345ad98469c93ea1": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "fe18163f968fd6da367ba6fe": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Insidious: Out of the Further"
+        },
+        {
+          "key": "B",
+          "text": "Mutiny"
+        },
+        {
+          "key": "C",
+          "text": "Spa Weekend"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "8a2fa08cd60b19e2c521d009": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "below US$1.1400 per euro"
+        },
+        {
+          "key": "B",
+          "text": "US$1.1400 to below US$1.1550 per euro"
+        },
+        {
+          "key": "C",
+          "text": "US$1.1550 to below US$1.1700 per euro"
+        },
+        {
+          "key": "D",
+          "text": "US$1.1700 per euro or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "e9360305fd19d228d9ae58d0": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "below 600,000 SAAR"
+        },
+        {
+          "key": "B",
+          "text": "600,000 to 649,999 SAAR"
+        },
+        {
+          "key": "C",
+          "text": "650,000 to 699,999 SAAR"
+        },
+        {
+          "key": "D",
+          "text": "700,000 SAAR or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "927e102d4b76700141eb8f7b": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 60%"
+        },
+        {
+          "key": "B",
+          "text": "60% to under 70%"
+        },
+        {
+          "key": "C",
+          "text": "70% to under 80%"
+        },
+        {
+          "key": "D",
+          "text": "80% or more"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "a9b1428d77304043acf2c0fe": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "91756f047efbda8afb41313f": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "below US$65 billion"
+        },
+        {
+          "key": "B",
+          "text": "US$65 billion to below US$70 billion"
+        },
+        {
+          "key": "C",
+          "text": "US$70 billion to below US$75 billion"
+        },
+        {
+          "key": "D",
+          "text": "US$75 billion or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "6cd82ab082733703eb68d2ab": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "fall of 0.5% or more"
+        },
+        {
+          "key": "B",
+          "text": "fall below 0.5% to growth below 0.5%"
+        },
+        {
+          "key": "C",
+          "text": "growth of 0.5% to 1.4%"
+        },
+        {
+          "key": "D",
+          "text": "growth of 1.5% or more"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "3a4d47060dadab78a94ed8a6": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Jonas Vingegaard"
+        },
+        {
+          "key": "B",
+          "text": "João Almeida"
+        },
+        {
+          "key": "C",
+          "text": "Juan Ayuso"
+        },
+        {
+          "key": "D",
+          "text": "Other rider"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "014821acf4472bd7ce1535bb": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 100,000"
+        },
+        {
+          "key": "B",
+          "text": "100,000 to under 115,000"
+        },
+        {
+          "key": "C",
+          "text": "115,000 to under 130,000"
+        },
+        {
+          "key": "D",
+          "text": "130,000 or more"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "d56a79c1cdb0c9a4c8474da8": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0 to 3 winners"
+        },
+        {
+          "key": "B",
+          "text": "4 to 6 winners"
+        },
+        {
+          "key": "C",
+          "text": "7 to 9 winners"
+        },
+        {
+          "key": "D",
+          "text": "10 or more winners"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "29a4d5e4742b3676257502f7": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "a3c045d8c116bc65bff5f67f": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "d0be1929beb221dcaf3af189": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "below 190,000"
+        },
+        {
+          "key": "B",
+          "text": "190,000 to 209,999"
+        },
+        {
+          "key": "C",
+          "text": "210,000 to 229,999"
+        },
+        {
+          "key": "D",
+          "text": "230,000 or more"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "9f299306013017dfc72828ba": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "below 50.0"
+        },
+        {
+          "key": "B",
+          "text": "50.0 to 52.9"
+        },
+        {
+          "key": "C",
+          "text": "53.0 to 55.9"
+        },
+        {
+          "key": "D",
+          "text": "56.0 or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "4b7e1ea0e904b4c1787232c3": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "a75c01094f70bf1a90fb0d0c": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "numeric unit or measurement contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "f7cf8fe79f7d60eacab8b1be": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "4cb7e6a0c1f1e3032e746b6e": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "bbcecd0e6391fb6c50b150b3": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Adilet"
+        },
+        {
+          "key": "B",
+          "text": "Ak Zhol"
+        },
+        {
+          "key": "C",
+          "text": "Auyl"
+        },
+        {
+          "key": "D",
+          "text": "Baytaq"
+        },
+        {
+          "key": "E",
+          "text": "Nationwide Social Democratic Party"
+        },
+        {
+          "key": "F",
+          "text": "People's Party of Kazakhstan"
+        },
+        {
+          "key": "G",
+          "text": "Respublica"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "79e880b57dbaa4f15792c013": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "483d5b693a98bcbf6224dbaf": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "017a3f6a3a716c202815d621": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "d3cd9dcfab5e8945da6e35d9": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes — adjusted diluted EPS is at least US$4.00"
+        },
+        {
+          "key": "B",
+          "text": "No — adjusted diluted EPS is below US$4.00"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "ce8260ef987f0355f6357064": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes — the one-year LPR is 3.00%"
+        },
+        {
+          "key": "B",
+          "text": "No — the one-year LPR is not 3.00%"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "daa01f398b170460adeea655": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0.9% or lower"
+        },
+        {
+          "key": "B",
+          "text": "1.0% to 1.9%"
+        },
+        {
+          "key": "C",
+          "text": "2.0% to 2.9%"
+        },
+        {
+          "key": "D",
+          "text": "3.0% or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "b11e42d27b488554b12b4f97": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below £2 billion"
+        },
+        {
+          "key": "B",
+          "text": "£2 billion to below £5 billion"
+        },
+        {
+          "key": "C",
+          "text": "£5 billion to below £8 billion"
+        },
+        {
+          "key": "D",
+          "text": "£8 billion or higher"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "d17c311fc07853ff6ea3246e": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "hurricane (64 knots or greater)"
+        },
+        {
+          "key": "B",
+          "text": "tropical storm (34 to 63 knots)"
+        },
+        {
+          "key": "C",
+          "text": "tropical depression or post-tropical cyclone (33 knots or less)"
+        },
+        {
+          "key": "D",
+          "text": "no active Lala advisory is issued"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "fe0203bc19d36ca26c5d83d0": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "6831612ba042c5a517f56587": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "599878813048ffa643be898f": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "open_text",
+        "confidence": 0.8,
+        "reasons": [
+          "canonical entity/category/score response"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "eb55bbb354bc2625f40f22ea": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.97,
+        "reasons": [
+          "explicit numeric output contract"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "a5c3d706a8c0cc77eaeec150": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "65baf488193c873fe637f1c2": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "e2d1950f04d1fee0d78d9ede": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    },
+    "1395ece0bf8a3855733cd965": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-08-18T06:19:21.359Z"
+      }
+    }
+  }
+}
