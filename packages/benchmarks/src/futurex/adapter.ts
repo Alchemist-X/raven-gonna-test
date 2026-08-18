@@ -27,6 +27,22 @@ const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)
 // aggregated by exact-string vote and tie-broken alphabetically.
 const NUMERIC_CONTRACT_PATTERN =
   /boxed numeric value|exact published numeric value|only the exact numeric|numeric prediction only/i;
+// "what exact <measurement> will X report" asks for a quantity even when the
+// prompt only supplies the generic \boxed{YOUR_PREDICTION} envelope, so the
+// contract pattern above does not fire. Routed as free text these produce prose
+// ("Composite CPI +2.1% year-on-year (Census…"), which the grader compares by
+// exact string and scores 0. The noun list is what makes this safe: "what exact
+// film/winner/team" stays an entity question.
+// An entity name or a ` | `-separated list, never a sentence. Sentence-ending
+// punctuation mid-string, a parenthetical gloss, or sheer length all mark an
+// answer the grader will score 0 on an exact-string comparison.
+const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\b|:\s/i;
+// A refusal dressed as an answer. R1 says never abstain: a wrong guess and an
+// "unknown" both score 0, so hedging forfeits the upside for nothing.
+const HEDGED_PREDICTION =
+  /\b(?:not yet|unknown|unclear|cannot|can't|unable|to be (?:announced|confirmed|determined)|tbd|n\/a|no (?:public|official) )/i;
+const NUMERIC_TITLE_PATTERN =
+  /\bwhat exact\b[^?]*\b(?:rate|change|receipts|revenue|balance|value|number|count|price|total|level|index|yield|ratio|percentage|amount)\b/i;
 
 export interface FutureXAdapterOptions {
   revision: string;
@@ -101,6 +117,9 @@ export function routeFutureXQuestion(
   // inference drawn from how the question is phrased.
   if (NUMERIC_CONTRACT_PATTERN.test(question.prompt)) {
     return { kind: "numeric", choices: [], confidence: 0.97, reasons: ["explicit numeric output contract"] };
+  }
+  if (NUMERIC_TITLE_PATTERN.test(question.en_title)) {
+    return { kind: "numeric", choices: [], confidence: 0.9, reasons: ["asks for an exact measured quantity"] };
   }
   if (RANKING_PATTERN.test(question.en_title) || RANKING_PATTERN.test(question.prompt)) {
     const count = rankingCount(semantic);
@@ -307,6 +326,18 @@ export function validateFutureXSubmission(
     }
     if (route.kind === "numeric" && (!DECIMAL_ONLY.test(prediction) || !Number.isFinite(Number(prediction)))) {
       errors.push(`Invalid numeric prediction for ${question.id}: ${prediction}`);
+    }
+    // open_text had no checks at all, so a prose sentence shipped unchallenged —
+    // and the grader compares open text by exact string, meaning prose scores 0.
+    // These are errors, not warnings: a sentence is never a right answer, and a
+    // silent 0 on an L4 question is expensive.
+    if (route.kind === "open_text") {
+      if (PROSE_PREDICTION.test(prediction)) {
+        errors.push(`Open-text prediction for ${question.id} reads as prose, not an answer: ${prediction.slice(0, 80)}`);
+      }
+      if (HEDGED_PREDICTION.test(prediction)) {
+        errors.push(`Open-text prediction for ${question.id} hedges instead of answering: ${prediction.slice(0, 80)}`);
+      }
     }
   }
   if (options.deadlineUtc) {

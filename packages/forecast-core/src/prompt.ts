@@ -50,7 +50,15 @@ function taskContract(task: ForecastTask): string {
         ? `Return the value for the published field \`${task.unit}\`, in exactly that field's units and scale — read the field name carefully (for example _usd_millions means millions, _percent means percentage points such as 2.7, not 0.027). Bare number only: no units, commas, or ranges.`
         : "Return a single numeric value, not a prose-only answer. Bare number only: no units, commas, or ranges.";
     case "free_response":
-      return "Return one concise canonical answer using the official entity name where possible.";
+      // Graded by exact string match, so a sentence, a gloss or a hedge all
+      // score 0 — and an "unknown" scores the same as a wrong guess, which
+      // makes hedging pure downside.
+      return (
+        "Return ONLY the official entity name or value — no sentence, no explanation, no parenthetical, " +
+        "no units or qualifiers. It is graded by exact string match. If the outcome is not yet announced, " +
+        "still commit to your single most likely answer; refusing or writing \"not yet confirmed\" scores zero, " +
+        "exactly as a wrong guess would, so there is nothing to gain by hedging."
+      );
   }
 }
 

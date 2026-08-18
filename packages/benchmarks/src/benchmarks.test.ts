@@ -150,6 +150,27 @@ describe("FutureX adapter", () => {
     }).kind).toBe("numeric");
   });
 
+  it("routes 'what exact <measurement>' to numeric even with a generic boxed envelope", () => {
+    const common = { end_time: "2026-08-21", level: 4 as const };
+    // These carry only \\boxed{YOUR_PREDICTION}, so the explicit-contract
+    // pattern misses them. Left as free text they emit prose the grader scores
+    // 0 on — one shipped as "Composite CPI +2.1% year-on-year (Census...".
+    for (const title of [
+      "Hong Kong's July 2026 CPI release: what exact year-on-year change will the Composite CPI report?",
+      "HMRC's 21 August 2026 receipts release: what exact total HMRC cash receipts will it report?",
+      "Hungary's Monetary Council decision: what exact central-bank base rate will it set?"
+    ]) {
+      expect(routeFutureXQuestion({ ...common, id: title, en_title: title, prompt: "IMPORTANT: end with \\boxed{YOUR_PREDICTION}" }).kind).toBe("numeric");
+    }
+    // An entity question that also says "what exact" must stay open text.
+    expect(routeFutureXQuestion({
+      ...common,
+      id: "film",
+      en_title: "What exact film will the festival announce as its opening selection?",
+      prompt: "IMPORTANT: end with \\boxed{YOUR_PREDICTION}"
+    }).kind).toBe("open_text");
+  });
+
   it("does not call a question a ranking when there is nothing to order", () => {
     const common = { end_time: "2026-08-19", level: 3 as const };
     // "ranking" here is a noun for the standings, not an instruction to order.
@@ -328,5 +349,36 @@ describe("Prophet Arena adapter", () => {
     const response = buildProphetLegacyResponse(legacy, [], { residualCap: 0.05 });
     expect(Object.values(response.prediction).reduce((sum, value) => sum + value, 0)).toBeCloseTo(1, 10);
     expect(validateProphetLegacyResponse(legacy, response).valid).toBe(true);
+  });
+});
+
+describe("FutureX open-text submission validation", () => {
+  const question = {
+    id: "ot1",
+    prompt: "Who will win? IMPORTANT: end with \\boxed{YOUR_PREDICTION}",
+    end_time: "2026-08-24",
+    level: 3 as const,
+    en_title: "Who will win the race?"
+  };
+
+  const check = (prediction: string) =>
+    validateFutureXSubmission([question], [{ id: "ot1", prediction }], { requireComplete: true });
+
+  it("accepts a bare entity name", () => {
+    expect(check("Kyle Larson").valid).toBe(true);
+    expect(check("St Kilda v Gold Coast | Collingwood v Brisbane").valid).toBe(true);
+  });
+
+  it("rejects prose, which the grader scores 0 on an exact-string comparison", () => {
+    // Real submitted values from a live run before this check existed.
+    expect(check("Composite CPI +2.1% year-on-year (Census and Statistics Dept)").valid).toBe(false);
+    expect(check("Approximately £92 billion in total HMRC receipts").valid).toBe(false);
+    expect(check("MAS Core Inflation (YoY, July 2026): about 1.2%").valid).toBe(false);
+  });
+
+  it("rejects a hedge, since abstaining scores the same as a wrong guess", () => {
+    expect(check("Not yet publicly confirmed as of Aug 18, 2026").valid).toBe(false);
+    expect(check("unknown").valid).toBe(false);
+    expect(check("To be announced").valid).toBe(false);
   });
 });

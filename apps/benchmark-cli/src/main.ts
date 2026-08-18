@@ -286,6 +286,10 @@ async function writeReasoningArtifact(
       answer: result.answer,
       fallbackUsed: result.fallbackUsed,
       warnings: result.warnings,
+      // A forecast made with no retrieved source is a recall of training data,
+      // not research. On a future-prediction benchmark that is guessing, and it
+      // is invisible in the answer itself — so surface it per question.
+      researchedTrials: result.trials.filter((trial) => trial.citations.length > 0).length,
       trials: result.trials.map((trial) => ({
         trial: trial.trial,
         role: trial.role ?? null,
@@ -293,7 +297,8 @@ async function writeReasoningArtifact(
         citations: trial.citations,
         thinking: trial.thinking ?? null,
         rawResponse: trial.rawResponse,
-        latencyMs: trial.latencyMs
+        latencyMs: trial.latencyMs,
+        usage: trial.usage ?? null
       }))
     };
   });
@@ -317,19 +322,22 @@ function futureXLevelOptions(
 ): Parameters<ForecastEngine["forecast"]>[2] {
   const level = Number((task.metadata as { level?: unknown } | undefined)?.level ?? 1);
   const trialsByLevel: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4 };
-  const effortByLevel: Record<number, "low" | "medium" | "high"> = {
-    1: "low",
-    2: "medium",
-    3: "high",
-    4: "high"
-  };
   // Never spend MORE than the operator configured; the env value is the ceiling.
   const trials = Math.max(1, Math.min(config.trials, trialsByLevel[level] ?? config.trials));
   return {
     trials,
     concurrency: Math.min(trials, 3),
     timeoutMs: config.timeoutMs,
-    reasoningEffort: effortByLevel[level] ?? config.reasoningEffort,
+    // Effort does NOT scale down with level, even though that looks like the
+    // obvious saving. Measured over a full 80-question round: at low effort
+    // 20/20 trials performed ZERO web searches, at medium 10/34, at high 1/60.
+    // Low effort does not make the model think less about the question — it
+    // makes it skip research and answer from training data, which on a
+    // future-prediction benchmark is guessing. It produced a confident,
+    // directionally wrong answer on a question the issuer had already guided
+    // publicly (ADI Q3 EPS: answered "No" from a stale $1.60-$2.30 memory
+    // against live guidance of $3.30 +- $0.15). Trials remain the cost lever.
+    reasoningEffort: "high",
     researchSources: config.researchSources
   };
 }
@@ -675,7 +683,12 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       asOfUtc,
       deadlineUtc,
       model: config.model,
-      trials: config.trials
+      trials: config.trials,
+      // A checkpoint entry is keyed by taskId, which does not encode the route
+      // kind. Re-routing a question and resuming would therefore hand back a
+      // cached answer of the WRONG kind — a free-text sentence for a question
+      // that is now numeric. Binding the routes file makes that impossible.
+      routesSha256: await sha256File(required(args, "routes"))
     };
     const resumeResults = await loadResumeResults(args, checkpointPath, tasks, checkpointIdentity);
     const results = await runForecastBatch(tasks, engine, policyForFutureXTask, {
@@ -709,6 +722,15 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     if (!report.valid) throw new Error(report.errors.join("\n"));
     await writeJsonLinesAtomic(output, submission);
     const reasoningPath = await writeReasoningArtifact(output, tasks, results, submission);
+    const unresearched = results.filter((result) => result.trials.every((trial) => trial.citations.length === 0));
+    if (unresearched.length > 0) {
+      warn(
+        `${unresearched.length}/${results.length} question(s) were answered with ZERO retrieved sources — that is ` +
+          `recall of training data, not forecasting. Review before submitting: ` +
+          unresearched.slice(0, 10).map((result) => result.taskId.split(":").pop()).join(", ") +
+          (unresearched.length > 10 ? ", …" : "")
+      );
+    }
     await writeManifest(output, {
       benchmark: "futurex",
       revision,
