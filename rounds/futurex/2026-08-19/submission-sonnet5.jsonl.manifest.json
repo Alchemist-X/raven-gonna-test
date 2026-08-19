@@ -2,7 +2,7 @@
   "schemaVersion": "raven-gonna-test.artifact-manifest.v1",
   "createdAtUtc": "2026-08-18T06:41:30.309Z",
   "output": "submission-sonnet5.jsonl",
-  "sha256": "a49eb546cb4f44761c2195104a2ce3d542d0f3b85d8ff64807a37bcc111e0245",
+  "sha256": "ce350b8282eed6ea01f4cb053fb16661e2eff630a3b877e3743fc89f04b30c42",
   "benchmark": "futurex",
   "revision": "2841bff13f6d2f679298ce7007e91ae585f4ade1",
   "roundId": "2026-08-19",
@@ -23,5 +23,15 @@
       "submitted": 80,
       "coverage": 1
     }
-  }
+  },
+  "manualOverrides": [
+    {
+      "id": "1395ece0bf8a3855733cd965",
+      "from": "97.5828287124634",
+      "to": "97583",
+      "reason": "Unit-scale decision: 3 of 4 trials answered in GBP billions, 1 in millions. HMRC publishes the receipts table in GBP millions, so the millions scale matches the official source the benchmark grades against.",
+      "decidedBy": "user",
+      "at": "2026-08-19T08:42:41Z"
+    }
+  ]
 }

@@ -59,13 +59,17 @@ npx tsx apps/benchmark-cli/src/main.ts futurex run \
 node scripts/futurex-review-page.mjs <round-dir> <out>.jsonl
 ```
 
-## Two judgement calls still open
+## Judgement calls — record
 
-1. **The HMRC unit.** Three of four trials answered in billions and one in
-   millions — not four estimates but one estimate in two units. Aggregation
-   followed the majority and submitted billions. HMRC publishes that table in
-   £ millions; the two differ by 1000x, so it is right or it is zero.
-2. **No cross-trial unit normalisation on the numeric path.** Questions whose
-   prompt names a field (`revenue_usd_millions`) are unaffected; the four that
-   name none are exposed. No heuristic was added, because guessing the unit
-   wrong is worse than not guessing.
+1. **The HMRC unit — decided (2026-08-18, by the user).** Three of four trials
+   answered in £ billions and one in £ millions — one estimate in two units,
+   1000x apart. Aggregation had followed the majority (`97.58`, billions); the
+   user overrode to **`97583` in millions**, because HMRC publishes that table
+   in £ millions and the benchmark grades against the official figure. The
+   override is recorded in the manifest's `manualOverrides` and the submission
+   sha256 was refreshed.
+2. **No cross-trial unit normalisation on the numeric path (known limitation,
+   not fixed this round).** Questions whose prompt names a field
+   (`revenue_usd_millions`) are unaffected; those naming none are exposed. No
+   heuristic was added — guessing the unit wrong is worse than not guessing —
+   so the review page's unit-scale flag routes these to a human.

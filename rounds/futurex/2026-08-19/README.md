@@ -57,7 +57,7 @@ npx tsx apps/benchmark-cli/src/main.ts futurex run \
 node scripts/futurex-review-page.mjs <round-dir> <out>.jsonl
 ```
 
-## 提交前仍需人工判断的两件事
+## 人工判断记录
 
-1. **HMRC 税收题的量纲。** 四个 trial 里三个用十亿、一个用百万——它们不是四个估计，是同一估计的不同单位。聚合按多数取了十亿。HMRC 官方月报以百万英镑列表，两者差 1000 倍，非对即零。
-2. **数值路径没有跨 trial 单位归一化。** prompt 里带字段名的题（如 `revenue_usd_millions`）不受影响；4 道没有字段名的题会。没有加启发式修正，因为猜错单位比不猜更糟。
+1. **HMRC 税收题的量纲 —— 已裁决（2026-08-18，用户）。** 四个 trial 里三个按十亿英镑、一个按百万英镑作答——同一估计、不同单位，差 1000 倍。聚合曾按多数取十亿（`97.58`）；用户裁决改为**百万口径 `97583`**，理由：HMRC 官方月报表格以百万英镑列示，评分对照的是官方公布值。改动记录在 manifest 的 `manualOverrides`，提交件 sha256 已同步更新。
+2. **数值路径没有跨 trial 单位归一化（已知局限，本轮不修）。** prompt 里带字段名的题（如 `revenue_usd_millions`）不受影响；没有字段名的题暴露。未加启发式修正，因为猜错单位比不猜更糟——由 review 页的 unit-scale 标记交人工裁决。
