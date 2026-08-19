@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-submission-log.v1",
+  "round": "2026-08-19",
+  "deadlineUtc": "2026-08-19T16:00:00Z",
+  "recipient": "FutureX-ai@outlook.com",
+  "sender": "ixxue@icloud.com",
+  "channel": "email (FutureX has no submission API)",
+  "datasetRevision": "2841bff13f6d2f679298ce7007e91ae585f4ade1",
+  "evidenceCutoffUtc": "2026-08-18T02:25:21Z",
+  "agentFrameworkCommit": "9cfa3e31aac7c9ed9b14d80884379837b760ae4a",
+  "leaderboardUpdateDue": "2026-08-27T16:00:00Z",
+  "submissions": [
+    {
+      "entry": "raven_labs/claude-sonnet-5",
+      "attachment": "submission-sonnet5.jsonl",
+      "sha256": "ce350b8282eed6ea01f4cb053fb16661e2eff630a3b877e3743fc89f04b30c42",
+      "sentLocal": "2026-08-19 17:01:39 +08",
+      "cc": [],
+      "note": "Sent before the CC list was specified. Includes one manual override (HMRC receipts, billions -> millions)."
+    },
+    {
+      "entry": "raven_labs/claude-opus-5",
+      "attachment": "submission-opus.jsonl",
+      "sha256": "4318d9c68cc8147d7ad986e419d4f93e16b5a5d315738c8b94cf41278937673a",
+      "sentLocal": "2026-08-19 19:23:51 +08",
+      "cc": [
+        "issue.00.gui@gmail.com",
+        "millank0817@gmail.com",
+        "1700012744@pku.edu.cn"
+      ],
+      "note": "5 questions answered with zero retrieved sources; 4 of those agree with the researched runs."
+    },
+    {
+      "entry": "raven_labs/claude-fable-5",
+      "attachment": "submission-fable.jsonl",
+      "sha256": "16ed6dc65e779432591ab85d91385a00844af6c2172fa44942e4587050ca892b",
+      "sentLocal": "2026-08-19 19:23:55 +08",
+      "cc": [
+        "issue.00.gui@gmail.com",
+        "millank0817@gmail.com",
+        "1700012744@pku.edu.cn"
+      ],
+      "note": "1 question answered with zero retrieved sources."
+    }
+  ],
+  "crossModelAgreement": {
+    "identicalWithinTolerance": 61,
+    "twoOfThree": 14,
+    "allThreeDiffer": 5,
+    "weightOfFullDisagreement": 0.087
+  },
+  "selfCheckAllThree": {
+    "rows": 80,
+    "fallbackAnswers": 0,
+    "formatViolations": 0,
+    "fractionalCountAnswers": 0,
+    "zeroResearchQuestions": {
+      "sonnet5": 0,
+      "opus": 5,
+      "fable": 1
+    }
+  },
+  "derivationRecords": "complete for all three; every replay reproduced the submitted answer exactly"
+}

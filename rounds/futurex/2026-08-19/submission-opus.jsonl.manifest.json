@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "raven-gonna-test.artifact-manifest.v1",
+  "createdAtUtc": "2026-08-19T10:29:49.152Z",
+  "output": "submission-opus.jsonl",
+  "sha256": "4318d9c68cc8147d7ad986e419d4f93e16b5a5d315738c8b94cf41278937673a",
+  "benchmark": "futurex",
+  "revision": "2841bff13f6d2f679298ce7007e91ae585f4ade1",
+  "roundId": "2026-08-19",
+  "model": "claude-opus-5",
+  "provider": "claude-cli",
+  "records": 80,
+  "mode": "submission-candidate",
+  "evidenceCutoff": "2026-08-18T02:25:21Z",
+  "routeFile": "routes.json",
+  "reasoning": "submission-opus.reasoning.jsonl",
+  "fallbackAnswers": 0,
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "stats": {
+      "expected": 80,
+      "submitted": 80,
+      "coverage": 1
+    }
+  }
+}
