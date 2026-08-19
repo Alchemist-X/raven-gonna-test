@@ -286,6 +286,8 @@ async function writeReasoningArtifact(
       answer: result.answer,
       fallbackUsed: result.fallbackUsed,
       warnings: result.warnings,
+      // The decisive step: how N trial answers became the one submitted value.
+      derivation: result.derivation ?? null,
       // A forecast made with no retrieved source is a recall of training data,
       // not research. On a future-prediction benchmark that is guessing, and it
       // is invisible in the answer itself — so surface it per question.

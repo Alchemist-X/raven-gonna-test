@@ -211,7 +211,17 @@ export const ForecastResultSchema = z.object({
   policyId: z.string(),
   generatedAtUtc: z.string().datetime({ offset: true }),
   fallbackUsed: z.boolean(),
-  warnings: z.array(z.string())
+  warnings: z.array(z.string()),
+  /**
+   * How the trials became this answer. Kept because the trials and the final
+   * answer alone leave the decisive step unexplained.
+   */
+  derivation: z.array(z.object({
+    method: z.string(),
+    inputs: z.unknown(),
+    chosen: z.unknown(),
+    detail: z.record(z.unknown())
+  })).optional()
 });
 export type ForecastResult = z.infer<typeof ForecastResultSchema>;
 

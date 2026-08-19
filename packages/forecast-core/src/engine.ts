@@ -10,7 +10,7 @@ import type {
   TrialPrediction
 } from "./contracts.js";
 import { ForecastAnswerSchema, ForecastTaskSchema, InformationPolicySchema } from "./contracts.js";
-import { aggregateTrialPredictions, type AggregationOptions } from "./aggregation.js";
+import { aggregateTrialPredictions, type AggregationDerivation, type AggregationOptions } from "./aggregation.js";
 import { validatePolicyForTask } from "./policy.js";
 import { answerTypeForTask, buildPrompts } from "./prompt.js";
 import { extractJsonLenient, salvageChoice, salvageNumber } from "./parse.js";
@@ -275,11 +275,12 @@ export class ForecastEngine {
 
     let fallbackUsed = false;
     let answer: ForecastAnswer;
+    const derivation: AggregationDerivation[] = [];
     if (successful.length > 0) {
       // Aggregation can detect problems the answer alone cannot express, so it
       // reports them here rather than emitting a plausible number in silence.
       const diagnostics: string[] = [];
-      answer = aggregateTrialPredictions(task, successful, { ...options, diagnostics });
+      answer = aggregateTrialPredictions(task, successful, { ...options, diagnostics, derivation });
       warnings.push(...diagnostics);
     } else if (options.fallback) {
       answer = options.fallback;
@@ -299,7 +300,8 @@ export class ForecastEngine {
       policyId: policy.id,
       generatedAtUtc: this.clock.now().toISOString(),
       fallbackUsed,
-      warnings
+      warnings,
+      ...(derivation.length > 0 ? { derivation } : {})
     };
   }
 }

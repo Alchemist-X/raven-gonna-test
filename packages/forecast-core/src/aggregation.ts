@@ -4,6 +4,24 @@ import { chooseNumericPoint } from "./numeric-decision.js";
 import { chooseF1Subset } from "./set-decision.js";
 import { blendLogOdds, clampProbability, logitPool, normalizeProbabilities } from "./probability.js";
 
+/**
+ * How an aggregate answer was reached, recorded so a resolved miss can be
+ * traced past the trials to the decision itself. Without it the record shows
+ * four trials saying [4025, 4020, 4004, 4025] and a submission of 4018.45,
+ * with nothing explaining the jump — the aggregation step is exactly where a
+ * defensible set of forecasts can still turn into an indefensible answer.
+ */
+export interface AggregationDerivation {
+  /** The rule applied, e.g. "expected-score-grid", "logit-pool-argmax". */
+  method: string;
+  /** What the rule consumed, verbatim. */
+  inputs: unknown;
+  /** What it produced. */
+  chosen: unknown;
+  /** Rule-specific evidence: expected score, grid size, cluster membership. */
+  detail: Record<string, unknown>;
+}
+
 export interface AggregationOptions {
   priorProbability?: number;
   priorWeight?: number;
@@ -16,6 +34,8 @@ export interface AggregationOptions {
    * answering there hides a data problem behind a well-formed number.
    */
   diagnostics?: string[];
+  /** Sink for the derivation record; the engine attaches it to the result. */
+  derivation?: AggregationDerivation[];
 }
 
 function compatibleAnswers(task: ForecastTask, trials: readonly TrialPrediction[]): ForecastAnswer[] {
@@ -50,7 +70,14 @@ export function aggregateTrialPredictions(
       const priorWeight = options.priorWeight ?? 0;
       const blended = prior === undefined ? pooled : blendLogOdds(pooled, prior, priorWeight);
       const floor = options.probabilityFloor ?? 0.01;
-      return { kind: "binary", pYes: clampProbability(blended, floor, 1 - floor) };
+      const finalP = clampProbability(blended, floor, 1 - floor);
+      options.derivation?.push({
+        method: prior === undefined ? "logit-pool" : "logit-pool-blended-prior",
+        inputs: { trialProbabilities: probabilities },
+        chosen: finalP,
+        detail: { pooled, ...(prior !== undefined ? { prior, priorWeight } : {}), floor }
+      });
+      return { kind: "binary", pYes: finalP };
     }
     case "categorical": {
       const totals = Object.fromEntries(task.choices.map((choice) => [choice, 0]));
@@ -63,6 +90,23 @@ export function aggregateTrialPredictions(
       const choice = task.choices.reduce((best, candidate) =>
         (probabilities[candidate] ?? 0) > (probabilities[best] ?? 0) ? candidate : best
       );
+      const ranked = [...task.choices].sort((a, b) => (probabilities[b] ?? 0) - (probabilities[a] ?? 0));
+      options.derivation?.push({
+        method: "mean-simplex-argmax",
+        inputs: {
+          trialChoices: answers.map((answer) => (answer.kind === "categorical" ? answer.choice : null)),
+          trialProbabilities: answers.map((answer) => (answer.kind === "categorical" ? answer.probabilities : null))
+        },
+        chosen: choice,
+        detail: {
+          pooledProbabilities: probabilities,
+          // Exact match with no partial credit, so the only thing that decides
+          // the score is whether the top choice is right — the margin over the
+          // runner-up is how safe that call was.
+          runnerUp: ranked[1] ?? null,
+          margin: (probabilities[ranked[0] ?? ""] ?? 0) - (probabilities[ranked[1] ?? ""] ?? 0)
+        }
+      });
       return { kind: "categorical", choice, probabilities };
     }
     case "multi_label": {
@@ -87,6 +131,17 @@ export function aggregateTrialPredictions(
         }
       );
       const selected = [...decision.selected].sort((a, b) => task.choices.indexOf(a) - task.choices.indexOf(b));
+      options.derivation?.push({
+        method: decision.method,
+        inputs: { inclusionProbabilities: probabilities },
+        chosen: selected,
+        detail: {
+          expectedF1: decision.expectedF1,
+          consideredSizes: decision.consideredSizes,
+          minimumSelections: task.minimumSelections,
+          ...(task.maximumSelections !== undefined ? { maximumSelections: task.maximumSelections } : {})
+        }
+      });
       return { kind: "multi_label", selected, probabilities };
     }
     case "ranking": {
@@ -105,6 +160,12 @@ export function aggregateTrialPredictions(
       const order = candidates
         .sort((a, b) => (scores[b] ?? 0) - (scores[a] ?? 0) || (candidateOrder.get(a) ?? 0) - (candidateOrder.get(b) ?? 0))
         .slice(0, Math.min(task.rankCount, candidates.length));
+      options.derivation?.push({
+        method: "borda-count",
+        inputs: { trialOrders: answers.map((answer) => (answer.kind === "ranking" ? answer.order : null)) },
+        chosen: order,
+        detail: { bordaScores: scores, rankCount: task.rankCount }
+      });
       return { kind: "ranking", order, scores };
     }
     case "numeric": {
@@ -128,6 +189,19 @@ export function aggregateTrialPredictions(
             `(${values.join(", ")}); answer ${decision.value} comes from the bounds, not a forecast`
         );
       }
+      options.derivation?.push({
+        method: decision.method,
+        inputs: { trialValues: values },
+        chosen: decision.value,
+        detail: {
+          expectedScore: decision.expectedScore,
+          gridPoints: decision.gridPoints,
+          integerValued: task.integerValued === true,
+          ...(task.unit !== undefined ? { unit: task.unit } : {}),
+          ...(task.minimum !== undefined ? { minimum: task.minimum } : {}),
+          ...(task.maximum !== undefined ? { maximum: task.maximum } : {})
+        }
+      });
       const numericAnswer: ForecastAnswer = { kind: "numeric", value: decision.value };
       if (task.unit !== undefined) numericAnswer.unit = task.unit;
       return numericAnswer;
@@ -142,6 +216,19 @@ export function aggregateTrialPredictions(
       const clusters = clusterAnswers(raw);
       const winner = clusters[0];
       if (!winner) throw new Error("No free-response prediction.");
+      options.derivation?.push({
+        method: "fold-cluster-vote",
+        inputs: { trialAnswers: raw },
+        chosen: winner.representative,
+        detail: {
+          // Which spellings were treated as the same answer, and by how much
+          // the winning group beat the next — a one-vote margin over a rival
+          // entity is a very different result from a unanimous four.
+          clusters: clusters.map((cluster) => ({ representative: cluster.representative, size: cluster.size, members: cluster.members })),
+          winningSize: winner.size,
+          runnerUpSize: clusters[1]?.size ?? 0
+        }
+      });
       return { kind: "free_response", value: winner.representative };
     }
   }
