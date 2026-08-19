@@ -2,6 +2,8 @@
 
 Verified on 2026-08-09 in Singapore. Re-check official sources before every round.
 
+This file summarizes rules and timing. See the [three-benchmark end-to-end runbook](three-benchmark-runbook.md) for exact commands, stage gates, artifacts, recovery, and Definition of Done.
+
 ## FutureX
 
 Sources: [site](https://futurex.live/), [online dataset](https://huggingface.co/datasets/futurex-ai/Futurex-Online), [public scorer](https://github.com/Futurex-ai/Futurex-Eval).
@@ -15,7 +17,7 @@ Human actions still required:
 1. Email `FutureX-ai@outlook.com` to confirm the next deadline, replacement policy, ensemble/human-review policy, and production numeric scorer.
 2. Discover, then explicitly fetch the full revision.
 3. Add SHA-bound overrides for low-confidence task routing.
-4. Run Predictor, inspect checkpoints, and create JSONL.
+4. After the Raven adapter lands, run Raven, inspect checkpoints, and create JSONL; the current paid path is blocked.
 5. Strictly validate and prepare the model/framework/organization/SHA/visibility email body.
 6. Send manually and retain sent time, attachment hash, and receipt.
 

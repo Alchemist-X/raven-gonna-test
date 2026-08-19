@@ -13,7 +13,7 @@ The repository never sends email, uploads to GCS, performs onboarding, connects 
 As of 2026-08-09, the first runnable version includes:
 
 - binary, categorical, multi-label, ranking, numeric, and free-response tasks;
-- an OpenAI-compatible Predictor client with Foresight v4 `answer_type`, `research`, and `reasoning_effort` support;
+- a legacy OpenAI-compatible client and six answer parsers, retained only as migration scaffolding and prohibited for official candidates;
 - independent trials, logit pooling, prior shrinkage, probability constraints, and Platt calibration;
 - explicit information policies and evidence cutoffs;
 - true pinned-revision FutureX Parquet ingestion through `/resolve/<SHA>/...`, source hashing, routing, JSONL export/validation, and a versioned local scorer;
@@ -22,7 +22,7 @@ As of 2026-08-09, the first runnable version includes:
 - Prophet Arena current/legacy schemas, two-sided-ask midpoint priors, bounded residuals, geometry projection, and a Bearer-authenticated HTTP service;
 - resumable validated checkpoints, no-clobber outputs, explicit paid-call opt-in, hashes, a process-wide concurrency gate, boundary checks, and offline fixtures.
 
-A full paid round has not been run with a real Predictor key, and nothing has been submitted externally.
+The selected official forecasting system is the self-developed **Raven Forecasting Engine**. This repository does not yet integrate `predict-raven`: Raven v1 is binary-only, and its asynchronous `/v1/forecasts` contract is incompatible with this repository's legacy chat client. Until the Raven adapter lands, every `--allow-paid` path, Prophet live onboarding, and official candidate is blocked. Fetch, route, baseline, validate, and score remain usable. No paid Raven benchmark run or external submission has occurred.
 
 ## Quick start
 
@@ -35,15 +35,7 @@ pnpm verify
 pnpm doctor
 ```
 
-For live model calls, set secrets in the local or hosted environment:
-
-```bash
-export PREDICTOR_API_KEY="..."
-export PREDICTOR_MODEL="foresight-v4"
-export PREDICTOR_BASE_URL="https://api.lightningrod.ai/v1/openai"
-```
-
-Never place keys in submissions, manifests, command output, or Git.
+Read the [Raven-only three-benchmark runbook](three-benchmark-runbook.md) before any live work. Do not change a legacy model string or base URL and claim that Raven is integrated. A real integration requires an asynchronous Raven adapter, six typed outputs, cutoff policy, joint horizons/outcomes, and complete usage accounting. Internal-provider keys belong only in the Raven server's secret manager, never in submissions, manifests, command output, or Git.
 
 ## Commands
 
@@ -68,9 +60,10 @@ pnpm cli futurex validate --input <questions.json> --submission <submission.json
 pnpm cli forecastbench fetch --question-set YYYY-MM-DD-llm.json --output <questions.json>
 pnpm cli forecastbench run --input <questions.json> \
   --output <YYYY-MM-DD.organization.N.json> \
-  --organization <name> --model-name <name> --model-organization <name> --baseline-only
+  --organization <name> --model-name <name> --model-organization <name> \
+  --mode backtest --baseline-only
 pnpm cli forecastbench validate --input <questions.json> \
-  --submission <YYYY-MM-DD.organization.N.json>
+  --submission <YYYY-MM-DD.organization.N.json> --mode backtest
 
 # Prophet Arena
 pnpm cli prophet predict --input <request.json> --output <response.json> --baseline-only
@@ -78,11 +71,11 @@ export PROPHET_BEARER_TOKEN="<32+ byte random token>"
 pnpm prophet:serve
 ```
 
-Remove `--baseline-only` to call the configured Predictor. The CLI still does not perform an external submission.
+The ForecastBench commands above are an out-of-window plumbing test. Inside the official UTC window, `--mode backtest` may be removed. Do not remove `--baseline-only` for a paid full round until the Raven adapter, base-question horizon batching, and subset pilot are complete. The CLI still does not perform an external submission.
 
 Generated FutureX routes start as `pending`; review each item before changing it to `approved` or `edited` with `reviewedAtUtc`. Paid pilot and official-candidate runs fail before model calls when selected routes remain pending. Pilot and research-snapshot artifacts always carry `submissionEligible=false` and reject live research at or after a task's `end_time`.
 
-Paid model calls additionally require `--allow-paid`. Existing outputs are not overwritten unless `--force` is explicit. The Prophet service binds to `127.0.0.1` by default; a non-loopback bind requires a 32+ byte Bearer token, and startup without a Predictor key requires explicit `PROPHET_ALLOW_BASELINE_ONLY=1`. Production onboarding still requires HTTPS and a compatibility test.
+Paid commands additionally require `--allow-paid`, but that flag does not make the current path Raven. Existing outputs are not overwritten unless `--force` is explicit. The Prophet service binds to `127.0.0.1` by default; a non-loopback bind requires a 32+ byte Bearer token, and pure local baseline mode requires explicit `PROPHET_ALLOW_BASELINE_ONLY=1`. The current paid server still points to the legacy client, so production onboarding remains blocked until a Raven event-level adapter, HTTPS, and compatibility testing are complete.
 
 ## Architecture
 
@@ -100,7 +93,7 @@ packages/benchmarks  packages/runtime  packages/eval
 - `benchmarks` owns external contracts, routing, fallbacks, export, and validation.
 - `eval` owns Brier, ECE, Edge over Market, Platt calibration, and chronological splits.
 
-See [Architecture](architecture.md), [Benchmark playbook](benchmark-playbook.md), and the [next-session handoff](agent-handoff.md). The full milestone plan is in the [development plan](../../Plan/2026-08-09-raven-gonna-test-development-plan.en.md).
+See [Architecture](architecture.md), [Benchmark playbook](benchmark-playbook.md), the [end-to-end three-benchmark runbook](three-benchmark-runbook.md), and the [next-session handoff](agent-handoff.md). The full milestone plan is in the [development plan](../../Plan/2026-08-09-raven-gonna-test-development-plan.en.md).
 
 ## Verification
 

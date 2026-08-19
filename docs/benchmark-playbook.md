@@ -2,6 +2,8 @@
 
 核验时点：2026-08-09，新加坡时间。规则可能漂移；每轮运行前重新检查官方来源。
 
+本文件是规则与时序摘要；可复制命令、阶段 Gate、产物、恢复和 Definition of Done 见 [三个 Benchmark 端到端执行 Runbook](three-benchmark-runbook.md)。
+
 ## FutureX
 
 官方入口：[官网](https://futurex.live/)、[Online 数据集](https://huggingface.co/datasets/futurex-ai/Futurex-Online)、[公开 scorer](https://github.com/Futurex-ai/Futurex-Eval)。
@@ -15,7 +17,7 @@
 1. 发信 `FutureX-ai@outlook.com`，确认下一轮 deadline、重提覆盖、ensemble/人工 review 和 production numeric scorer。
 2. `futurex discover` 查看新 revision，再显式 `fetch --revision <full SHA>`。
 3. 对低置信题型准备绑定该 SHA 的 route override。
-4. 运行 Predictor、检查 checkpoint、生成 JSONL。
+4. Raven adapter 完成后运行 Raven、检查 checkpoint、生成 JSONL；当前 paid path 阻断。
 5. strict validate；邮件正文写 model、framework、organization、dataset SHA、visibility。
 6. 人工发送附件，保存 sent time、附件 hash 和回执。
 
@@ -40,7 +42,7 @@
 2. 收到 GCS folder 和正式日期后先上传测试文件。
 3. 确认组合系统的 model 字段使用产品名还是 `ensemble`。
 4. 轮次开始后下载 dated question set；不要使用 `latest`。
-5. 先生成 100% safety baseline，再跑 Predictor/统计专家覆盖。
+5. 先生成 100% safety baseline；Raven adapter 与原题级 batching 完成后，再跑 Raven/统计专家覆盖。
 6. 验证 market/dataset 各自覆盖、动态 horizon、范围、唯一键；文件名严格使用 `<forecast_due_date>.<organization>.<N>.json`。
 7. 人工上传 GCS，检查 object timestamp/hash；失败时截止前邮件 fallback。
 

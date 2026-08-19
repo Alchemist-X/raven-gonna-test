@@ -57,16 +57,13 @@ free_response
 
 核心层会验证结构化 `EvidenceRecord` 的发布时间、observed-at、域名和 source class；但厂商 research 当前只返回 citation URL，尚未形成可证明历史时点的冻结证据包。因此 CLI 禁止把 live research 用于 backtest；完整 frozen-evidence adapter 仍是后续工作。
 
-## Predictor
+## Raven 目标与迁移状态
 
-`OpenAICompatiblePredictor` 默认适配 Foresight v4，但 base URL、model 和 key 可替换。客户端：
+正式预测系统已确定为自研 Raven Forecasting Engine。目标依赖方向是 `benchmark adapter → Raven async adapter → predict-raven engine → internal provider/search`。每个 artifact 必须固定 Raven SHA、adapter SHA、内部 provider/model、InformationPolicy、as-of 和 usage。
 
-- 使用原生 fetch，不引入厂商 SDK；
-- 支持 Foresight `<answer>` 结构、annotations 和 usage；
-- 统一 AbortSignal 与 timeout；
-- 不把 API key写入 artifact。
+当前 `OpenAICompatiblePredictor` 只是尚未移除的 legacy client；所有 paid CLI/server 仍会调用它，因此不能生成 Raven 正式候选。Raven 当前是 binary-only 的异步 `/v1/forecasts` 服务，必须先补固定 resolution/as-of/policy、六类 typed answers、联合 horizons/outcomes、trial namespace 和完整 cost telemetry。
 
-核心引擎并行运行独立 trials：binary 用 logit pooling；categorical 平均分布；multi-label 平均 inclusion probability；ranking 用 Borda；numeric 用 trimmed mean；free response 用规范化多数。
+Raven 内部 evidence rounds 与独立 replicates 分开。过渡期外层固定一个 replicate；只有高价值题在共享冻结 evidence 后追加 fresh replicate。聚合仍可使用 binary logit pooling、categorical/multi-label 概率聚合、ranking Borda、numeric trimmed mean 和 free-response canonical voting。
 
 ## Baseline-first 与恢复
 

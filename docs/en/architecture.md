@@ -38,9 +38,13 @@ One `marketBlind` boolean cannot represent all three benchmarks:
 
 The core validates structured `EvidenceRecord` cutoff, observed time, domain, and source class. Provider research currently returns citation URLs rather than a frozen historical evidence bundle, so the CLI blocks live research in backtests; a complete frozen-evidence adapter remains future work.
 
-## Predictor and aggregation
+## Raven target and migration state
 
-The native-fetch OpenAI-compatible client defaults to Foresight v4, understands tagged answers, annotations, usage, timeout, and shared abort signals. Independent trials are aggregated by logit pooling for binary forecasts, mean distributions for categorical and multi-label tasks, Borda for rankings, trimmed means for numeric tasks, and canonical voting for free responses.
+The official forecasting system is the self-developed Raven Forecasting Engine. The target dependency is `benchmark adapter → Raven async adapter → predict-raven engine → internal provider/search`. Every artifact pins Raven SHA, adapter SHA, internal provider/model, InformationPolicy, as-of, and usage.
+
+The current `OpenAICompatiblePredictor` is legacy code that has not yet been removed. Every paid CLI/server path still invokes it, so it cannot produce an official Raven candidate. Raven is currently a binary-only asynchronous `/v1/forecasts` service; the integration must add fixed resolution/as-of/policy, six typed outputs, joint horizons/outcomes, trial namespace, and complete cost telemetry.
+
+Raven evidence rounds and independent replicates are separate. Keep one outer replicate during migration, then add fresh replicates only for high-value tasks after sharing frozen evidence. Aggregation can still use binary logit pooling, categorical/multi-label probability pooling, ranking Borda, numeric trimmed means, and canonical free-response voting.
 
 ## Baseline-first recovery
 
