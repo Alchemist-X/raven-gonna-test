@@ -43,6 +43,27 @@ export PREDICTOR_MODEL="foresight-v4"
 export PREDICTOR_BASE_URL="https://api.lightningrod.ai/v1/openai"
 ```
 
+也可以走订阅制 CLI provider，不需要 `PREDICTOR_API_KEY`：
+
+```bash
+# Claude Code 订阅
+export PREDICTOR_PROVIDER="claude-cli"
+export PREDICTOR_MODEL="claude-sonnet-5"
+export PREDICTOR_CLAUDE_EFFORT="high"     # 可选：low|medium|high|xhigh|max
+
+# 或 OpenAI Codex CLI（ChatGPT 订阅）
+export PREDICTOR_PROVIDER="codex-cli"
+export PREDICTOR_MODEL="gpt-5.6-sol"
+export PREDICTOR_CODEX_EFFORT="xhigh"     # 可选：low|medium|high|xhigh|max|ultra
+```
+
+codex-cli provider 的行为边界（均为实测结论，详见 `packages/runtime/src/codex-cli.ts` 头注）：
+
+- 每次调用都在全新的 `CODEX_HOME`（仅链接 auth.json）里执行——`~/.codex` 的 AGENTS.md、config、plugins 和跨会话 memories 一律不进上下文；
+- 该版本的 web_search 无法关闭，因此 `web: deny` 的任务会被**直接拒绝**（fail-closed），不会降级成"口头要求不搜"；
+- `citations` 记录的是 `search://<query>` 检索查询而非真实抓取的 URL（事件流不暴露结果 URL），与 claude-cli 的 citation **不可直接对比**；
+- 最终回复受 `--output-schema` JSON Schema 约束——解析失败率天然低于 claude-cli，这是 harness 差异而非模型差异，对比时必须注明。
+
 不要把 key 写进提交文件、manifest、命令输出或 Git。
 
 ## 常用命令

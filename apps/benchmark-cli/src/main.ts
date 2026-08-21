@@ -46,6 +46,7 @@ import {
 } from "@raven-gonna-test/benchmarks";
 import {
   ClaudeCliPredictor,
+  CodexCliPredictor,
   ConcurrencyLimitedModel,
   OpenAICompatiblePredictor,
   loadPredictorConfig,
@@ -217,6 +218,15 @@ function createPort(config: ReturnType<typeof loadPredictorConfig>) {
       model: config.model,
       timeoutMs: config.timeoutMs,
       ...(config.claudeEffort ? { effort: config.claudeEffort } : {})
+    });
+  }
+  if (config.provider === "codex-cli") {
+    return new CodexCliPredictor({
+      model: config.model,
+      timeoutMs: config.timeoutMs,
+      ...(config.codexEffort ? { effort: config.codexEffort } : {}),
+      ...(config.maxRetries !== undefined ? { maxRetries: config.maxRetries } : {}),
+      ...(config.retryBaseMs !== undefined ? { retryBaseMs: config.retryBaseMs } : {})
     });
   }
   return new OpenAICompatiblePredictor(config);
@@ -459,10 +469,14 @@ async function loadResumeResults(
 
 async function commandDoctor(): Promise<void> {
   const provider = process.env.PREDICTOR_PROVIDER ?? "openai-compatible";
-  const claudeCli = provider === "claude-cli";
-  // The CLI provider is ready when the CLI itself is authenticated, which this
+  const subscriptionCli = provider === "claude-cli" || provider === "codex-cli";
+  // A CLI provider is ready when the CLI itself is authenticated, which this
   // process cannot see; reporting an API-key check for it would be misleading.
-  const providerReady = claudeCli ? "check `claude auth status`" : Boolean(process.env.PREDICTOR_API_KEY?.trim());
+  const providerReady = provider === "claude-cli"
+    ? "check `claude auth status`"
+    : provider === "codex-cli"
+      ? "check `codex login status`"
+      : Boolean(process.env.PREDICTOR_API_KEY?.trim());
   process.stdout.write(`${JSON.stringify({
     repository: "raven-gonna-test",
     node: process.version,
@@ -470,8 +484,10 @@ async function commandDoctor(): Promise<void> {
     predictor: {
       provider,
       ready: providerReady,
-      model: process.env.PREDICTOR_MODEL ?? (claudeCli ? "claude-sonnet-5" : "foresight-v4"),
-      ...(claudeCli
+      model:
+        process.env.PREDICTOR_MODEL ??
+        (provider === "claude-cli" ? "claude-sonnet-5" : provider === "codex-cli" ? "gpt-5.6-sol" : "foresight-v4"),
+      ...(subscriptionCli
         ? {}
         : { baseUrl: safeProviderUrl(process.env.PREDICTOR_BASE_URL ?? "https://api.lightningrod.ai/v1/openai") })
     },
@@ -739,6 +755,11 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       roundId,
       model: config.model,
       provider: config.provider,
+      // Enough harness identity to tell whether two runs are comparable:
+      // trials is the per-question ceiling, effortOverride the provider-level
+      // escalation past the engine's own reasoningEffort.
+      trials: config.trials,
+      effortOverride: config.claudeEffort ?? config.codexEffort ?? null,
       records: submission.length,
       mode,
       evidenceCutoff: asOfUtc,

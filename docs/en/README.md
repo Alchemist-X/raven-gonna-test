@@ -35,6 +35,8 @@ pnpm verify
 pnpm doctor
 ```
 
+Besides the HTTP `openai-compatible` provider, two subscription CLI providers exist and need no `PREDICTOR_API_KEY`: `claude-cli` (Claude Code subscription; optional `PREDICTOR_CLAUDE_EFFORT=low|medium|high|xhigh|max`) and `codex-cli` (OpenAI Codex CLI on a ChatGPT subscription; optional `PREDICTOR_CODEX_EFFORT=low|medium|high|xhigh|max|ultra`). The codex-cli port runs every call in a fresh `CODEX_HOME` (auth symlink only, so no AGENTS.md/config/plugins/memories reach the context), refuses no-web tasks outright because this Codex build's web search cannot be disabled, records `search://<query>` markers instead of fetched URLs (the event stream exposes queries only — not comparable with claude-cli citations), and constrains the final reply with `--output-schema` (a harness advantage, not a model one; label it in comparisons). Details in the header of `packages/runtime/src/codex-cli.ts`.
+
 Read the [Raven-only three-benchmark runbook](three-benchmark-runbook.md) before any live work. Do not change a legacy model string or base URL and claim that Raven is integrated. A real integration requires an asynchronous Raven adapter, six typed outputs, cutoff policy, joint horizons/outcomes, and complete usage accounting. Internal-provider keys belong only in the Raven server's secret manager, never in submissions, manifests, command output, or Git.
 
 ## Commands
