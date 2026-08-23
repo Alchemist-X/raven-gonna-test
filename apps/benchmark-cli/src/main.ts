@@ -1134,5 +1134,13 @@ async function main(): Promise<void> {
 
 main().catch((error) => {
   process.stderr.write(`[ERR] ${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
+  // An AggregateError's message says only that every trial failed; the causes
+  // live in .errors, and swallowing them makes the failure undiagnosable from
+  // the log — which is the only thing a detached batch run leaves behind.
+  if (error instanceof AggregateError) {
+    for (const cause of error.errors) {
+      process.stderr.write(`[ERR]   cause: ${cause instanceof Error ? cause.message : String(cause)}\n`);
+    }
+  }
   process.exitCode = 1;
 });
