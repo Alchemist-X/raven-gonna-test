@@ -40,6 +40,14 @@ describe("buildClaudeCliArgs", () => {
     expect(args[args.indexOf("--allowedTools") + 1]).toBe("WebSearch WebFetch");
   });
 
+  it("isolates the call from operator context so every machine runs the same harness", () => {
+    const args = buildClaudeCliArgs({ model: "m" }, request());
+    // Empty setting-sources drops user/project/local settings (and the rules
+    // files they inject) while retrieval and auth keep working.
+    expect(args[args.indexOf("--setting-sources") + 1]).toBe("");
+    expect(args).toContain("--strict-mcp-config");
+  });
+
   it("appends rather than replaces the system prompt, keeping tool-use behaviour", () => {
     const args = buildClaudeCliArgs({ model: "m" }, request({ systemPrompt: "Cutoff: 2026-08-17." }));
     expect(args).toContain("--append-system-prompt");

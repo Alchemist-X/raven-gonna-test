@@ -17,6 +17,7 @@
 // login); an unauthenticated CLI fails the call with its own message.
 
 import { spawn } from "node:child_process";
+import { tmpdir } from "node:os";
 import type { ModelPort, ModelRequest, ModelResponse } from "@raven-gonna-test/forecast-core";
 
 export interface ClaudeCliConfig {
@@ -63,6 +64,17 @@ export function buildClaudeCliArgs(
     "--output-format",
     "stream-json",
     "--verbose",
+    // Context isolation, so the same model is the same harness on every
+    // machine. Without these the CLI injects the operator's user-level rules
+    // files into every forecast (measured: ~29k tokens of engineering/server
+    // docs on the dev machine, different again on the fleet server), and a
+    // cross-machine comparison silently stops being one. An empty
+    // --setting-sources drops user/project/local settings while WebSearch and
+    // the CLI's own auth keep working (verified empirically);
+    // --strict-mcp-config guarantees no MCP servers ride along.
+    "--setting-sources",
+    "",
+    "--strict-mcp-config",
     ...(allowedTools ? ["--allowedTools", allowedTools] : []),
     "--model",
     config.model,
@@ -173,7 +185,10 @@ export class ClaudeCliPredictor implements ModelPort {
     const timeoutMs = this.config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
     return await new Promise<ModelResponse>((resolve, reject) => {
-      const child = spawn(this.config.executable ?? "claude", args, { cwd: this.config.cwd });
+      // Default the working directory away from any project tree: CLAUDE.md
+      // auto-discovery walks up from cwd, and a forecast must not absorb
+      // whatever repository the operator happened to launch from.
+      const child = spawn(this.config.executable ?? "claude", args, { cwd: this.config.cwd ?? tmpdir() });
       let stdout = "";
       let stderr = "";
       let settled = false;
