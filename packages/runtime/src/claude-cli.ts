@@ -33,6 +33,11 @@ export interface ClaudeCliConfig {
   executable?: string;
   /** Working directory for the spawned CLI. */
   cwd?: string;
+  /** Retries for transient failures. Earned the hard way: one transient burst
+   *  from a slow upstream (kimi via ANTHROPIC_BASE_URL, 2026-08-22) failed
+   *  every trial of a six-question batch that passed cleanly when rerun. */
+  maxRetries?: number;
+  retryBaseMs?: number;
 }
 
 export type ClaudeCliEffort = "low" | "medium" | "high" | "xhigh" | "max";
@@ -171,6 +176,17 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   return { content, thinking: thinkingBlocks.join("\n\n"), citations: [...urls], usage, model, isError };
 }
 
+/**
+ * Permanent failures a retry cannot fix: revoked or missing credentials,
+ * malformed requests, and our own per-attempt timeout (retrying a full timeout
+ * doubles the damage; the engine's trial timeout governs the total). Everything
+ * else — dropped streams, 5xx bursts from an ANTHROPIC_BASE_URL upstream,
+ * process flakes — is worth a bounded retry.
+ */
+export function isRetryableClaudeFailure(message: string): boolean {
+  return !/401|403|OAuth|revoked|unauthorized|invalid_request|log.?in|logged.?in|timed out/i.test(message);
+}
+
 export class ClaudeCliPredictor implements ModelPort {
   readonly model: string;
 
@@ -181,6 +197,22 @@ export class ClaudeCliPredictor implements ModelPort {
 
   async generate(request: ModelRequest, signal: AbortSignal): Promise<ModelResponse> {
     if (signal.aborted) throw signal.reason ?? new Error("Claude CLI call aborted before start.");
+    const maxRetries = this.config.maxRetries ?? 2;
+    const retryBaseMs = this.config.retryBaseMs ?? 1000;
+    let lastError: Error | undefined;
+    for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
+      if (attempt > 0) await claudeRetryDelay(Math.min(30_000, retryBaseMs * 2 ** (attempt - 1)), signal);
+      try {
+        return await this.runOnce(request, signal);
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        if (signal.aborted || !isRetryableClaudeFailure(lastError.message)) throw lastError;
+      }
+    }
+    throw lastError ?? new Error("Claude CLI retry loop exited unexpectedly.");
+  }
+
+  private async runOnce(request: ModelRequest, signal: AbortSignal): Promise<ModelResponse> {
     const args = buildClaudeCliArgs(this.config, request);
     const timeoutMs = this.config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
@@ -239,4 +271,22 @@ export class ClaudeCliPredictor implements ModelPort {
       child.stdin.end(request.userPrompt);
     });
   }
+}
+
+async function claudeRetryDelay(milliseconds: number, signal: AbortSignal): Promise<void> {
+  if (signal.aborted) throw signal.reason ?? new Error("Retry wait aborted.");
+  await new Promise<void>((resolve, reject) => {
+    let onAbort: () => void;
+    const cleanup = (): void => signal.removeEventListener("abort", onAbort);
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve();
+    }, milliseconds);
+    onAbort = (): void => {
+      clearTimeout(timer);
+      cleanup();
+      reject(signal.reason ?? new Error("Retry wait aborted."));
+    };
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
 }

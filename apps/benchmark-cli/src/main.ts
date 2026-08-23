@@ -217,7 +217,9 @@ function createPort(config: ReturnType<typeof loadPredictorConfig>) {
     return new ClaudeCliPredictor({
       model: config.model,
       timeoutMs: config.timeoutMs,
-      ...(config.claudeEffort ? { effort: config.claudeEffort } : {})
+      ...(config.claudeEffort ? { effort: config.claudeEffort } : {}),
+      ...(config.maxRetries !== undefined ? { maxRetries: config.maxRetries } : {}),
+      ...(config.retryBaseMs !== undefined ? { retryBaseMs: config.retryBaseMs } : {})
     });
   }
   if (config.provider === "codex-cli") {
