@@ -126,6 +126,21 @@ const RATIONALE_PROPERTY = {
     "Two to four sentences: the decisive evidence (with dates) and how it determined the answer. Written before the answer fields."
 } as const;
 
+const SOURCES_PROPERTY = {
+  type: "array",
+  description:
+    "Sources actually opened or returned by web search. Preserve each original canonical URL; use an empty array only if no source was available.",
+  items: {
+    type: "object",
+    properties: {
+      title: { type: "string", description: "Source or page title." },
+      url: { type: "string", description: "Original absolute http(s) URL, not a search-results URL." }
+    },
+    required: ["title", "url"],
+    additionalProperties: false
+  }
+} as const;
+
 function probabilityProperties(choices: readonly string[]): Record<string, unknown> {
   return Object.fromEntries(
     choices.map((choice) => [choice, { type: "number", description: "Probability between 0 and 1." }])
@@ -139,10 +154,39 @@ function objectSchema(properties: Record<string, unknown>): Record<string, unkno
   // schema-level equivalent of "reason first, then answer".
   return {
     type: "object",
-    properties: { rationale: RATIONALE_PROPERTY, ...properties },
-    required: ["rationale", ...Object.keys(properties)],
+    properties: { rationale: RATIONALE_PROPERTY, sources: SOURCES_PROPERTY, ...properties },
+    required: ["rationale", "sources", ...Object.keys(properties)],
     additionalProperties: false
   };
+}
+
+function sourceUrlsFromAnswer(content: string): string[] {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(content);
+  } catch {
+    return [];
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return [];
+  const sources = (parsed as Record<string, unknown>).sources;
+  if (!Array.isArray(sources)) return [];
+  const urls = new Set<string>();
+  for (const source of sources) {
+    const value = typeof source === "string"
+      ? source
+      : source && typeof source === "object" && !Array.isArray(source)
+        ? (source as Record<string, unknown>).url
+        : undefined;
+    if (typeof value !== "string") continue;
+    try {
+      const url = new URL(value);
+      if (url.protocol === "http:" || url.protocol === "https:") urls.add(url.toString());
+    } catch {
+      // The model-visible answer is still kept in rawResponse; malformed URLs
+      // must not be promoted into the verified source list.
+    }
+  }
+  return [...urls];
 }
 
 /**
@@ -370,12 +414,16 @@ export class CodexCliPredictor implements ModelPort {
         const detail = parsed.failureMessage || stderr.trim().slice(-800) || "no output";
         throw new Error(`Codex CLI exited ${code}: ${detail}`);
       }
+      const sourceUrls = sourceUrlsFromAnswer(content);
       return {
         content,
         ...(parsed.thinking ? { thinking: parsed.thinking } : {}),
         // Queries, not URLs: the search:// scheme keeps them out of any "URL
         // we actually fetched" claim while still proving research happened.
-        citations: parsed.searchQueries.map((query) => `search://${encodeURIComponent(query)}`),
+        citations: [
+          ...parsed.searchQueries.map((query) => `search://${encodeURIComponent(query)}`),
+          ...sourceUrls
+        ],
         usage: { ...(parsed.usage ?? {}), web_search_requests: parsed.searchQueries.length },
         model: this.config.model
       };

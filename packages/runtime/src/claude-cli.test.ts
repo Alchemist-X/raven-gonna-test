@@ -87,6 +87,7 @@ describe("parseClaudeStream", () => {
         message: {
           model: "claude-opus-5",
           content: [
+            { type: "tool_use", name: "WebSearch", input: { query: "official guidance midpoint" } },
             { type: "tool_use", name: "WebFetch", input: { url: "https://fetched.example/a" } },
             { type: "text", text: "thinking out loud" }
           ]
@@ -102,6 +103,7 @@ describe("parseClaudeStream", () => {
     const parsed = parseClaudeStream(stream);
     expect(parsed.content).toBe("<answer>0.62</answer>");
     expect(parsed.citations.sort()).toEqual(["https://fetched.example/a", "https://search.example/b"]);
+    expect(parsed.searchQueries).toEqual(["official guidance midpoint"]);
     expect(parsed.usage).toMatchObject({ input_tokens: 10, total_cost_usd: 0.25, num_turns: 3 });
     expect(parsed.model).toBe("claude-opus-5");
     expect(parsed.isError).toBe(false);

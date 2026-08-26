@@ -126,13 +126,13 @@ describe("answerSchemaForTask", () => {
   it("matches the field names parseModelAnswer already accepts", () => {
     const binary = answerSchemaForTask(task({ kind: "binary_probability" }));
     expect(Object.keys(binary.properties as Record<string, unknown>)).toContain("probability");
-    expect(binary.required).toEqual(["rationale", "probability"]);
+    expect(binary.required).toEqual(["rationale", "sources", "probability"]);
 
     const numeric = answerSchemaForTask(task({ kind: "numeric", integerValued: false }));
-    expect(numeric.required).toEqual(["rationale", "value", "standard_deviation"]);
+    expect(numeric.required).toEqual(["rationale", "sources", "value", "standard_deviation"]);
 
     const free = answerSchemaForTask(task({ kind: "free_response" }));
-    expect(free.required).toEqual(["rationale", "answer"]);
+    expect(free.required).toEqual(["rationale", "sources", "answer"]);
   });
 
   it("pins categorical probabilities to exactly the offered choices", () => {

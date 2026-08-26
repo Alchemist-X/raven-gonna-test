@@ -14,7 +14,8 @@ import {
 
 const CHOICE_LINE = /^\s*([A-Z])\.\s+(?:the outcome be\s+)?(.+?)\s*$/gim;
 const NUMERIC_PATTERN = /\b(?:numeric prediction|how (?:many|much)|what (?:will|is|was)(?: be)? (?:the )?(?:closing )?(?:price|value|number|total|rate|percentage|percent|index|close|open|margin|duration)|average price|day(?:'s)? close|grain index|revenue|gross bookings?|gross merchandise volume|market capitalization|adjusted ebitda|sales|reserves?|inventor(?:y|ies)|storage|claims|gdp growth|pmi|box office gross|working gas|productivity growth|policy repo rate|elo rating|runs?|winning margin|rated good or excellent)\b|\b(?:usd|cny|dkk|nt\$)\s*(?:millions?|billions?)\b|\b(?:millions?|billions?|two decimal places|one decimal place|annualized quarter-over-quarter)\b/i;
-const RANKING_PATTERN = /\b(?:rank|ranking|ranked|ordered|in order|top \d+)\b/i;
+const RANKING_PATTERN =
+  /\b(?:rank|ranking|ranked|ordered|in order|top (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)|winners? of the (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten))\b/i;
 const MULTI_PATTERN = /\b(?:select all|choose all|all that apply|more than one)\b/i;
 const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates)\s+will\b/i;
 const STRONG_SINGLE_PATTERN = /\b(?:who will win|winner of|which (?:candidate|ticket|club|team|player|person) will (?:win|receive)|most votes|\bvs\.?\b)\b/i;
@@ -27,6 +28,11 @@ const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)
 // aggregated by exact-string vote and tie-broken alphabetically.
 const NUMERIC_CONTRACT_PATTERN =
   /boxed numeric value|exact published numeric value|only the exact numeric|numeric prediction only/i;
+// The 2026-08-26 wire format removed the target field/unit from many L3/L4
+// prompts and replaced it with this generic settlement-contract sentence.
+// It is numeric only after ranking language has had first refusal: the same
+// sentence also appears on "top five" and "six winners" list questions.
+const SOURCE_NATIVE_VALUE_PATTERN = /return exactly the source-native value required by the settlement contract/i;
 // "what exact <measurement> will X report" asks for a quantity even when the
 // prompt only supplies the generic \boxed{YOUR_PREDICTION} envelope, so the
 // contract pattern above does not fire. Routed as free text these produce prose
@@ -82,8 +88,13 @@ function rankingCount(text: string): number | undefined {
     const end = Number(range[2]);
     if (end >= start) return end - start + 1;
   }
-  const count = text.match(/(?:top|rank)\s+(\d+)/i)?.[1];
-  return count ? Number(count) : undefined;
+  const token = text.match(/(?:top|rank)\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i)?.[1]
+    ?? text.match(/winners? of the (\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i)?.[1];
+  if (!token) return undefined;
+  if (/^\d+$/.test(token)) return Number(token);
+  return ({ one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 } as const)[
+    token.toLowerCase() as "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine" | "ten"
+  ];
 }
 
 function semanticPrompt(prompt: string): string {
@@ -151,6 +162,14 @@ export function routeFutureXQuestion(
       if (count) route.rankCount = count;
       return route;
     }
+  }
+  if (SOURCE_NATIVE_VALUE_PATTERN.test(question.prompt)) {
+    return {
+      kind: "numeric",
+      choices: [],
+      confidence: 0.9,
+      reasons: ["generic source-native settlement value after ranking exclusion"]
+    };
   }
   if (extractedChoices.length >= 2) {
     const multi = MULTI_PATTERN.test(semantic) || STRONG_MULTI_PATTERN.test(semantic);

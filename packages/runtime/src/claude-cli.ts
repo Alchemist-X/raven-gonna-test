@@ -99,19 +99,22 @@ export function buildClaudeCliArgs(
  *   - tool_use blocks carrying an `input.url` (a WebFetch the model requested)
  *   - `{title, url}` pairs (WebSearch results handed back to the model)
  */
-function collectToolUrls(node: unknown, urls: Set<string>): void {
+function collectToolActivity(node: unknown, urls: Set<string>, queries: Set<string>): void {
   if (!node || typeof node !== "object") return;
   if (Array.isArray(node)) {
-    for (const item of node) collectToolUrls(item, urls);
+    for (const item of node) collectToolActivity(item, urls, queries);
     return;
   }
   const record = node as Record<string, unknown>;
   if (record.type === "tool_use" && record.input && typeof record.input === "object") {
-    const url = (record.input as Record<string, unknown>).url;
+    const input = record.input as Record<string, unknown>;
+    const url = input.url;
     if (typeof url === "string" && url) urls.add(url);
+    const query = input.query;
+    if (typeof query === "string" && query) queries.add(query);
   }
   if (typeof record.url === "string" && typeof record.title === "string") urls.add(record.url);
-  for (const value of Object.values(record)) collectToolUrls(value, urls);
+  for (const value of Object.values(record)) collectToolActivity(value, urls, queries);
 }
 
 export interface ParsedClaudeStream {
@@ -124,6 +127,7 @@ export interface ParsedClaudeStream {
    */
   thinking: string;
   citations: string[];
+  searchQueries: string[];
   usage: Record<string, unknown> | undefined;
   model: string | undefined;
   isError: boolean;
@@ -131,6 +135,7 @@ export interface ParsedClaudeStream {
 
 export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   const urls = new Set<string>();
+  const searchQueries = new Set<string>();
   const assistantTexts: string[] = [];
   const thinkingBlocks: string[] = [];
   let content = "";
@@ -147,7 +152,7 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
     } catch {
       continue; // A partial or non-JSON line is not fatal; keep reading.
     }
-    collectToolUrls(event, urls);
+    collectToolActivity(event, urls, searchQueries);
     if (event.type === "assistant") {
       const message = event.message as { content?: unknown; model?: unknown } | undefined;
       if (typeof message?.model === "string") model = message.model;
@@ -173,7 +178,15 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   // The CLI omits the result event when it dies mid-stream; the last assistant
   // turn is still usable, and a salvageable answer beats a deleted trial.
   if (!content && assistantTexts.length) content = assistantTexts[assistantTexts.length - 1] ?? "";
-  return { content, thinking: thinkingBlocks.join("\n\n"), citations: [...urls], usage, model, isError };
+  return {
+    content,
+    thinking: thinkingBlocks.join("\n\n"),
+    citations: [...urls],
+    searchQueries: [...searchQueries],
+    usage,
+    model,
+    isError
+  };
 }
 
 /**
@@ -259,7 +272,10 @@ export class ClaudeCliPredictor implements ModelPort {
         resolve({
           content: parsed.content,
           ...(parsed.thinking ? { thinking: parsed.thinking } : {}),
-          citations: parsed.citations,
+          citations: [
+            ...parsed.searchQueries.map((query) => `search://${encodeURIComponent(query)}`),
+            ...parsed.citations
+          ],
           ...(parsed.usage ? { usage: parsed.usage } : {}),
           model: parsed.model ?? this.model
         });
