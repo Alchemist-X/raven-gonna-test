@@ -804,6 +804,19 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       routesSha256: await sha256File(required(args, "routes"))
     };
     const resumeResults = await loadResumeResults(args, checkpointPath, tasks, checkpointIdentity);
+    if (resumeResults && enabled(args, "retry-fallbacks")) {
+      let removed = 0;
+      for (const [taskId, result] of resumeResults) {
+        const cutoffFallback = result.fallbackUsed && result.warnings.some((warning) =>
+          warning.startsWith("Live research skipped: task cutoff ")
+        );
+        if (result.fallbackUsed && !cutoffFallback) {
+          resumeResults.delete(taskId);
+          removed += 1;
+        }
+      }
+      info(`resume retry-fallbacks removed ${removed} provider/timeout fallback(s); preserved cutoff fallbacks`);
+    }
     const results = await runForecastBatch(tasks, engine, policyForFutureXTask, {
       concurrency: config.concurrency,
       checkpointPath,

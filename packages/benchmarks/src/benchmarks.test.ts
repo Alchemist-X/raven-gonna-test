@@ -75,6 +75,27 @@ describe("FutureX adapter", () => {
     expect(validateFutureXSubmission(questions, submission, { deadlineUtc: options.deadlineUtc, now: new Date("2026-08-12T15:00:00Z") }).valid).toBe(true);
   });
 
+  it("CSV-quotes ranking entities that contain commas without changing cardinality", () => {
+    const id = "comma-rank";
+    const question = {
+      id,
+      prompt: "Return the top five titles in order.",
+      end_time: "2026-09-01T23:59:59+08:00",
+      level: 4 as const,
+      en_title: "Billboard top five titles"
+    };
+    const result: ForecastResult = {
+      ...binaryResult(`futurex:${"a".repeat(40)}:${id}`, 0.5),
+      answer: {
+        kind: "ranking",
+        order: ["Boston", "Choosin' Texas", "I Knew It, I Knew You", "Been By Now", "Second Wind"]
+      }
+    };
+    const submission = buildFutureXSubmission([question], [result]);
+    expect(submission[0]?.prediction).toContain('"I Knew It, I Knew You"');
+    expect(validateFutureXSubmission([question], submission).valid).toBe(true);
+  });
+
   it("scores deterministic FutureX types and returns null for unavailable semantics", () => {
     const resolved = [
       { id: "a", prompt: "A or B", end_time: "2026-01-01", level: 1, en_title: "choice", task_type: "single_choice", ground_truth: "A" },

@@ -272,6 +272,43 @@ function decimal(value: number): string {
   return String(Number(value.toPrecision(15)));
 }
 
+/** CSV is the only reversible representation available inside FutureX's one
+ * string prediction field. In particular, ranking entities can themselves
+ * contain commas (song and film titles), so a plain split/join silently changes
+ * the number of answers. */
+export function parseFutureXList(value: string): string[] {
+  const fields: string[] = [];
+  let field = "";
+  let quoted = false;
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index]!;
+    if (character === '"') {
+      if (quoted && value[index + 1] === '"') {
+        field += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === "," && !quoted) {
+      const normalized = field.trim();
+      if (normalized) fields.push(normalized);
+      field = "";
+    } else {
+      field += character;
+    }
+  }
+  const normalized = field.trim();
+  if (normalized) fields.push(normalized);
+  return fields;
+}
+
+function formatFutureXList(values: readonly string[]): string {
+  return values.map((value) => /[",\r\n]/.test(value)
+    ? `"${value.replaceAll('"', '""')}"`
+    : value
+  ).join(", ");
+}
+
 export function futureXPredictionFromResult(result: ForecastResult): string {
   switch (result.answer.kind) {
     case "binary":
@@ -279,9 +316,9 @@ export function futureXPredictionFromResult(result: ForecastResult): string {
     case "categorical":
       return result.answer.choice;
     case "multi_label":
-      return result.answer.selected.join(", ");
+      return formatFutureXList(result.answer.selected);
     case "ranking":
-      return result.answer.order.join(", ");
+      return formatFutureXList(result.answer.order);
     case "numeric":
       return decimal(result.answer.value);
     case "free_response":
@@ -341,7 +378,7 @@ export function validateFutureXSubmission(
     const prediction = row.prediction.trim();
     if (!prediction && options.requireComplete !== false) errors.push(`Empty prediction for ${question.id}`);
     const route = routeFutureXQuestion(question, options.routeOverrides?.[question.id]);
-    const labels = prediction.split(",").map((part) => part.trim()).filter(Boolean);
+    const labels = parseFutureXList(prediction);
     const allowed = new Set(route.choices.map((choice) => choice.key));
     if (route.kind === "single_choice" && (labels.length !== 1 || !allowed.has(labels[0] ?? ""))) {
       errors.push(`Invalid single-choice prediction for ${question.id}: ${prediction}`);

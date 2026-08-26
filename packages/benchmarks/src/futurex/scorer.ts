@@ -1,6 +1,6 @@
 import type { FutureXLevel, FutureXResolvedQuestion, FutureXTaskKind } from "./schema.js";
 import { FutureXResolvedQuestionSchema, FutureXSubmissionRowSchema } from "./schema.js";
-import { routeFutureXQuestion } from "./adapter.js";
+import { parseFutureXList, routeFutureXQuestion } from "./adapter.js";
 
 export type FutureXNumericProfile =
   | { id: "github-5pct-truth"; kind: "truth_relative"; ratio: 0.05; zeroSigma: 0.01 }
@@ -27,7 +27,7 @@ function normalized(value: string): string {
 }
 
 function labels(value: string | string[]): string[] {
-  return (Array.isArray(value) ? value : value.split(","))
+  return (Array.isArray(value) ? value : parseFutureXList(value))
     .map((part) => normalized(part))
     .filter(Boolean);
 }

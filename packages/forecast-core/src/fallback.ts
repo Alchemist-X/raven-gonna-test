@@ -96,11 +96,13 @@ export function defaultAnswerForTask(task: ForecastTask): ForecastAnswer {
     case "ranking": {
       // With no evidence, every permutation has the same expected overlap
       // score, so the given candidate order is as good as any and is the only
-      // one that is stable across replays. Empty candidates leave nothing to
-      // rank: an empty order scores 0, exactly what a missing row scores, while
-      // fabricated entity names would score 0 too and additionally pollute the
-      // artifact with entities no source ever mentioned.
-      const order = task.candidates.slice(0, task.rankCount);
+      // one that is stable across replays. Open-candidate rankings still have a
+      // strict output cardinality: an empty order makes the entire submission
+      // invalid. Stable sentinel labels preserve completeness while remaining
+      // unmistakably synthetic in the fallback-labelled audit artifact.
+      const order = task.candidates.length > 0
+        ? task.candidates.slice(0, task.rankCount)
+        : Array.from({ length: task.rankCount }, (_, index) => `unknown_${index + 1}`);
       return { kind: "ranking", order, scores: constantOver(order, 0) };
     }
     case "numeric": {
