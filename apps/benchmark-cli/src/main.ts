@@ -347,11 +347,9 @@ function resultAuditSummary(result: ForecastResult) {
   const usageTotals: Record<string, number> = {};
   let searchQueries = 0;
   let sourceUrls = 0;
-  let thinkingTrials = 0;
   for (const trial of result.trials) {
     searchQueries += trial.citations.filter((citation) => citation.startsWith("search://")).length;
     sourceUrls += trial.citations.filter((citation) => /^https?:\/\//i.test(citation)).length;
-    if (trial.thinking?.trim()) thinkingTrials += 1;
     for (const field of USAGE_TOTAL_FIELDS) {
       const value = trial.usage?.[field];
       if (typeof value === "number" && Number.isFinite(value)) {
@@ -359,7 +357,7 @@ function resultAuditSummary(result: ForecastResult) {
       }
     }
   }
-  return { usageTotals, searchQueries, sourceUrls, thinkingTrials };
+  return { usageTotals, searchQueries, sourceUrls };
 }
 
 async function writeRunAuditArtifact(output: string, results: readonly ForecastResult[]): Promise<string> {
@@ -367,13 +365,11 @@ async function writeRunAuditArtifact(output: string, results: readonly ForecastR
   let trials = 0;
   let searchQueries = 0;
   let sourceUrls = 0;
-  let thinkingTrials = 0;
   for (const result of results) {
     const summary = resultAuditSummary(result);
     trials += result.trials.length;
     searchQueries += summary.searchQueries;
     sourceUrls += summary.sourceUrls;
-    thinkingTrials += summary.thinkingTrials;
     for (const [field, value] of Object.entries(summary.usageTotals)) totals[field] = (totals[field] ?? 0) + value;
   }
   const auditPath = `${output.replace(/\.jsonl?$/i, "")}.audit.json`;
@@ -386,7 +382,6 @@ async function writeRunAuditArtifact(output: string, results: readonly ForecastR
     researchedAnswers: results.filter((result) => result.trials.some((trial) => trial.citations.length > 0)).length,
     searchQueries,
     sourceUrls,
-    thinkingTrials,
     usageTotals: totals
   });
   return auditPath;
