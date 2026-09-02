@@ -62,7 +62,11 @@ const manifest = readJson(manifestPath);
 const reasoningPath = `${submissionPath.replace(/\.jsonl?$/i, "")}.reasoning.jsonl`;
 const reasoning = readJsonl(reasoningPath);
 const closed = readJson(closedPath);
-if (closed.schemaVersion !== "raven-gonna-test.futurex-closed-no-web.v1") throw new Error("Unsupported closed-question artifact.");
+if (!["raven-gonna-test.futurex-closed-no-web.v1", "raven-gonna-test.futurex-closed-question.v1"].includes(closed.schemaVersion)) {
+  throw new Error("Unsupported closed-question artifact.");
+}
+const closedMode = closed.mode ?? "no-web";
+const closedSource = `closed-${closedMode}`;
 if (closed.revision.toLowerCase() !== routeFile.revision.toLowerCase() || closed.revision.toLowerCase() !== String(manifest.revision).toLowerCase()) {
   throw new Error("Revision mismatch between routes, submission manifest and closed-question artifact.");
 }
@@ -110,19 +114,19 @@ const mergedReasoning = reasoning.map((record) => {
     submittedPrediction: entry.after,
     answer: closedResult.answer,
     fallbackUsed: false,
-    source: "closed-no-web",
+    source: closedSource,
     evidencePolicy: closed.evidencePolicy,
     supersededFallback: { prediction: entry.before, answer: record.answer, warnings: record.warnings },
     warnings: closedResult.warnings,
     derivation: closedResult.derivation ?? null,
-    researchedTrials: 0,
+    researchedTrials: closedResult.trials.filter((trial) => trial.citations.some((c) => /^https?:\/\//i.test(c))).length,
     trials: closedResult.trials.map((trial) => ({
       trial: trial.trial,
       role: trial.role ?? null,
       answer: trial.answer,
       citations: trial.citations,
-      searchQueries: [],
-      sourceUrls: [],
+      searchQueries: trial.citations.filter((c) => c.startsWith("search://")).map((c) => { try { return decodeURIComponent(c.slice(9)); } catch { return c.slice(9); } }),
+      sourceUrls: trial.citations.filter((c) => /^https?:\/\//i.test(c)),
       thinking: trial.thinking ?? null,
       rawResponse: trial.rawResponse,
       latencyMs: trial.latencyMs,
@@ -141,7 +145,8 @@ const outManifest = {
   sha256: sha256(output),
   reasoning: path.basename(mergedReasoningPath),
   derivedFrom: { submission: path.basename(submissionPath), sha256: sha256(submissionPath), manifest: path.basename(manifestPath) },
-  closedNoWeb: {
+  closedQuestions: {
+    mode: closedMode,
     artifact: path.basename(closedPath),
     sha256: sha256(closedPath),
     evidencePolicy: closed.evidencePolicy,

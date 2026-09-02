@@ -213,6 +213,31 @@ export function routeFutureXQuestion(
   return { kind: "open_text", choices: [], confidence: 0.8, reasons: ["canonical entity/category/score response"] };
 }
 
+/**
+ * What a task is told when its event has already resolved by the time it is
+ * researched. The default policy withholds research from such questions (the
+ * outcome may be public, so retrieval would not be forecasting). Under the
+ * operator's explicit "research closed questions" decision the task is instead
+ * pointed at the published result, and falls back to a forecast only when the
+ * resolving source has not published yet.
+ */
+export function closedQuestionResearchHint(endTimeUtc: string | undefined): string {
+  return (
+    `NOTE: this event's resolution time${endTimeUtc ? ` (${endTimeUtc})` : ""} has already passed at the time of this ` +
+    "request, so the outcome may already be published. Search the resolving source named in the question (and reputable " +
+    "reporting of it) for the officially published result and answer with exactly that value. Only if it has not been " +
+    "published yet, forecast it as usual from the evidence available."
+  );
+}
+
+export function withClosedQuestionResearchHint<T extends ForecastTask>(task: T): T {
+  return {
+    ...task,
+    prompt: `${task.prompt}\n\n${closedQuestionResearchHint(task.resolution.dateUtc)}`,
+    metadata: { ...task.metadata, closedAtCutoff: true, closedQuestionMode: "research" }
+  };
+}
+
 export function futureXEndTimeUtc(value: string): string | undefined {
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return `${value}T15:59:59.000Z`;
   const parsed = new Date(value);

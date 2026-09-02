@@ -24,6 +24,7 @@ import {
   fetchFutureXOnlinePinned,
   futureXEndTimeUtc,
   futureXQuestionsToTasks,
+  withClosedQuestionResearchHint,
   FutureXQuestionsSchema,
   FutureXRouteOverrideFileSchema,
   normalizeProphetRequest,
@@ -199,7 +200,7 @@ Commands:
   futurex inspect --input questions.json [--routes routes.json] [--as-of <ISO>]
   futurex research-validate --input questions.json --routes routes.json --snapshot snapshot.json --revision <sha>
   futurex pilot --input questions.json --routes routes.json --revision <sha> --round <id> --as-of <ISO> --ids <id,id,...> --output pilot.json --allow-paid
-  futurex run --input questions.json --routes routes.json --revision <sha> --round <id> --as-of <ISO> --deadline <ISO> --output submission.jsonl --allow-paid
+  futurex run --input questions.json --routes routes.json --revision <sha> --round <id> --as-of <ISO> --deadline <ISO> --output submission.jsonl --allow-paid [--closed-questions fallback|research]
   futurex validate --input questions.json --submission submission.jsonl [--routes routes.json] [--deadline <ISO>]
   futurex score --gold resolved.json[l] --submission submission.jsonl [--profile github|paper]
   forecastbench fetch --question-set YYYY-MM-DD-llm.json --output questions.json
@@ -730,6 +731,16 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     const asOfUtc = required(args, "as-of");
     const deadlineUtc = required(args, "deadline");
     const mode = flag(args, "mode") ?? "submission-candidate";
+    // What to do with a question whose end_time has already passed at the
+    // cutoff. "fallback" (default) withholds research and answers from the
+    // deterministic default, because the outcome may be public. "research" is
+    // the operator's explicit decision (2026-09-02) to look the published
+    // result up instead; it is recorded in the checkpoint identity, the
+    // manifest and each affected task's metadata.
+    const closedMode = flag(args, "closed-questions") ?? "fallback";
+    if (closedMode !== "fallback" && closedMode !== "research") {
+      throw new Error("--closed-questions must be fallback or research.");
+    }
     if (mode === "backtest") {
       throw new Error("Live Predictor research is disabled for FutureX backtests; use frozen evidence replay instead.");
     }
@@ -753,10 +764,14 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     );
     const questions = FutureXQuestionsSchema.parse(await loadRows(input));
     const window = partitionFutureXByWindow(questions, asOfUtc);
+    const closedIds = new Set(window.closed);
     if (window.closed.length > 0) {
       warn(
-        `${window.closed.length} question(s) already at/after end_time; excluded from live research and answered from the ` +
-          `fallback path so the round still submits: ${window.closed.join(", ")}`
+        closedMode === "research"
+          ? `${window.closed.length} question(s) already at/after end_time; --closed-questions research: they will be researched ` +
+            `for the PUBLISHED result up to the submission deadline: ${window.closed.join(", ")}`
+          : `${window.closed.length} question(s) already at/after end_time; excluded from live research and answered from the ` +
+            `fallback path so the round still submits: ${window.closed.join(", ")}`
       );
     }
     if (window.open.length === 0) throw new Error("Every FutureX question is past its end_time; nothing to research.");
@@ -772,7 +787,9 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     // soonest ones first, then enforce the earlier of event end and submission
     // deadline inside the batch so a queued/in-flight task cannot research the
     // answer after it becomes public.
-    const tasks = [...unsortedTasks].sort((left, right) => {
+    const tasks = [...unsortedTasks].map((task) =>
+      closedMode === "research" && closedIds.has(task.origin.externalId) ? withClosedQuestionResearchHint(task) : task
+    ).sort((left, right) => {
       const leftEnd = left.resolution.dateUtc ? new Date(left.resolution.dateUtc).getTime() : Number.POSITIVE_INFINITY;
       const rightEnd = right.resolution.dateUtc ? new Date(right.resolution.dateUtc).getTime() : Number.POSITIVE_INFINITY;
       return leftEnd - rightEnd;
@@ -796,7 +813,10 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       // kind. Re-routing a question and resuming would therefore hand back a
       // cached answer of the WRONG kind — a free-text sentence for a question
       // that is now numeric. Binding the routes file makes that impossible.
-      routesSha256: await sha256File(required(args, "routes"))
+      routesSha256: await sha256File(required(args, "routes")),
+      // Only stamped in research mode so checkpoints written before the option
+      // existed still resume under the default policy.
+      ...(closedMode === "research" ? { closedQuestions: "research" } : {})
     };
     const resumeResults = await loadResumeResults(args, checkpointPath, tasks, checkpointIdentity);
     if (resumeResults && enabled(args, "retry-fallbacks")) {
@@ -823,7 +843,10 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       // submission row at all, because buildFutureXSubmission throws on a gap.
       fallbackFor: (task) => defaultAnswerForTask(task),
       notAfterUtcFor: (task) => {
-        const candidates = [task.resolution.dateUtc, deadlineUtc]
+        // A closed question under the research decision is bounded only by the
+        // submission deadline; its own end time has already passed by design.
+        const researchClosed = closedMode === "research" && closedIds.has(task.origin.externalId);
+        const candidates = [researchClosed ? undefined : task.resolution.dateUtc, deadlineUtc]
           .filter((value): value is string => Boolean(value))
           .map((value) => new Date(value).getTime())
           .filter(Number.isFinite);
@@ -892,6 +915,8 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       mode,
       evidenceCutoff: asOfUtc,
       routeFile: path.basename(required(args, "routes")),
+      closedQuestions: closedMode,
+      closedAtCutoff: window.closed,
       reasoning: path.basename(reasoningPath),
       audit: path.basename(auditPath),
       fallbackAnswers: results.filter((result) => result.fallbackUsed).length,

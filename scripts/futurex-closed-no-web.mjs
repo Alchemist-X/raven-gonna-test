@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 // Answer FutureX questions whose end_time has ALREADY passed at the evidence
-// cutoff — without any web access.
+// cutoff. Two modes:
+//   --mode no-web   (default) no web access at all: training knowledge only.
+//   --mode research the operator's explicit decision to look the PUBLISHED
+//                   result up: normal retrieval, and the task is told that its
+//                   event has resolved and to answer with the official value,
+//                   forecasting only if nothing has been published yet.
 //
 // `futurex run` refuses to research such a question (the outcome may be
 // public) and answers it from the deterministic fallback, i.e. a coin flip.
@@ -54,6 +59,8 @@ const roundId = required("round");
 const asOfUtc = required("as-of");
 const ids = required("ids").split(",").map((value) => value.trim()).filter(Boolean);
 const output = required("output");
+const mode = typeof flags.get("mode") === "string" ? flags.get("mode") : "no-web";
+if (mode !== "no-web" && mode !== "research") throw new Error("--mode must be no-web or research.");
 if (!/^[0-9a-f]{40}$/i.test(revision)) throw new Error("--revision must be a full 40-character SHA.");
 if (!Number.isFinite(new Date(asOfUtc).getTime())) throw new Error("--as-of must be a valid timestamp.");
 
@@ -83,12 +90,13 @@ if (flags.get("allow-paid") !== true) {
   throw new Error(`About ${selected.length * config.trials} paid model calls; re-run with --allow-paid.`);
 }
 
-const { tasks } = bench.futureXQuestionsToTasks(selected, {
+const { tasks: plainTasks } = bench.futureXQuestionsToTasks(selected, {
   revision,
   roundId,
   asOfUtc,
   routeOverrides: routeFile.routes
 });
+const tasks = mode === "research" ? plainTasks.map((task) => bench.withClosedQuestionResearchHint(task)) : plainTasks;
 const port = new runtime.ConcurrencyLimitedModel(
   new runtime.ClaudeCliPredictor({
     model: config.model,
@@ -100,10 +108,13 @@ const port = new runtime.ConcurrencyLimitedModel(
   config.concurrency
 );
 const engine = new core.ForecastEngine(port);
-const POLICY_ID = "futurex-closed-no-web-v1";
-const policyFor = (task) => ({ ...core.futureXPolicy(task.asOfUtc), id: POLICY_ID, web: "deny" });
+const POLICY_ID = mode === "research" ? "futurex-closed-research-published-v1" : "futurex-closed-no-web-v1";
+const policyFor = (task) =>
+  mode === "research"
+    ? { ...core.futureXPolicy(task.asOfUtc), id: POLICY_ID }
+    : { ...core.futureXPolicy(task.asOfUtc), id: POLICY_ID, web: "deny" };
 
-console.error(`[INFO] execution mode: closed-question no-web forecast; ${tasks.length} task(s); model ${config.model}; trials ${config.trials}`);
+console.error(`[INFO] execution mode: closed-question ${mode} forecast; ${tasks.length} task(s); model ${config.model}; trials ${config.trials}`);
 const results = await runtime.runForecastBatch(tasks, engine, policyFor, {
   concurrency: config.concurrency,
   forecastOptions: {
@@ -114,7 +125,7 @@ const results = await runtime.runForecastBatch(tasks, engine, policyFor, {
   },
   fallbackFor: (task) => core.defaultAnswerForTask(task),
   onProgress: (completed, total, task, result) =>
-    console.error(`[INFO] closed no-web ${completed}/${total}: ${task.origin.externalId} trials=${result.trials.length}${result.fallbackUsed ? " [fallback]" : ""}`)
+    console.error(`[INFO] closed ${mode} ${completed}/${total}: ${task.origin.externalId} trials=${result.trials.length}${result.fallbackUsed ? " [fallback]" : ""}`)
 });
 
 // Fail closed: a tool call of any kind (recorded as a search:// query or a
@@ -122,7 +133,7 @@ const results = await runtime.runForecastBatch(tasks, engine, policyFor, {
 // not be used.
 for (const result of results) {
   for (const trial of result.trials) {
-    if (trial.citations.length > 0) {
+    if (mode === "no-web" && trial.citations.length > 0) {
       throw new Error(`${result.taskId} trial ${trial.trial} touched a tool (${trial.citations.slice(0, 3).join(", ")}); no-web boundary violated.`);
     }
   }
@@ -133,9 +144,12 @@ const report = bench.validateFutureXSubmission(selected, submission, { routeOver
 if (!report.valid) throw new Error(report.errors.join("\n"));
 
 const artifact = {
-  schemaVersion: "raven-gonna-test.futurex-closed-no-web.v1",
+  schemaVersion: "raven-gonna-test.futurex-closed-question.v1",
+  mode,
   evidencePolicy: POLICY_ID,
-  description: "Questions already past end_time at the evidence cutoff, answered from training knowledge with retrieval tools withheld.",
+  description: mode === "research"
+    ? "Questions already past end_time at the evidence cutoff, researched for the published result by operator decision."
+    : "Questions already past end_time at the evidence cutoff, answered from training knowledge with retrieval tools withheld.",
   revision,
   roundId,
   asOfUtc,
@@ -149,7 +163,7 @@ const artifact = {
   results
 };
 writeFileSync(output, `${JSON.stringify(artifact, null, 2)}\n`);
-console.error(`[OK] closed-question no-web artifact written: ${output}`);
+console.error(`[OK] closed-question ${mode} artifact written: ${output}`);
 for (const row of submission) {
   const result = results.find((candidate) => candidate.taskId.endsWith(`:${row.id}`));
   console.error(`[INFO]   ${row.id} -> ${row.prediction}${result?.fallbackUsed ? " [fallback]" : ""}`);
