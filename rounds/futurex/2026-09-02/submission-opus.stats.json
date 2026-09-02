@@ -10,20 +10,20 @@
     "1": {
       "questions": 20,
       "trials": 24,
-      "searches": 134,
-      "urls": 799,
-      "researched": 18,
-      "meanSearchesPerTrial": 5.6,
-      "meanUrlsPerTrial": 33.3
+      "searches": 163,
+      "urls": 951,
+      "researched": 20,
+      "meanSearchesPerTrial": 6.8,
+      "meanUrlsPerTrial": 39.6
     },
     "2": {
       "questions": 20,
       "trials": 42,
-      "searches": 211,
-      "urls": 1293,
-      "researched": 18,
-      "meanSearchesPerTrial": 5,
-      "meanUrlsPerTrial": 30.8
+      "searches": 230,
+      "urls": 1388,
+      "researched": 20,
+      "meanSearchesPerTrial": 5.5,
+      "meanUrlsPerTrial": 33
     },
     "3": {
       "questions": 20,
@@ -45,8 +45,8 @@
     }
   },
   "trials": 181,
-  "searches": 1391,
-  "sourceUrls": 8426,
+  "searches": 1439,
+  "sourceUrls": 8673,
   "fallbackAnswers": [],
   "zeroResearchAnswers": [
     {
@@ -62,12 +62,12 @@
       "prediction": "8"
     }
   ],
-  "closedNoWebAnswers": [
+  "closedQuestionAnswers": [
     {
       "id": "b6f2c50f7fc43ef08c155929",
       "level": 1,
       "title": "Will South Korea's August 2026 headline CPI inflation be at least 2.5% year on year?",
-      "prediction": "B"
+      "prediction": "A"
     },
     {
       "id": "f56b0a7cf127f36c2f90df85",
@@ -79,7 +79,7 @@
       "id": "b72f7bee1d55898d662fb392",
       "level": 2,
       "title": "What Official Cash Rate will the Reserve Bank of New Zealand announce on 2 September 2026?",
-      "prediction": "A"
+      "prediction": "B"
     },
     {
       "id": "9a31115b723473ad80c73c4f",
@@ -89,11 +89,11 @@
     }
   ],
   "usageTotals": {
-    "input_tokens": 3330,
-    "cache_creation_input_tokens": 4774553,
-    "cache_read_input_tokens": 75464387,
-    "output_tokens": 1472445,
-    "total_cost_usd": 166.36,
-    "num_turns": 2778
+    "input_tokens": 3414,
+    "cache_creation_input_tokens": 4895703,
+    "cache_read_input_tokens": 77110637,
+    "output_tokens": 1479678,
+    "total_cost_usd": 169.62,
+    "num_turns": 2848
   }
 }

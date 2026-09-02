@@ -1,8 +1,8 @@
 {
   "schemaVersion": "raven-gonna-test.artifact-manifest.v1",
-  "createdAtUtc": "2026-09-02T14:15:44.879Z",
-  "output": "submission-release-research.jsonl",
-  "sha256": "beb2ad3d8f7b662dd93e7a46fc6426d19839bd628f27b9b69078d9fe7926f459",
+  "createdAtUtc": "2026-09-02T12:56:40.212Z",
+  "output": "submission-release.jsonl",
+  "sha256": "cf85bca15d74dd580933ad99b11d1b683d54867428bb6adf499e932dcac2ef36",
   "benchmark": "futurex",
   "revision": "c8fcda646d7186ffcdff745b10862a116f9df36e",
   "roundId": "2026-09-02",
@@ -22,7 +22,7 @@
   "mode": "submission-candidate",
   "evidenceCutoff": "2026-09-02T08:26:26Z",
   "routeFile": "routes.json",
-  "reasoning": "submission-release-research.reasoning.jsonl",
+  "reasoning": "submission-release.reasoning.jsonl",
   "audit": "submission.audit.json",
   "fallbackAnswers": 0,
   "validation": {
@@ -36,24 +36,23 @@
     }
   },
   "derivedFrom": {
-    "submission": "submission-final-research.jsonl",
-    "sha256": "f148fb160cad45060f844236ceaa92d78b05bca96a75d245aa1bba82edff9699",
-    "manifest": "submission-final-research.jsonl.manifest.json"
+    "submission": "submission-final.jsonl",
+    "sha256": "d3ceb725250723f61f44e1595d323f363fcf738cc4a418b40cf68c2594df0bd5",
+    "manifest": "submission-final.jsonl.manifest.json"
   },
-  "closedQuestions": {
-    "mode": "research",
-    "artifact": "closed-research.json",
-    "sha256": "a267c7d5a47f635fbcdc40dfb2aec097693cc0b9cc6b89f66f666ba5dc7dfd18",
-    "evidencePolicy": "futurex-closed-research-published-v1",
+  "closedNoWeb": {
+    "artifact": "closed-no-web.json",
+    "sha256": "3c010cb29b7503f24bca167e34f5dabb4a2efdd217c7f52d281cf07caf2ec8a0",
+    "evidencePolicy": "futurex-closed-no-web-v1",
     "model": "claude-opus-5",
     "trials": 3,
-    "asOfUtc": "2026-09-02T14:10:24Z"
+    "asOfUtc": "2026-09-02T08:26:26Z"
   },
   "splicedRows": [
     {
       "id": "b6f2c50f7fc43ef08c155929",
       "before": "A",
-      "after": "A",
+      "after": "B",
       "noWebTrials": 3
     },
     {
@@ -65,7 +64,7 @@
     {
       "id": "b72f7bee1d55898d662fb392",
       "before": "A",
-      "after": "B",
+      "after": "A",
       "noWebTrials": 3
     },
     {
@@ -80,8 +79,8 @@
     "kinds": [
       "ranking"
     ],
-    "reason": "ranking aggregation fix: case-insensitive entity merge and exact-order plurality before Borda",
-    "codeSha": "ea3b0e10799a2d633a909c685b1635de169ef60b",
+    "reason": "ranking aggregation fix: case-insensitive entity merge (duplicate title in Sverigetopplistan albums answer) and exact-order plurality before Borda",
+    "codeSha": "d2b86a1a017ffe6bb34bd1c8b8b475d32eef0588",
     "changed": [
       {
         "id": "a3b899fb1a3e3e35ee7a0836",

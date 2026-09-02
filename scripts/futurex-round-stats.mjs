@@ -40,7 +40,7 @@ for (const row of submission) {
   level.questions += 1;
   if (!rec) continue;
   if (rec.fallbackUsed) fallbacks.push(row.id);
-  if (rec.source === "closed-no-web") noWeb.push(row.id);
+  if (typeof rec.source === "string" && rec.source.startsWith("closed-")) noWeb.push(row.id);
   const recTrials = rec.trials ?? [];
   level.trials += recTrials.length;
   trials += recTrials.length;
@@ -60,7 +60,7 @@ for (const row of submission) {
   level.searches += qSearches;
   level.urls += qUrls;
   if (recTrials.length > 0 && qUrls > 0) level.researched += 1;
-  if (recTrials.length > 0 && qUrls === 0 && rec.source !== "closed-no-web") zeroResearch.push(row.id);
+  if (recTrials.length > 0 && qUrls === 0 && !(typeof rec.source === "string" && rec.source.startsWith("closed-"))) zeroResearch.push(row.id);
 }
 for (const level of Object.values(byLevel)) {
   level.meanSearchesPerTrial = level.trials ? Number((level.searches / level.trials).toFixed(1)) : 0;
@@ -76,7 +76,7 @@ console.log(JSON.stringify({
   sourceUrls: urls,
   fallbackAnswers: titled(fallbacks),
   zeroResearchAnswers: titled(zeroResearch),
-  closedNoWebAnswers: titled(noWeb),
+  closedQuestionAnswers: titled(noWeb),
   usageTotals: {
     input_tokens: usage.input_tokens ?? 0,
     cache_creation_input_tokens: usage.cache_creation_input_tokens ?? 0,

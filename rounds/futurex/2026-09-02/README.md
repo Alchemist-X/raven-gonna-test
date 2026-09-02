@@ -19,11 +19,11 @@ harness 与 2026-08-26 轮的服务器正式跑一致（`claude-cli` provider，
 | 证据冻结 as-of | `2026-09-02T08:26:26Z` |
 | 提交截止 | 2026-09-02 24:00 (UTC+8) = `2026-09-02T16:00:00Z` |
 | 题库版本 | `c8fcda646d7186ffcdff745b10862a116f9df36e`（75 题：L1 20 / L2 20 / L3 20 / L4 15） |
-| 提交件 sha256 | `cf85bca15d74dd580933ad99b11d1b683d54867428bb6adf499e932dcac2ef36` |
+| 提交件 sha256 | `beb2ad3d8f7b662dd93e7a46fc6426d19839bd628f27b9b69078d9fe7926f459`（零联网变体 `submission-opus.no-web-variant.jsonl`：`cf85bca1…`） |
 | 校验 | `valid: true`，coverage 1.0，0 error，0 warning |
-| 兜底答案 | 0（4 道开工前已结算的题走零联网作答，见下） |
+| 兜底答案 | 0（4 道开工前已结算的题按用户决定联网查已公布结果，见下） |
 | 题型分布 | single_choice 40 / numeric 19 / ranking 12 / open_text 4 |
-| 生成代码 | 首跑 `797056c`，补跑 `866c0a5`，重推导 `d2b86a1`（manifest `codeSha` 链） |
+| 生成代码 | 首跑 `797056c`，补跑 `866c0a5`，重推导 `d2b86a1`，已结算题联网查证 `ea3b0e1`（manifest `codeSha` 链） |
 
 ## 检索深度
 
@@ -40,10 +40,13 @@ harness 与 2026-08-26 轮的服务器正式跑一致（`claude-cli` provider，
 ## 本轮特殊处理（都有留痕）
 
 1. **4 道题在开工前已过 end_time**（韩国 8 月 CPI、上议院 regret amendment、RBNZ OCR、澳洲 Q2 GDP）。
-   主跑按规则不检索、走确定性兜底（等概率选 A）。随后用 [`scripts/futurex-closed-no-web.mjs`](../../../scripts/futurex-closed-no-web.mjs)
-   在**完全不给检索工具**的条件下让模型凭训练知识作答（3 trial，任一 trial 出现工具调用即整体失败），
-   再由 `futurex-splice-answers.mjs` 拼回提交件：A→B、A→B、A→A、A→C。原始记录、作答记录和替换前后值都在
-   manifest `splicedRows` 与 `submission-opus.closed-no-web.json`。
+   主跑按规则不检索、走确定性兜底（等概率选 A）。**用户 22:05 决定：这类题直接联网查已公布的结果。**
+   harness 新增 `futurex run --closed-questions research`（默认仍是 fallback），已结算题脚本新增 `--mode research`：
+   给模型正常检索工具并明示「该事件结算时点已过，去找官方公布值，没公布再照常预测」，3 trial，
+   再由 `futurex-splice-answers.mjs` 拼回。结果：韩国 8 月 CPI 3.1%→A、RBNZ 加息至 2.75%→B、澳洲 Q2 GDP +0.4%→C；
+   上议院 regret amendment 的辩论排在 9 月 3 日、结算时点前尚未投票，opus 答 B（否决）、fable 答 C（NO_OFFICIAL_RESULT）。
+   此前的零联网变体（凭训练知识作答：B/B/A/C）保留为 `submission-*.no-web-variant.jsonl`；两版的 trial 记录都在
+   `submission-*.closed-research.json` / `submission-*.closed-no-web.json`，manifest `splicedRows` 记录替换前后值。
 2. **路由人工覆盖 10 条。** 合并后的检测器把「谁赢 Vuelta 第 11/12 赛段」「Dragon Award 最佳数字游戏」
    「YouTube 全球周榜 No.1 MV」误判成 numeric，把 F1 领奖台 / F2、F3 冲刺赛前五 / 欧洲大师赛前五 /
    WTT 四强 / 苏格兰五个 NHS board 误判成 numeric（无 "top N" 措辞）。逐条改为 open_text / ranking，
@@ -79,7 +82,8 @@ harness 与 2026-08-26 轮的服务器正式跑一致（`claude-cli` provider，
 | `submission-opus.reasoning.jsonl` | 每题每 trial 的 persona / 搜索词 / 来源 URL / 原始回复 / token；含 derivation |
 | `submission-opus.review.html` | 浏览器评审页，按分数权重排序并标出待复核项 |
 | `submission-opus.stats.json` / `.audit.json` | 分 level 检索深度、零检索题、usage 合计 |
-| `submission-opus.closed-no-web.json` | 4 道已结算题的零联网作答记录 |
+| `submission-opus.closed-research.json` / `.closed-no-web.json` | 4 道已结算题的联网查证记录 / 零联网作答记录 |
+| `submission-opus.no-web-variant.jsonl` (+manifest) | 已结算题按零联网作答的旧变体，仅存档 |
 | `submission-opus.run-metadata.json` | 启动参数（模型、并发、effort、as-of、code SHA、主机） |
 | `routes.json` (+manifest) | 本轮路由，75/75 已 review（10 edited、65 approved） |
 | `questions.json.manifest.json` | 题库文件 hash（parquet sha256 `fd378ac6…`） |
@@ -113,7 +117,7 @@ node scripts/futurex-review-page.mjs <round> <out>/submission-release.jsonl
    未加代码层钳制；若官方真值记为负数则该题 0 分。
 2. **两道 MLB 总得分题零检索**：接受模型的基率作答（9、8），未强制重跑——单场总得分检索边际价值低。
 3. **fable-5 第二候选**：见下节。两个模型在 55/75 题上一致（数值按 5% 容差），20 题不同（权重 0.375），
-   分歧集中在 L4 排序题（12 道里 10 道至少一个位置不同）和体育/榜单类；宏观数据题基本一致。
+   分歧集中在 L4 排序题（12 道里 10 道至少一个位置不同）和体育/榜单类；宏观数据题基本一致。已结算题联网查证后两模型在上议院题上分歧（B vs C），一致题数变为 54/75。
 
 ## 第二候选：claude-fable-5
 
@@ -124,8 +128,8 @@ end_time 前一分钟被硬性截断（batch 的 per-task cutoff），没有题�
 
 | 项 | 值 |
 | --- | --- |
-| 提交件 | `submission-fable.jsonl`，sha256 `25519f9639ff5b997f7142e025e5cdf3521ba438d5321bf7b95658a8c02f9e9d` |
-| 校验 | valid，75/75，0 fallback，0 零检索（4 道已结算题走零联网作答：B/B/A/C，与 opus 相同） |
+| 提交件 | `submission-fable.jsonl`，sha256 `1e3860fa96bb3e92bfd713b7536b6a6990964df78cc8f4303310f03b11e8f1e4`（零联网变体 `submission-fable.no-web-variant.jsonl`：`25519f96…`） |
+| 校验 | valid，75/75，0 fallback，0 零检索（4 道已结算题联网查已公布结果：A/C/B/C） |
 | trials | 184（L1 24 / L2 42 / L3 59 / L4 59），1,038 次搜索，6,466 来源 URL；trial 损失 2（额度限制） |
 | 排序重推导 | 4 行改动（两道瑞典榜单存在大小写重复实体，修正后消除） |
 | 邮件正文 | `email-fable.txt` |
