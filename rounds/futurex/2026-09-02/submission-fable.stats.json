@@ -10,20 +10,20 @@
     "1": {
       "questions": 20,
       "trials": 24,
-      "searches": 79,
-      "urls": 478,
-      "researched": 18,
-      "meanSearchesPerTrial": 3.3,
-      "meanUrlsPerTrial": 19.9
+      "searches": 101,
+      "urls": 595,
+      "researched": 20,
+      "meanSearchesPerTrial": 4.2,
+      "meanUrlsPerTrial": 24.8
     },
     "2": {
       "questions": 20,
       "trials": 42,
-      "searches": 154,
-      "urls": 873,
-      "researched": 18,
-      "meanSearchesPerTrial": 3.7,
-      "meanUrlsPerTrial": 20.8
+      "searches": 170,
+      "urls": 948,
+      "researched": 20,
+      "meanSearchesPerTrial": 4,
+      "meanUrlsPerTrial": 22.6
     },
     "3": {
       "questions": 20,
@@ -45,28 +45,28 @@
     }
   },
   "trials": 184,
-  "searches": 1038,
-  "sourceUrls": 6466,
+  "searches": 1076,
+  "sourceUrls": 6658,
   "fallbackAnswers": [],
   "zeroResearchAnswers": [],
-  "closedNoWebAnswers": [
+  "closedQuestionAnswers": [
     {
       "id": "b6f2c50f7fc43ef08c155929",
       "level": 1,
       "title": "Will South Korea's August 2026 headline CPI inflation be at least 2.5% year on year?",
-      "prediction": "B"
+      "prediction": "A"
     },
     {
       "id": "f56b0a7cf127f36c2f90df85",
       "level": 1,
       "title": "Will the UK House of Lords agree to Lord Roborough's regret amendment on the Nature Restoration Levy Regulations 2026?",
-      "prediction": "B"
+      "prediction": "C"
     },
     {
       "id": "b72f7bee1d55898d662fb392",
       "level": 2,
       "title": "What Official Cash Rate will the Reserve Bank of New Zealand announce on 2 September 2026?",
-      "prediction": "A"
+      "prediction": "B"
     },
     {
       "id": "9a31115b723473ad80c73c4f",
@@ -76,11 +76,11 @@
     }
   ],
   "usageTotals": {
-    "input_tokens": 2936,
-    "cache_creation_input_tokens": 4270164,
-    "cache_read_input_tokens": 62408089,
-    "output_tokens": 1249787,
-    "total_cost_usd": 240.99,
-    "num_turns": 2141
+    "input_tokens": 3000,
+    "cache_creation_input_tokens": 4305501,
+    "cache_read_input_tokens": 63637433,
+    "output_tokens": 1243171,
+    "total_cost_usd": 243.28,
+    "num_turns": 2190
   }
 }

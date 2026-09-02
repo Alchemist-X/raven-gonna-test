@@ -21,11 +21,11 @@ provider, context isolation, level-scaled trials) plus this round's four fixes
 | Evidence cutoff (as-of) | `2026-09-02T08:26:26Z` |
 | Submission deadline | 2026-09-02 24:00 (UTC+8) = `2026-09-02T16:00:00Z` |
 | Dataset revision | `c8fcda646d7186ffcdff745b10862a116f9df36e` (75 questions: L1 20 / L2 20 / L3 20 / L4 15) |
-| Attachment sha256 | `cf85bca15d74dd580933ad99b11d1b683d54867428bb6adf499e932dcac2ef36` |
+| Attachment sha256 | `beb2ad3d8f7b662dd93e7a46fc6426d19839bd628f27b9b69078d9fe7926f459` (no-web variant `submission-opus.no-web-variant.jsonl`: `cf85bca1…`) |
 | Validation | `valid: true`, coverage 1.0, 0 errors, 0 warnings |
-| Fallback answers | 0 (the 4 questions already closed at the cutoff were answered with retrieval withheld, see below) |
+| Fallback answers | 0 (the 4 questions already closed at the cutoff were researched for their published results by operator decision, see below) |
 | Task mix | single_choice 40 / numeric 19 / ranking 12 / open_text 4 |
-| Code | first pass `797056c`, resume `866c0a5`, re-derivation `d2b86a1` (see manifest `codeSha` chain) |
+| Code | first pass `797056c`, resume `866c0a5`, re-derivation `d2b86a1`, closed-question research `ea3b0e1` (see manifest `codeSha` chain) |
 
 ## Research depth
 
@@ -46,12 +46,18 @@ answered 9 / 8 from base rates, unanimously across trials).
 1. **Four questions were already past end_time when the run started** (South Korea
    August CPI, the Lords regret amendment, the RBNZ OCR, Australia Q2 GDP). The live
    run does not research those and falls back to a deterministic answer (uniform,
-   option A). They were then answered by
-   [`scripts/futurex-closed-no-web.mjs`](../../../scripts/futurex-closed-no-web.mjs)
-   with **no retrieval tools at all** (3 trials; any tool call fails the whole step)
-   and spliced back by `futurex-splice-answers.mjs`: A→B, A→B, A→A, A→C. The raw
-   trials and before/after values are in the manifest's `splicedRows` and in
-   `submission-opus.closed-no-web.json`.
+   option A). **Operator decision at 22:05 (UTC+8): look the published result up.**
+   `futurex run` gained `--closed-questions research` (the default stays fallback) and
+   the closed-question script gained `--mode research`: normal retrieval, with the task
+   told that its event has resolved and to answer with the official value, forecasting
+   only if nothing is published yet; 3 trials, spliced back by
+   `futurex-splice-answers.mjs`. Results: South Korea August CPI 3.1% → A, RBNZ hike to
+   2.75% → B, Australia Q2 GDP +0.4% → C; the Lords regret amendment is scheduled for
+   3 September and had not been voted on by the resolution time — opus answers B
+   (not agreed), fable C (NO_OFFICIAL_RESULT). The earlier no-web variant (training
+   knowledge only: B/B/A/C) is kept as `submission-*.no-web-variant.jsonl`; both sets
+   of trials are in `submission-*.closed-research.json` / `.closed-no-web.json`, and the
+   manifest's `splicedRows` records each before/after value.
 2. **Ten routes overridden by hand.** The merged detector routed "who wins Vuelta
    stage 11/12", "Dragon Award best digital game" and "YouTube global weekly #1
    music video" as numeric, and the F1 podium / F2 and F3 sprint top five / European
@@ -100,7 +106,8 @@ answered 9 / 8 from base rates, unanimously across trials).
 | `submission-opus.reasoning.jsonl` | Per trial: persona, search queries, source URLs, raw reply, tokens; derivation per question |
 | `submission-opus.review.html` | Browser review page ordered by score weight with flagged rows |
 | `submission-opus.stats.json` / `.audit.json` | Research depth per level, zero-research questions, usage totals |
-| `submission-opus.closed-no-web.json` | The no-web answers for the 4 closed questions |
+| `submission-opus.closed-research.json` / `.closed-no-web.json` | The published-result research / the no-web answers for the 4 closed questions |
+| `submission-opus.no-web-variant.jsonl` (+manifest) | The earlier no-web variant, archived only |
 | `submission-opus.run-metadata.json` | Launch parameters (model, concurrency, effort, as-of, code SHA, host) |
 | `routes.json` (+manifest) | This round's routes, 75/75 reviewed (10 edited, 65 approved) |
 | `questions.json.manifest.json` | Dataset file hashes (parquet sha256 `fd378ac6…`) |
@@ -120,7 +127,9 @@ See the command block in [`README.md`](README.md); it is identical.
 3. **The fable-5 second candidate**: see the next section. The two models agree on 55/75
    questions (numeric within the 5% tolerance) and differ on 20 (weight 0.375); the
    disagreement sits in the L4 rankings (10 of 12 differ in at least one position) and
-   in sports/chart questions, while the macro releases mostly agree.
+   in sports/chart questions, while the macro releases mostly agree. After the
+   closed-question research the models also split on the Lords amendment (B vs C), so
+   agreement is 54/75.
 
 ## Second candidate: claude-fable-5
 
@@ -134,8 +143,8 @@ question was researched after it resolved; the email body states this window.
 
 | Item | Value |
 | --- | --- |
-| Attachment | `submission-fable.jsonl`, sha256 `25519f9639ff5b997f7142e025e5cdf3521ba438d5321bf7b95658a8c02f9e9d` |
-| Validation | valid, 75/75, 0 fallback, 0 zero-research (the 4 closed questions answered with retrieval withheld: B/B/A/C, same as opus) |
+| Attachment | `submission-fable.jsonl`, sha256 `1e3860fa96bb3e92bfd713b7536b6a6990964df78cc8f4303310f03b11e8f1e4` (no-web variant `submission-fable.no-web-variant.jsonl`: `25519f96…`) |
+| Validation | valid, 75/75, 0 fallback, 0 zero-research (the 4 closed questions researched for their published results: A/C/B/C) |
 | Trials | 184 (L1 24 / L2 42 / L3 59 / L4 59), 1,038 searches, 6,466 source URLs; 2 trials lost to the session limit |
 | Ranking re-derivation | 4 rows changed (two Swedish chart answers carried a case-variant duplicate, now gone) |
 | Email body | `email-fable.txt` |

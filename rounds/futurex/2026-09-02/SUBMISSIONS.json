@@ -11,26 +11,28 @@
     {
       "entry": "raven_labs/claude-opus-5",
       "attachment": "submission-opus.jsonl",
-      "sha256": "cf85bca15d74dd580933ad99b11d1b683d54867428bb6adf499e932dcac2ef36",
+      "sha256": "beb2ad3d8f7b662dd93e7a46fc6426d19839bd628f27b9b69078d9fe7926f459",
       "evidenceCutoffUtc": "2026-09-02T08:26:26Z",
-      "agentFrameworkCommit": "d2b86a1a017ffe6bb34bd1c8b8b475d32eef0588",
+      "agentFrameworkCommit": "ea3b0e10799a2d633a909c685b1635de169ef60b",
       "emailBody": "email-opus.txt",
       "status": "awaiting human send",
-      "note": "4 already-closed questions answered with retrieval withheld (spliced, recorded in manifest); 2 MLB total-runs questions answered from base rates with zero retrieval; 2 ranking rows re-derived after the aggregation fix."
+      "note": "4 already-closed questions researched for their published results (spliced, recorded in manifest); 2 MLB total-runs questions answered from base rates with zero retrieval; 2 ranking rows re-derived after the aggregation fix.",
+      "closedQuestions": "researched for the published result after end_time (operator decision 2026-09-02 22:05 UTC+8); the no-web variant is kept as submission-*.no-web-variant.jsonl"
     },
     {
       "entry": "raven_labs/claude-fable-5",
       "attachment": "submission-fable.jsonl",
-      "sha256": "25519f9639ff5b997f7142e025e5cdf3521ba438d5321bf7b95658a8c02f9e9d",
+      "sha256": "1e3860fa96bb3e92bfd713b7536b6a6990964df78cc8f4303310f03b11e8f1e4",
       "evidenceCutoffUtc": "2026-09-02T09:23:20Z",
       "researchWindowUtc": [
         "2026-09-02T09:23:20Z",
         "2026-09-02T13:35:11Z"
       ],
-      "agentFrameworkCommit": "b069a853becd26774da8f09853b42d7265b295e2",
+      "agentFrameworkCommit": "ea3b0e10799a2d633a909c685b1635de169ef60b",
       "emailBody": "email-fable.txt",
       "status": "awaiting human send",
-      "note": "Launched after opus; 46 questions lost every trial to the subscription session limit and were re-forecast on resume after the 20:50 (UTC+8) reset, each still bounded by its own end time. 4 closed questions answered with retrieval withheld; 4 ranking rows re-derived after the aggregation fix (two had a case-variant duplicate)."
+      "note": "Launched after opus; 46 questions lost every trial to the subscription session limit and were re-forecast on resume after the 20:50 (UTC+8) reset, each still bounded by its own end time. 4 closed questions researched for their published results (KR CPI 3.1% -> A, RBNZ 2.75% -> B, AU GDP +0.4% -> C; Lords vote not yet held -> C); 4 ranking rows re-derived after the aggregation fix (two had a case-variant duplicate).",
+      "closedQuestions": "researched for the published result after end_time (operator decision 2026-09-02 22:05 UTC+8); the no-web variant is kept as submission-*.no-web-variant.jsonl"
     }
   ],
   "crossModelAgreement": {
@@ -38,9 +40,9 @@
       "claude-opus-5",
       "claude-fable-5"
     ],
-    "identicalWithinTolerance": 55,
-    "differ": 20,
+    "identicalWithinTolerance": 54,
+    "differ": 21,
     "weightOfDisagreement": 0.375,
-    "note": "numeric compared within the grader's 5% tolerance; every L4 ranking except two differs in at least one position"
+    "note": "numeric compared within the grader's 5% tolerance; every L4 ranking except two differs in at least one position; the two models also split on the Lords regret amendment (vote not yet held at end_time): opus B, fable C"
   }
 }

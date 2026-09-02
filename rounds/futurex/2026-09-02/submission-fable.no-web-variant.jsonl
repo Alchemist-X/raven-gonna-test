@@ -3,7 +3,7 @@
 {"id":"97d22dafd8711544e1d3c321","prediction":"A"}
 {"id":"352abcb9053b93f7758938d9","prediction":"B"}
 {"id":"e36c90edc3f4fdb6ff1670cc","prediction":"A"}
-{"id":"b6f2c50f7fc43ef08c155929","prediction":"A"}
+{"id":"b6f2c50f7fc43ef08c155929","prediction":"B"}
 {"id":"7977e7f0d71d56afeda047e8","prediction":"A"}
 {"id":"705f8dc5c3a438565cbba782","prediction":"B"}
 {"id":"74108d07fe402e68cce26270","prediction":"A"}
@@ -15,7 +15,7 @@
 {"id":"79ed0ceb4422d1d2eb107dce","prediction":"A"}
 {"id":"c275e1bd537b1e378a7d5a42","prediction":"B"}
 {"id":"691082df3b869fae4fd63f14","prediction":"A"}
-{"id":"f56b0a7cf127f36c2f90df85","prediction":"C"}
+{"id":"f56b0a7cf127f36c2f90df85","prediction":"B"}
 {"id":"e23fc79e458a357350007175","prediction":"B"}
 {"id":"5b711b4e9c0087b57ecf492a","prediction":"A"}
 {"id":"6cfb9525761abee18c55fb9a","prediction":"C"}
@@ -25,7 +25,7 @@
 {"id":"54cda0cb1f93bf01e01f1f05","prediction":"A"}
 {"id":"f74f3f9dc1f61cb210bdd19c","prediction":"C"}
 {"id":"6e8507c15cf3415c5924696f","prediction":"C"}
-{"id":"b72f7bee1d55898d662fb392","prediction":"B"}
+{"id":"b72f7bee1d55898d662fb392","prediction":"A"}
 {"id":"fac981828c6bb295a8797d22","prediction":"A"}
 {"id":"86115720e39351aaa8ea7264","prediction":"B"}
 {"id":"b5bea707524108175c5d0bfd","prediction":"B"}
