@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ForecastTaskSchema, type ForecastTask, type TrialPrediction } from "./contracts.js";
-import { aggregateTrialPredictions } from "./aggregation.js";
+import { aggregateTrialPredictions, type AggregationDerivation } from "./aggregation.js";
 import { parseModelAnswer } from "./engine.js";
 import { forecastBenchDatasetPolicy, validateEvidence } from "./policy.js";
 import { answerTypeForTask } from "./prompt.js";
@@ -63,6 +63,34 @@ describe("aggregation", () => {
       ["Delta", "Alpha", "Beta"]
     ].map((order, trial) => ({ trial, answer: { kind: "ranking", order }, citations: [], rawResponse: "", latencyMs: 1 }));
     expect(aggregateTrialPredictions(task, trials)).toMatchObject({ kind: "ranking", order: ["Alpha", "Beta", "Gamma"] });
+  });
+
+  it("merges ranking entities that differ only in case, so one title cannot appear twice", () => {
+    const task: ForecastTask = { ...base, taskId: "case-rank", kind: "ranking", candidates: [], rankCount: 3 };
+    const trials: TrialPrediction[] = [
+      ["Somna med Humlan Djojj", "Sov med Humlan Djojj", "Visitor"],
+      ["Somna Med Humlan Djojj", "Sov Med Humlan Djojj", "Visitor"],
+      ["Visitor", "Somna med Humlan Djojj", "Wildchild"]
+    ].map((order, trial) => ({ trial, answer: { kind: "ranking", order }, citations: [], rawResponse: "", latencyMs: 1 }));
+    const answer = aggregateTrialPredictions(task, trials);
+    if (answer.kind !== "ranking") throw new Error("expected ranking");
+    expect(answer.order).toHaveLength(3);
+    expect(new Set(answer.order.map((value) => value.toLowerCase())).size).toBe(3);
+    expect(answer.order[0]).toBe("Somna med Humlan Djojj");
+  });
+
+  it("prefers the exact order a strict plurality of trials agree on over a Borda blend", () => {
+    const task: ForecastTask = { ...base, taskId: "plural-rank", kind: "ranking", candidates: [], rankCount: 3 };
+    const derivation: AggregationDerivation[] = [];
+    const trials: TrialPrediction[] = [
+      ["Somna", "Sov", "Visitor"],
+      ["Your Turn", "Somna", "Sov"],
+      ["Your Turn", "Somna", "Sov"],
+      ["Your Turn", "Somna", "Sov"]
+    ].map((order, trial) => ({ trial, answer: { kind: "ranking", order }, citations: [], rawResponse: "", latencyMs: 1 }));
+    // Borda alone would put Somna first (one first plus three seconds beat three firsts).
+    expect(aggregateTrialPredictions(task, trials, { derivation })).toMatchObject({ kind: "ranking", order: ["Your Turn", "Somna", "Sov"] });
+    expect(derivation[0]?.method).toBe("exact-order-plurality");
   });
 
   it("parses Foresight-style independent multi-label probabilities", () => {

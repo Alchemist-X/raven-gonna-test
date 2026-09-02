@@ -145,15 +145,52 @@ export function aggregateTrialPredictions(
       return { kind: "multi_label", selected, probabilities };
     }
     case "ranking": {
+      // Entities are matched case- and whitespace-insensitively. "Somna med
+      // Humlan Djojj" and "Somna Med Humlan Djojj" are one album; counting them
+      // as two put the same title twice in a submitted list (2026-09-02), and
+      // a duplicate entity scores 0 on the grader. The first spelling seen wins.
+      const spelling = new Map<string, string>();
+      const canonical = (value: string): string => {
+        const key = value.trim().toLowerCase().replace(/\s+/g, " ");
+        if (!spelling.has(key)) spelling.set(key, value.trim());
+        return spelling.get(key)!;
+      };
+      for (const candidate of task.candidates) canonical(candidate);
+      const trialOrders = answers.flatMap((answer) =>
+        answer.kind === "ranking" ? [[...new Set(answer.order.map(canonical))]] : []
+      );
+      // Exact-order plurality before Borda. The grader gives full credit only
+      // for a position-by-position match, so when a strict plurality of trials
+      // agree on the whole order, that order is the best single guess; Borda
+      // can rank first a title that no trial ranked first, because it rewards
+      // consistent second places over a majority of firsts.
+      const tally = new Map<string, { order: string[]; count: number }>();
+      for (const order of trialOrders) {
+        const key = order.join(" ");
+        const entry = tally.get(key);
+        if (entry) entry.count += 1;
+        else tally.set(key, { order, count: 1 });
+      }
+      const ranked = [...tally.values()].sort((a, b) => b.count - a.count);
+      const top = ranked[0];
+      if (top && top.count >= 2 && (ranked[1]?.count ?? 0) < top.count && top.order.length === task.rankCount) {
+        const scores = Object.fromEntries(top.order.map((candidate, index) => [candidate, top.order.length - index]));
+        options.derivation?.push({
+          method: "exact-order-plurality",
+          inputs: { trialOrders },
+          chosen: top.order,
+          detail: { support: top.count, trials: trialOrders.length, runnerUpSupport: ranked[1]?.count ?? 0, rankCount: task.rankCount }
+        });
+        return { kind: "ranking", order: top.order, scores };
+      }
       const candidates = task.candidates.length > 0
-        ? [...task.candidates]
-        : [...new Set(answers.flatMap((answer) => answer.kind === "ranking" ? answer.order : []))];
+        ? [...new Set(task.candidates.map(canonical))]
+        : [...new Set(trialOrders.flat())];
       if (candidates.length === 0) throw new Error("No ranking candidates were returned.");
       const candidateOrder = new Map(candidates.map((candidate, index) => [candidate, index]));
       const scores = Object.fromEntries(candidates.map((candidate) => [candidate, 0]));
-      for (const answer of answers) {
-        if (answer.kind !== "ranking") continue;
-        answer.order.forEach((candidate, index) => {
+      for (const order of trialOrders) {
+        order.forEach((candidate, index) => {
           if (candidate in scores) scores[candidate] = (scores[candidate] ?? 0) + candidates.length - index;
         });
       }
@@ -162,7 +199,7 @@ export function aggregateTrialPredictions(
         .slice(0, Math.min(task.rankCount, candidates.length));
       options.derivation?.push({
         method: "borda-count",
-        inputs: { trialOrders: answers.map((answer) => (answer.kind === "ranking" ? answer.order : null)) },
+        inputs: { trialOrders },
         chosen: order,
         detail: { bordaScores: scores, rankCount: task.rankCount }
       });
