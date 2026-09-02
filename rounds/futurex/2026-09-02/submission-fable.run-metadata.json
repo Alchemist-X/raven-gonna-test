@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-local-run.v1",
+  "launchedAtUtc": "2026-09-02T09:23:20.428Z",
+  "slot": "fable5-high",
+  "model": "claude-fable-5",
+  "provider": "claude-cli",
+  "trialsCeiling": 4,
+  "concurrency": 8,
+  "reasoningEffort": "high",
+  "effortOverride": null,
+  "asOfUtc": "2026-09-02T09:23:20Z",
+  "deadlineUtc": "2026-09-02T16:00:00Z",
+  "codeSha": "375909ef8ddf53d644a43cd1ee04e72b0ef09907",
+  "host": "issueonedeMacBook-Pro.local"
+}

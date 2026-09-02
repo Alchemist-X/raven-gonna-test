@@ -1,6 +1,6 @@
 # FutureX 提交邮件格式
 
-最后更新：2026-08-19　　英文版见 [`en/futurex-submission-email.md`](en/futurex-submission-email.md)
+最后更新：2026-09-02　　英文版见 [`en/futurex-submission-email.md`](en/futurex-submission-email.md)
 
 FutureX **没有提交 API**，只接受邮件（官方说明见其 HuggingFace 数据集页）。本仓库
 也没有任何命令能对外发送——`futurex run` 只产出文件，发信是人工步骤。这份文档给出
@@ -12,6 +12,17 @@ FutureX **没有提交 API**，只接受邮件（官方说明见其 HuggingFace 
   主办方要审计再单独提供。
 - 收件人 `FutureX-ai@outlook.com`。
 - 在该轮截止时间前送达（通常是轮次日期当天 24:00 UTC+8）。
+
+### 单值答案基数 Gate
+
+`open_text` 提交在协议上是一个标量字符串，不能用 `|`、分号、换行或 JSON 数组把多个
+独立候选塞进同一个 `prediction`。strict validator 会阻断这类附件。若题目确实要求多项
+答案，不得换个分隔符绕过检查；应先把题目显式路由成受支持的 multi-answer 类型并完成人工
+基数复核，否则只提交一个最可能的规范答案。
+
+2026-08-19 的 AFL 题（`25cd695a325d2ab9b3474844`）是固定回归案例：Fable/Opus 的
+字符串都包含最终正确的 `Essendon v Port Adelaide`，但还混入了其他候选，ground truth
+只有一个字符串，整题因此为 0。该轮 L4 只有 17 道已结算题，单题相当于总分约 2.35 分。
 
 ## 正文要素
 

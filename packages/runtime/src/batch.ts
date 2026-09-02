@@ -20,7 +20,35 @@ export interface BatchOptions {
    */
   forecastOptionsFor?: (task: ForecastTask) => Parameters<ForecastEngine["forecast"]>[2];
   fallbackFor?: (task: ForecastTask) => ForecastAnswer | undefined;
+  /**
+   * Absolute per-task cutoff for live model work. A task picked after this
+   * instant is answered without calling the model; an in-flight task is
+   * aborted at the cutoff. This is the enforcement boundary for benchmarks
+   * whose questions resolve while a multi-hour batch is still running.
+   */
+  notAfterUtcFor?: (task: ForecastTask) => string | undefined;
   onProgress?: (completed: number, total: number, task: ForecastTask, result: ForecastResult) => void;
+}
+
+function degradedResult(
+  task: ForecastTask,
+  engine: ForecastEngine,
+  policy: InformationPolicy,
+  answer: ForecastAnswer,
+  warning: string
+): ForecastResult {
+  return {
+    schemaVersion: "raven-gonna-test.forecast-result.v1",
+    taskId: task.taskId,
+    answer,
+    trials: [],
+    model: engine.modelId,
+    strategyId: "batch-fallback",
+    policyId: policy.id,
+    generatedAtUtc: new Date().toISOString(),
+    fallbackUsed: true,
+    warnings: [warning]
+  };
 }
 
 export async function runForecastBatch(
@@ -57,29 +85,48 @@ export async function runForecastBatch(
       const task = pending[index];
       if (!task) return;
       const fallback = options.fallbackFor?.(task);
+      const policy = policyFor(task);
       const forecastOptions = { ...(options.forecastOptions ?? {}), ...(options.forecastOptionsFor?.(task) ?? {}) };
       if (fallback !== undefined) forecastOptions.fallback = fallback;
       let result: ForecastResult;
-      try {
-        result = await engine.forecast(task, policyFor(task), forecastOptions);
+      const notAfterUtc = options.notAfterUtcFor?.(task);
+      const notAfterMs = notAfterUtc ? new Date(notAfterUtc).getTime() : undefined;
+      if (notAfterMs !== undefined && (!Number.isFinite(notAfterMs) || Date.now() >= notAfterMs)) {
+        if (fallback === undefined) throw new Error(`Task ${task.taskId} reached ${notAfterUtc} and has no fallback.`);
+        result = degradedResult(
+          task,
+          engine,
+          policy,
+          fallback,
+          `Live research skipped: task cutoff ${notAfterUtc ?? "invalid"} was reached before the worker started.`
+        );
+      } else try {
+        const cutoffController = notAfterMs === undefined ? undefined : new AbortController();
+        const cutoffTimer = cutoffController && notAfterMs !== undefined
+          ? setTimeout(
+            () => cutoffController.abort(new Error(`Task live-research cutoff reached at ${notAfterUtc}.`)),
+            Math.max(1, notAfterMs - Date.now())
+          )
+          : undefined;
+        if (cutoffController) forecastOptions.signal = cutoffController.signal;
+        try {
+          result = await engine.forecast(task, policy, forecastOptions);
+        } finally {
+          if (cutoffTimer) clearTimeout(cutoffTimer);
+        }
       } catch (error) {
         // One pathological task must not reject Promise.all and abandon the
         // other 79. Where a fallback answer is available the batch degrades to
         // it and says so; without one there is nothing to submit for this task
         // and the failure is genuinely fatal.
         if (fallback === undefined) throw error;
-        result = {
-          schemaVersion: "raven-gonna-test.forecast-result.v1",
-          taskId: task.taskId,
-          answer: fallback,
-          trials: [],
-          model: engine.modelId,
-          strategyId: "batch-fallback",
-          policyId: policyFor(task).id,
-          generatedAtUtc: new Date().toISOString(),
-          fallbackUsed: true,
-          warnings: [`Forecast threw; substituted fallback answer: ${error instanceof Error ? error.message : String(error)}`]
-        };
+        result = degradedResult(
+          task,
+          engine,
+          policy,
+          fallback,
+          `Forecast threw; substituted fallback answer: ${error instanceof Error ? error.message : String(error)}`
+        );
       }
       resultById.set(task.taskId, result);
       completed += 1;

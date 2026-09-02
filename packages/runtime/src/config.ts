@@ -1,12 +1,12 @@
 /**
  * "openai-compatible" talks HTTP to a completions endpoint and needs an API
- * key. "claude-cli" shells out to the Claude Code CLI, which holds its own
- * credential and spends a subscription rather than API credit — so it must not
- * demand PREDICTOR_API_KEY.
+ * key. "claude-cli" and "codex-cli" shell out to the respective coding CLI,
+ * which holds its own credential and spends a subscription rather than API
+ * credit — so neither must demand PREDICTOR_API_KEY.
  */
-export type PredictorProvider = "openai-compatible" | "claude-cli";
+export type PredictorProvider = "openai-compatible" | "claude-cli" | "codex-cli";
 
-export const PREDICTOR_PROVIDERS: readonly PredictorProvider[] = ["openai-compatible", "claude-cli"];
+export const PREDICTOR_PROVIDERS: readonly PredictorProvider[] = ["openai-compatible", "claude-cli", "codex-cli"];
 
 export interface PredictorConfig {
   provider: PredictorProvider;
@@ -22,6 +22,12 @@ export interface PredictorConfig {
    * low|medium|high. Only meaningful for the claude-cli provider.
    */
   claudeEffort?: "low" | "medium" | "high" | "xhigh" | "max";
+  /**
+   * Codex CLI model_reasoning_effort, which reaches three levels above
+   * ModelRequest's low|medium|high ("ultra" adds automatic task delegation).
+   * Only meaningful for the codex-cli provider.
+   */
+  codexEffort?: "low" | "medium" | "high" | "xhigh" | "max" | "ultra";
   researchSources: string[];
   maxRetries?: number;
   retryBaseMs?: number;
@@ -75,6 +81,10 @@ export function loadPredictorConfig(env: NodeJS.ProcessEnv = process.env): Predi
   if (claudeEffort && !["low", "medium", "high", "xhigh", "max"].includes(claudeEffort)) {
     throw new Error("PREDICTOR_CLAUDE_EFFORT must be low, medium, high, xhigh, or max.");
   }
+  const codexEffort = env.PREDICTOR_CODEX_EFFORT;
+  if (codexEffort && !["low", "medium", "high", "xhigh", "max", "ultra"].includes(codexEffort)) {
+    throw new Error("PREDICTOR_CODEX_EFFORT must be low, medium, high, xhigh, max, or ultra.");
+  }
   const effort = env.PREDICTOR_REASONING_EFFORT ?? "medium";
   if (!(["low", "medium", "high"] as const).includes(effort as "low" | "medium" | "high")) {
     throw new Error("PREDICTOR_REASONING_EFFORT must be low, medium, or high.");
@@ -90,13 +100,16 @@ export function loadPredictorConfig(env: NodeJS.ProcessEnv = process.env): Predi
     baseUrl,
     apiKey,
     // The default model is provider-specific: "foresight-v4" is meaningless to
-    // the Claude CLI and would fail every call.
-    model: env.PREDICTOR_MODEL?.trim() || (provider === "claude-cli" ? "claude-sonnet-5" : "foresight-v4"),
+    // the coding CLIs and would fail every call.
+    model:
+      env.PREDICTOR_MODEL?.trim() ||
+      (provider === "claude-cli" ? "claude-sonnet-5" : provider === "codex-cli" ? "gpt-5.6-sol" : "foresight-v4"),
     timeoutMs,
     trials,
     concurrency,
     reasoningEffort: effort as "low" | "medium" | "high",
     ...(claudeEffort ? { claudeEffort: claudeEffort as Exclude<PredictorConfig["claudeEffort"], undefined> } : {}),
+    ...(codexEffort ? { codexEffort: codexEffort as Exclude<PredictorConfig["codexEffort"], undefined> } : {}),
     researchSources: (env.PREDICTOR_RESEARCH_SOURCES ?? "perplexity,google_news")
       .split(",")
       .map((source) => source.trim())

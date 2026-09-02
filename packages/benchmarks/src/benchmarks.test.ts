@@ -10,7 +10,9 @@ import {
   buildProphetCurrentResponse,
   expandForecastBenchQuestionSet,
   futureXQuestionsToTasks,
+  isCountQuestion,
   normalizeProphetRequest,
+  numericTargetField,
   prophetEventToTasks,
   scoreForecastBenchRaw,
   scoreFutureX,
@@ -73,6 +75,29 @@ describe("FutureX adapter", () => {
       { id: "fx-ranking", prediction: "B, A, C" }
     ]);
     expect(validateFutureXSubmission(questions, submission, { deadlineUtc: options.deadlineUtc, now: new Date("2026-08-12T15:00:00Z") }).valid).toBe(true);
+  });
+
+  it("drops commas inside ranking entities so the official comma split keeps the cardinality", () => {
+    const id = "comma-rank";
+    const question = {
+      id,
+      prompt: "Return the top five titles in order.",
+      end_time: "2026-09-01T23:59:59+08:00",
+      level: 4 as const,
+      en_title: "Billboard top five titles"
+    };
+    const result: ForecastResult = {
+      ...binaryResult(`futurex:${"a".repeat(40)}:${id}`, 0.5),
+      answer: {
+        kind: "ranking",
+        order: ["Boston", "Choosin' Texas", "I Knew It, I Knew You", "Been By Now", "Second Wind"]
+      }
+    };
+    const submission = buildFutureXSubmission([question], [result]);
+    expect(submission[0]?.prediction).toBe("Boston, Choosin' Texas, I Knew It I Knew You, Been By Now, Second Wind");
+    // What the official extractor does: a raw split on commas must still yield five items.
+    expect(submission[0]!.prediction.split(",").map((part) => part.trim())).toHaveLength(5);
+    expect(validateFutureXSubmission([question], submission).valid).toBe(true);
   });
 
   it("scores deterministic FutureX types and returns null for unavailable semantics", () => {
@@ -169,6 +194,32 @@ describe("FutureX adapter", () => {
       en_title: "What exact film will the festival announce as its opening selection?",
       prompt: "IMPORTANT: end with \\boxed{YOUR_PREDICTION}"
     }).kind).toBe("open_text");
+  });
+
+  it("routes the 2026-08-26 source-native wire format without flattening lists into numerics", () => {
+    const common = { end_time: "2026-09-01", level: 4 as const };
+    const prompt = (title: string) =>
+      `The event to be predicted: "${title}"\n` +
+      "Return exactly the source-native value required by the settlement contract, with no units or commentary.";
+    for (const title of [
+      "U.S. job openings — July 2026 JOLTS",
+      "Utility patents issued in the USPTO Official Gazette dated 1 September 2026",
+      "Australia total construction work done — June quarter 2026"
+    ]) {
+      expect(routeFutureXQuestion({ ...common, id: title, en_title: title, prompt: prompt(title) })).toMatchObject({
+        kind: "numeric"
+      });
+    }
+    for (const [title, rankCount] of [
+      ["Box Office Mojo Domestic Weekend 35 top five film titles", 5],
+      ["La Vuelta 2026 official general-classification top ten after Stage 9", 10],
+      ["Official winners of the six UFC Shanghai main-card bouts", 6]
+    ] as const) {
+      expect(routeFutureXQuestion({ ...common, id: title, en_title: title, prompt: prompt(title) })).toMatchObject({
+        kind: "ranking",
+        rankCount
+      });
+    }
   });
 
   it("does not call a question a ranking when there is nothing to order", () => {
@@ -366,7 +417,37 @@ describe("FutureX open-text submission validation", () => {
 
   it("accepts a bare entity name", () => {
     expect(check("Kyle Larson").valid).toBe(true);
-    expect(check("St Kilda v Gold Coast | Collingwood v Brisbane").valid).toBe(true);
+    // A colon inside a title is not a sentence: this exact answer was rejected
+    // as prose on the 2026-09-02 live run and blocked the whole submission.
+    expect(check("Hollow Knight: Silksong").valid).toBe(true);
+    expect(check("Spider-Man: Brand New Day").valid).toBe(true);
+    // A slash can be part of one official bilingual/alias answer; it is not a
+    // candidate-list separator.
+    expect(check("Geister / Ghost Song").valid).toBe(true);
+  });
+
+  it("rejects packed candidates and flags the 2026-08-19 AFL regression for cardinality review", () => {
+    for (const prediction of [
+      "St Kilda v Gold Coast | Carlton v Fremantle | Essendon v Port Adelaide",
+      "St Kilda v Gold Coast; Essendon v Port Adelaide",
+      "St Kilda v Gold Coast\nEssendon v Port Adelaide",
+      '["St Kilda v Gold Coast", "Essendon v Port Adelaide"]'
+    ]) {
+      const report = check(prediction);
+      expect(report.valid).toBe(false);
+      expect(report.errors.join("\n")).toMatch(/packs multiple candidates/i);
+    }
+
+    const aflQuestion = {
+      ...question,
+      id: "25cd695a325d2ab9b3474844",
+      en_title: "Which AFL Round 24 fixtures will be decided by 12 points or fewer?"
+    };
+    expect(routeFutureXQuestion(aflQuestion)).toMatchObject({
+      kind: "open_text",
+      confidence: 0.55,
+      reasons: ["open-ended multi-answer wording requires explicit answer-cardinality review"]
+    });
   });
 
   it("rejects prose, which the grader scores 0 on an exact-string comparison", () => {
@@ -380,5 +461,38 @@ describe("FutureX open-text submission validation", () => {
     expect(check("Not yet publicly confirmed as of Aug 18, 2026").valid).toBe(false);
     expect(check("unknown").valid).toBe(false);
     expect(check("To be announced").valid).toBe(false);
+  });
+});
+
+describe("FutureX prose-unit wire format (2026-09-02)", () => {
+  const base = {
+    id: "0794938eee8080b862598e67",
+    end_time: "2026-09-02T23:30:00+08:00",
+    level: 3,
+    en_title: "What U.S. commercial crude-oil stock level will EIA report for the week ending 28 August 2026?",
+    prompt:
+      "You are an agent that can predict future events. The event to be predicted: \"What U.S. commercial crude-oil stock level will EIA report for the week ending 28 August 2026? (resolved around 2026-09-02T23:30:00+08:00 (GMT+8)).\"\n" +
+      "Return exactly the source-native value required by the settlement contract, with no units or commentary.\n" +
+      "Report the value in thousand barrels.\n" +
+      "IMPORTANT: End with \\boxed{YOUR_PREDICTION}."
+  };
+  const options = { revision: "c8fcda646d7186ffcdff745b10862a116f9df36e", roundId: "2026-09-02", asOfUtc: "2026-09-02T08:00:00.000Z" };
+
+  it("carries the prose unit sentence onto the task as its unit", () => {
+    expect(numericTargetField(base.prompt)).toBe("thousand barrels");
+    const { tasks } = futureXQuestionsToTasks([base], options);
+    expect(tasks[0]).toMatchObject({ kind: "numeric", unit: "thousand barrels" });
+    expect((tasks[0] as { integerValued?: boolean }).integerValued).toBeUndefined();
+    expect(numericTargetField("Return only the exact published numeric value for revenue_usd_millions.")).toBe("revenue_usd_millions");
+  });
+
+  it("marks a prose count unit and a 'total runs' title as integer-valued, but not a scaled unit", () => {
+    expect(isCountQuestion("How many filtered wind reports will NOAA SPC list?", "filtered wind reports")).toBe(true);
+    expect(isCountQuestion("What cumulative number of cases will ECDC state?", "cases")).toBe(true);
+    expect(isCountQuestion("What exact total runs will the Yankees and Angels score in MLB game 823983?")).toBe(true);
+    expect(isCountQuestion("What U.S. goods-and-services trade deficit will BEA report?", "USD billion")).toBe(false);
+    expect(isCountQuestion("What current-account balance will Japan report?", "JPY 100 million")).toBe(false);
+    const counted = futureXQuestionsToTasks([{ ...base, id: "c5b37f70132c134c0d1f0f41", en_title: "How many filtered wind reports will NOAA SPC list for the convective day of 5 September 2026?", prompt: base.prompt.replace("thousand barrels", "filtered wind reports") }], options).tasks[0];
+    expect(counted).toMatchObject({ kind: "numeric", unit: "filtered wind reports", integerValued: true });
   });
 });

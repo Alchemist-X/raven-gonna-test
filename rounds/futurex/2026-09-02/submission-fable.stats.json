@@ -1,0 +1,86 @@
+{
+  "rows": 75,
+  "byKind": {
+    "single_choice": 40,
+    "open_text": 4,
+    "numeric": 19,
+    "ranking": 12
+  },
+  "byLevel": {
+    "1": {
+      "questions": 20,
+      "trials": 24,
+      "searches": 79,
+      "urls": 478,
+      "researched": 18,
+      "meanSearchesPerTrial": 3.3,
+      "meanUrlsPerTrial": 19.9
+    },
+    "2": {
+      "questions": 20,
+      "trials": 42,
+      "searches": 154,
+      "urls": 873,
+      "researched": 18,
+      "meanSearchesPerTrial": 3.7,
+      "meanUrlsPerTrial": 20.8
+    },
+    "3": {
+      "questions": 20,
+      "trials": 59,
+      "searches": 325,
+      "urls": 1882,
+      "researched": 20,
+      "meanSearchesPerTrial": 5.5,
+      "meanUrlsPerTrial": 31.9
+    },
+    "4": {
+      "questions": 15,
+      "trials": 59,
+      "searches": 480,
+      "urls": 3233,
+      "researched": 15,
+      "meanSearchesPerTrial": 8.1,
+      "meanUrlsPerTrial": 54.8
+    }
+  },
+  "trials": 184,
+  "searches": 1038,
+  "sourceUrls": 6466,
+  "fallbackAnswers": [],
+  "zeroResearchAnswers": [],
+  "closedNoWebAnswers": [
+    {
+      "id": "b6f2c50f7fc43ef08c155929",
+      "level": 1,
+      "title": "Will South Korea's August 2026 headline CPI inflation be at least 2.5% year on year?",
+      "prediction": "B"
+    },
+    {
+      "id": "f56b0a7cf127f36c2f90df85",
+      "level": 1,
+      "title": "Will the UK House of Lords agree to Lord Roborough's regret amendment on the Nature Restoration Levy Regulations 2026?",
+      "prediction": "B"
+    },
+    {
+      "id": "b72f7bee1d55898d662fb392",
+      "level": 2,
+      "title": "What Official Cash Rate will the Reserve Bank of New Zealand announce on 2 September 2026?",
+      "prediction": "A"
+    },
+    {
+      "id": "9a31115b723473ad80c73c4f",
+      "level": 2,
+      "title": "What range will Australia's real GDP quarterly growth occupy in the June quarter 2026 first release?",
+      "prediction": "C"
+    }
+  ],
+  "usageTotals": {
+    "input_tokens": 2936,
+    "cache_creation_input_tokens": 4270164,
+    "cache_read_input_tokens": 62408089,
+    "output_tokens": 1249787,
+    "total_cost_usd": 240.99,
+    "num_turns": 2141
+  }
+}

@@ -140,10 +140,10 @@ describe("defaultAnswerForTask ranking", () => {
     expect(answer.order).toEqual(["A", "B", "C"]);
   });
 
-  it("emits an empty order when there are no candidates, rather than inventing entities", () => {
+  it("emits stable sentinels when an open ranking still requires an exact count", () => {
     const answer = defaultAnswerForTask(buildTask({ kind: "ranking", candidates: [], rankCount: 3 }));
     if (answer.kind !== "ranking") throw new Error("expected a ranking answer");
-    expect(answer.order).toEqual([]);
+    expect(answer.order).toEqual(["unknown_1", "unknown_2", "unknown_3"]);
     expect(() => ForecastAnswerSchema.parse(answer)).not.toThrow();
     expect(isDegenerateAnswer(answer)).toBe(true);
   });

@@ -1,0 +1,1329 @@
+<title>FutureX Round Review</title>
+<style>
+:root{
+  --ground:#fbfbfc; --panel:#ffffff; --edge:#dfe3ea;
+  --ink:#131820; --muted:#59626f;
+  --accent:#0d7490; --accent-soft:#e4f2f6;
+  --ok:#15803d; --watch:#a1620a; --watch-soft:#fdf4e6;
+  --flag:#b0201c; --flag-soft:#fdeceb;
+  --shadow:0 1px 2px rgba(19,24,32,.05),0 8px 24px rgba(19,24,32,.05);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0e1218; --panel:#161c25; --edge:#28313d;
+  --ink:#e8ecf2; --muted:#95a1b1;
+  --accent:#4cc4e0; --accent-soft:#13323c;
+  --ok:#5cc98a; --watch:#e0a84e; --watch-soft:#33280f;
+  --flag:#f08a84; --flag-soft:#3a1a19;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --ground:#0e1218; --panel:#161c25; --edge:#28313d;
+  --ink:#e8ecf2; --muted:#95a1b1;
+  --accent:#4cc4e0; --accent-soft:#13323c;
+  --ok:#5cc98a; --watch:#e0a84e; --watch-soft:#33280f;
+  --flag:#f08a84; --flag-soft:#3a1a19;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);margin:0;
+  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 24px 96px;display:flex;flex-direction:column;gap:36px}
+header h1{font-size:clamp(30px,4vw,44px);line-height:1.1;letter-spacing:-.022em;margin:0;text-wrap:balance;font-weight:700}
+.sub{color:var(--muted);margin:10px 0 0;font-size:17px;max-width:62ch}
+.prov{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px;font-size:14px;color:var(--muted);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.prov b{color:var(--ink);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.tile{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:20px 22px;box-shadow:var(--shadow)}
+.tile .n{font-size:38px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.05;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tile .k{display:block;margin-top:8px;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile.is-flag .n{color:var(--flag)} .tile.is-watch .n{color:var(--watch)} .tile.is-ok .n{color:var(--ok)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:0;z-index:5;
+  background:var(--ground);padding:14px 0;border-bottom:1px solid var(--edge)}
+button{font:inherit;font-size:15px;font-weight:600;cursor:pointer;border:1px solid var(--edge);background:var(--panel);
+  color:var(--ink);border-radius:999px;padding:9px 18px}
+button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--ground)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.list{display:flex;flex-direction:column;gap:14px}
+.row{background:var(--panel);border:1px solid var(--edge);border-left:5px solid var(--edge);
+  border-radius:10px;padding:20px 22px;box-shadow:var(--shadow)}
+.row.sev-2{border-left-color:var(--flag)} .row.sev-1{border-left-color:var(--watch)} .row.sev-0{border-left-color:var(--ok)}
+.row[hidden]{display:none}
+.row-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.chip{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent)}
+.chip.kind{background:transparent;border:1px solid var(--edge);color:var(--muted)}
+.weight{margin-left:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums;
+  font-weight:700;font-size:16px}
+.weight .unit{font-weight:500;color:var(--muted);font-size:13px;margin-left:4px}
+.row h3{margin:0 0 12px;font-size:19px;line-height:1.35;letter-spacing:-.01em;text-wrap:balance;font-weight:650}
+.answer{margin:0 0 12px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.answer-label{font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;background:var(--accent-soft);
+  color:var(--accent);padding:3px 9px;border-radius:5px;word-break:break-word}
+.meta{display:flex;gap:26px;margin:0;flex-wrap:wrap}
+.meta div{display:flex;gap:7px;align-items:baseline}
+.meta dt{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.meta dd{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums;font-weight:600}
+.trials{margin:12px 0 0;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.trials code{background:transparent;border:1px solid var(--edge);color:var(--muted)}
+.flags{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.flags li{font-size:15px;padding:8px 13px;border-radius:7px;font-weight:550}
+.flags .flag{background:var(--flag-soft);color:var(--flag)}
+.flags .watch{background:var(--watch-soft);color:var(--watch)}
+.allclear{margin:14px 0 0;font-size:15px;color:var(--ok);font-weight:600}
+footer{color:var(--muted);font-size:14.5px;border-top:1px solid var(--edge);padding-top:20px;max-width:70ch}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>FutureX round 2026-09-02 — what to check before submitting</h1>
+  <p class="sub">Every answer this round, ordered by how much score rides on it. Flags describe the artifact, never a guess at correctness: a question is marked because of how it was answered, not because the answer looks wrong.</p>
+  <div class="prov">
+    <span>model <b>claude-opus-5</b></span>
+    <span>evidence frozen <b>2026-09-02T08:26:26Z</b></span>
+    <span>dataset <b>c8fcda646d71</b></span>
+    <span>sha256 <b>cf85bca15d74dd58</b></span>
+  </div>
+</header>
+
+<section class="tiles">
+  <div class="tile"><span class="n">75</span><span class="k">answers submitted</span></div>
+  <div class="tile is-flag"><span class="n">10</span><span class="k">need a decision</span></div>
+  <div class="tile is-watch"><span class="n">14</span><span class="k">worth a look</span></div>
+  <div class="tile is-ok"><span class="n">51</span><span class="k">nothing flagged</span></div>
+  <div class="tile"><span class="n">34.7<span class="unit">%</span></span><span class="k">of score flagged</span></div>
+  <div class="tile"><span class="n">9,817</span><span class="k">sources retrieved</span></div>
+</section>
+
+<div class="controls" role="group" aria-label="Filter answers">
+  <button type="button" data-filter="all" aria-pressed="true">All 75</button>
+  <button type="button" data-filter="2" aria-pressed="false">Need a decision 10</button>
+  <button type="button" data-filter="1" aria-pressed="false">Worth a look 14</button>
+  <button type="button" data-filter="L4" aria-pressed="false">Level 4 only</button>
+</div>
+
+<main class="list">
+<article class="row sev-2" data-sev="2" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What ordered top five artists will YouTube publish on its Global Weekly Top Artists chart for 28 August–3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Alka Yagnik, Udit Narayan, Arijit Singh, Shreya Ghoshal, Kumar Sanu</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>328</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <ul class="flags"><li class="flag">trial 2: Claude CLI exited 1: Failed to authenticate. API Error: 403 Request not</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What ordered top five films will Box Office Mojo report for Domestic Weekend 36 of 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Spider-Man: Brand New Day, Coyote vs. Acme, Onslaught, The Odyssey, By Any Means</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>375</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code></p>
+  <ul class="flags"><li class="flag">trial 1: Claude CLI exited 1: You've hit your session limit · resets 8:50pm (Asi</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which four players will comprise the men's singles semifinal field at WTT Contender Almaty 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Shunsuke Togami, Simon Gauzy, Manush Shah, Kristian Karlsson</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>173</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 23:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <ul class="flags"><li class="flag">trial 2: Trial timed out after 900000ms.</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What exact total runs will the New York Yankees and Los Angeles Angels score in MLB game 823983?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>9</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>0</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 14:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>9</code><code>9</code><code>9</code></p>
+  <ul class="flags"><li class="flag">answered without sources</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What exact total runs will the New York Yankees and San Diego Padres score in MLB game 823257?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>8</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>0</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 12:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>8</code><code>8</code><code>8</code></p>
+  <ul class="flags"><li class="flag">answered without sources</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What annualized quarter-on-quarter real GDP growth will Japan's second Q2 2026 estimate report?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>2.06242934782609</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>172</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 09:15</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>2</code><code>2.1</code></p>
+  <ul class="flags"><li class="flag">trial 0: Claude CLI exited 1: Failed to authenticate. API Error: 403 Request not</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What Official Cash Rate will the Reserve Bank of New Zealand announce on 2 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>0</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 11:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>A</code><code>A</code><code>A</code></p>
+  <ul class="flags"><li class="flag">answered without sources</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What range will Australia's real GDP quarterly growth occupy in the June quarter 2026 first release?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>C</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>0</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 12:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>C</code><code>C</code><code>C</code></p>
+  <ul class="flags"><li class="flag">answered without sources</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will South Korea's August 2026 headline CPI inflation be at least 2.5% year on year?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>0</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 09:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>B</code><code>B</code><code>B</code></p>
+  <ul class="flags"><li class="flag">answered without sources</li></ul>
+</article>
+<article class="row sev-2" data-sev="2" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will the UK House of Lords agree to Lord Roborough's regret amendment on the Nature Restoration Levy Regulations 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>0</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 08:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>B</code><code>B</code><code>B</code></p>
+  <ul class="flags"><li class="flag">answered without sources</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What U.S. corn net export sales for marketing year 2026/27 will USDA report for the week ending 27 August 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>1149263.6338081</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>307</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 21:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>1100000</code><code>1400000</code><code>1150000</code><code>1200000</code></p>
+  <ul class="flags"><li class="watch">trials span 24% (tolerance is 5%)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">open_text</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What exact music video will rank No. 1 on YouTube's Global Weekly Top Music Videos chart for 28 August–3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Dai Dai</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>167</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>Shakira, Burna Boy - D</code><code>Dai Dai</code><code>Dai Dai</code></p>
+  <ul class="flags"><li class="watch">trials split Shakira, Burna Boy - Dai Dai (Official V</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many vulnerabilities will CISA add to its Known Exploited Vulnerabilities Catalog from 2 through 4 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>3</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>54</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 15:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>2</code><code>3</code><code>1</code></p>
+  <ul class="flags"><li class="watch">trials span 100% (tolerance is 5%)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">open_text</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What exact game will win the 2026 Dragon Award for Best Digital Game?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Hollow Knight: Silksong</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>144</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>Ghost of Yōtei</code><code>Hollow Knight: Silkson</code><code>Hollow Knight: Silkson</code></p>
+  <ul class="flags"><li class="watch">trials split Ghost of Yōtei / Hollow Knight: Silksong</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many influenza-like-illness outbreaks will China CDC report nationwide for surveillance week 35 of 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>1</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>106</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>1</code><code>1</code><code>0</code></p>
+  <ul class="flags"><li class="watch">trials span 200% (tolerance is 5%)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What cumulative number of locally acquired human West Nile virus cases in EU/EEA countries will ECDC state in its week-36 2026 threat report?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>1059</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>179</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>900</code><code>1050</code><code>1070</code></p>
+  <ul class="flags"><li class="watch">trials span 17% (tolerance is 5%)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many filtered wind reports will NOAA SPC list for the convective day of 5 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>47</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>49</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 08:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>35</code><code>45</code><code>48</code></p>
+  <ul class="flags"><li class="watch">trials span 31% (tolerance is 5%)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What current-account balance will Japan report for July 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>24138.8426933914</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>225</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 09:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>24500</code><code>27000</code><code>23500</code></p>
+  <ul class="flags"><li class="watch">trials span 14% (tolerance is 5%)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many total filtered severe-weather reports will NOAA SPC list for the convective day of 3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>C</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>12</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 08:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>C</code><code>C</code></p>
+  <ul class="flags"><li class="watch">thin evidence (12 sources)</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What seasonal-influenza laboratory positivity band will Hong Kong CHP report for week 35 of 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>84</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>B</code><code>C</code></p>
+  <ul class="flags"><li class="watch">trials split B / C</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What reference rate will the National Bank of Poland announce after its September 2026 Monetary Policy Council meeting?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>98</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 04:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>D</code><code>B</code></p>
+  <ul class="flags"><li class="watch">trials split D / B</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many games will be played in the LCK playoff best-of-five scheduled for 2 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>62</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 22:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>B</code><code>A</code></p>
+  <ul class="flags"><li class="watch">trials split B / A</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>Who will win Australia vs Bahrain in the AVC Men's Volleyball Continental on 5 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>133</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 13:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>A</code><code>B</code></p>
+  <ul class="flags"><li class="watch">trials split A / B</li></ul>
+</article>
+<article class="row sev-1" data-sev="1" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>Who will win South Sydney Rabbitohs vs Sydney Roosters in NRL Round 27?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>114</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 22:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>A</code><code>B</code></p>
+  <ul class="flags"><li class="watch">trials split A / B</li></ul>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What ordered top five songs will Circle Chart publish on its 2026 Week 35 Download Chart?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Bloody Paradise, Blingy, BiiiG, This &amp; That, MONEYMONEYMONEY</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>625</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What ordered top five songs will YouTube publish for United States Weekly Top Songs for 28 August–3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Dai Dai, Choosin' Texas, Animal, Hootie Frutti, AH HA</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>489</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which five Scottish NHS boards will have the largest pain-management first-appointment waiting lists at 30 June 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>NHS Grampian, NHS Lothian, NHS Tayside, NHS Lanarkshire, NHS Ayrshire &amp; Arran</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>100</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 18:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What gross mortgage advances will UK regulated lenders report for Q2 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>78.8549005681818</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>336</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 17:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>80</code><code>78</code><code>78.5</code><code>79</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which five drivers will finish first through fifth in the 2026 Formula 2 Monza Sprint Race, in official classification order?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Nikola Tsolov, Rafael Câmara, Gabriele Minì, Noel León, Alex Dunne</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>157</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 06:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What ordered top five will Sverigetopplistan publish on Sweden's Week 36 Albums Chart?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Your Turn In Blue, Somna med Humlan Djojj, Sov med Humlan Djojj, Visitor, Wildchild</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>666</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 07:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What ordered top five will Sverigetopplistan publish on Sweden's Week 36 Singles Chart?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Djurens vaggvisa, Dai Dai, Happiness Is So Sad, Tänk om, Stjärnorna</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>410</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 07:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>What exact annual recurring revenue, in US$ millions, will Samsara report for fiscal Q2 2027?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>2115.5</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>159</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 06:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>2114</code><code>2112</code><code>2118</code><code>2118</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which five drivers will finish first through fifth in the 2026 Formula 3 Monza Sprint Race, in official classification order?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Ugo Ugochukwu, Brando Badoer, Freddie Slater, Ernesto Rivera, Théophile Naël</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>144</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which five players will occupy the first five displayed rows of the final 2026 Omega European Masters leaderboard?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Ryan Gerard, Matt Wallace, Marco Penge, Rasmus Højgaard, Nicolai Højgaard</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>145</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 06:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="4">
+  <div class="row-head">
+    <span class="chip lvl">L4</span>
+    <span class="chip kind">ranking</span>
+    <span class="weight">2.67<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which three drivers will finish on the podium at the 2026 Formula 1 Italian Grand Prix, in official finishing order?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Lando Norris, George Russell, Lewis Hamilton</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>4</dd></div>
+    <div><dt>Sources</dt><dd>316</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 04:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>undefined</code><code>undefined</code><code>undefined</code><code>undefined</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many patients will Northern Ireland report waiting for a diagnostic test at 30 June 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>224000</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>207</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 18:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>224000</code><code>225000</code><code>223000</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many patients will Northern Ireland report waiting for a first outpatient appointment at 30 June 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>504000</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>190</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 18:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>498000</code><code>505000</code><code>504000</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many take-home naloxone kits will Scotland report issuing in January–March 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>9833</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>91</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 18:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>9900</code><code>9800</code><code>9800</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What U.S. goods-and-services trade deficit will BEA report for July 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>90.4324460431655</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>106</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 21:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>90.4</code><code>90.6</code><code>90.3</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">open_text</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Who will win Stage 11 of the 2026 Vuelta a España from Cartagena to Lorca?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Matthew Brennan</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>124</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 03:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>Matthew Brennan</code><code>Matthew Brennan</code><code>Matthew Brennan</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">open_text</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Who will win Stage 12 of the 2026 Vuelta a España from Vera to Calar Alto?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>Enric Mas</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>187</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 03:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>Enric Mas</code><code>Enric Mas</code><code>Enric Mas</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many deaths will ONS report as registered in England and Wales in the week ending 21 August 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>10206</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>162</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 18:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>10170</code><code>10300</code><code>10150</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What U.S. commercial crude-oil stock level will EIA report for the week ending 28 August 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>427628.136904762</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>176</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 23:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>426900</code><code>427700</code><code>428300</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What average monthly consumption expenditure will Japan report for two-or-more-person households in July 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>305314.912683823</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>156</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 09:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>304000</code><code>304500</code><code>307500</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="3">
+  <div class="row-head">
+    <span class="chip lvl">L3</span>
+    <span class="chip kind">numeric</span>
+    <span class="weight">1.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What revised annualized productivity growth will BLS report for the U.S. nonfarm business sector in Q2 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>1.5</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>3</dd></div>
+    <div><dt>Sources</dt><dd>155</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 21:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>1.5</code><code>1.5</code><code>1.5</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What SARS-CoV-2 positivity band will China CDC report among outpatient ILI respiratory samples for week 35 of 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>62</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 23:59</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>B</code><code>B</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What daily precipitation total will JMA report at Osaka station on 4 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>D</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>55</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 12:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>D</code><code>D</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What national clinical-laboratory influenza positivity band will CDC FluView report for week 34 of 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>C</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>80</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-05 03:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>C</code><code>C</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What rainfall total will Australia's Bureau of Meteorology report for Sydney Observatory Hill on 6 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>44</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 16:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>A</code><code>A</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What share of the contiguous United States will the U.S. Drought Monitor place in D1–D4 drought on the map valid 1 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>C</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>127</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 23:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>C</code><code>C</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What outcome will ESA report for BepiColombo's Mercury Transfer Module separation on 3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>38</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 08:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>A</code><code>A</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will New Clause 31 on a National Commission on Electoral Reform be added to the UK Representation of the People Bill?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>112</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 08:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>B</code><code>B</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>How many total goals will Bayer Leverkusen and Union Berlin score in Bundesliga Matchday 2?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>D</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>38</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 03:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>D</code><code>D</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What range will Australia's seasonally adjusted goods balance occupy for July 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>D</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>104</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 12:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>D</code><code>D</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What range will euro-area retail-trade volume growth occupy in July 2026 month on month?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>154</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 17:30</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>A</code><code>A</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>What will be the result of South Africa Women vs the Black Ferns on 5 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>C</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>35</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 02:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>C</code><code>C</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="2">
+  <div class="row-head">
+    <span class="chip lvl">L2</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">1.00<span class="unit">% of score</span></span>
+  </div>
+  <h3>Which manufacturer will win the Hypercar class at the 2026 Lone Star Le Mans?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>G</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>2</dd></div>
+    <div><dt>Sources</dt><dd>152</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 13:00</dd></div>
+  </dl>
+  <p class="trials"><span class="answer-label">Each trial said</span><code>G</code><code>G</code></p>
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Atlético de Madrid defeat Athletic Club in LALIGA Matchday 4?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>36</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 04:30</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Brazil's industrial production increase month on month in July 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>117</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 21:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will FC Barcelona defeat Valencia CF in LALIGA Matchday 4?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>51</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-07 07:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will NOAA SWPC's Solar Region Summary for 3 September 2026 list any region with beta-gamma or beta-gamma-delta magnetic class?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>23</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 12:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Philippine headline inflation be at least 6.0% year on year in August 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>93</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 12:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will the incumbent No. 1 retain the top spot on Circle Chart's Week 35 Global K-pop Chart?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>77</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 23:59</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>What Overnight Policy Rate will Bank Negara Malaysia announce on 3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>32</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 20:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Who will win Fremantle vs Hawthorn in the 2026 AFL qualifying final?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>24</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 22:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Broadcom report fiscal Q3 2026 revenue of at least US$29.4 billion?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>38</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 06:30</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will C3 AI report fiscal Q1 2027 total revenue above US$52.0 million?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>49</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 06:30</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will England's NHS Health Check uptake among people offered a check exceed 35% in April–June 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>104</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 18:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will JMA report a daily maximum temperature of at least 33.0 degrees Celsius at Tokyo station on 3 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>24</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 12:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Manchester City defeat Coventry City in their 5 September 2026 Premier League match?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>20</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 03:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will South Africa's real GDP grow quarter on quarter in Q2 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>81</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-08 18:30</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Switzerland's consumer price index rise month on month in August 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>42</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-03 21:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will the Penrith Panthers defeat the Wests Tigers in NRL Round 27?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>44</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-06 18:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will the incumbent No. 1 remain atop the ARIA Albums Chart for the week of 7 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>B</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>37</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-04 23:59</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article>
+<article class="row sev-0" data-sev="0" data-level="1">
+  <div class="row-head">
+    <span class="chip lvl">L1</span>
+    <span class="chip kind">single_choice</span>
+    <span class="weight">0.50<span class="unit">% of score</span></span>
+  </div>
+  <h3>Will Ülle Madise be elected President of Estonia in the first Riigikogu ballot on 2 September 2026?</h3>
+  <p class="answer"><span class="answer-label">Submitted</span><code>A</code></p>
+  <dl class="meta">
+    <div><dt>Trials</dt><dd>1</dd></div>
+    <div><dt>Sources</dt><dd>41</dd></div>
+    <div><dt>Closes</dt><dd>2026-09-02 20:00</dd></div>
+  </dl>
+  
+  <p class="allclear">Nothing flagged</p>
+</article></main>
+
+<footer>Generated from <code>submission-release.jsonl</code> and its reasoning trace by <code>scripts/futurex-review-page.mjs</code>. Nothing here has been submitted — FutureX takes submissions by email only, and no command in this repo sends anything.</footer>
+</div>
+
+<script>
+const buttons = [...document.querySelectorAll("[data-filter]")];
+const rows = [...document.querySelectorAll(".row")];
+buttons.forEach((button) => button.addEventListener("click", () => {
+  buttons.forEach((other) => other.setAttribute("aria-pressed", String(other === button)));
+  const filter = button.dataset.filter;
+  rows.forEach((element) => {
+    const show = filter === "all"
+      ? true
+      : filter === "L4"
+        ? element.dataset.level === "4"
+        : element.dataset.sev === filter;
+    element.hidden = !show;
+  });
+}));
+</script>

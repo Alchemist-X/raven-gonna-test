@@ -1,6 +1,6 @@
 # FutureX submission email format
 
-Last updated: 2026-08-19.　Chinese original: [`../futurex-submission-email.md`](../futurex-submission-email.md) — Chinese is authoritative.
+Last updated: 2026-09-02.　Chinese original: [`../futurex-submission-email.md`](../futurex-submission-email.md) — Chinese is authoritative.
 
 FutureX has **no submission API**; it accepts email only (per its HuggingFace
 dataset page). No command in this repo can send anything either — `futurex run`
@@ -14,6 +14,21 @@ send, so nobody has to redesign it each round.
   the organizers ask to audit.
 - Recipient `FutureX-ai@outlook.com`.
 - Must arrive before that round's deadline (typically 24:00 UTC+8 on the round date).
+
+### Scalar-answer cardinality gate
+
+An `open_text` submission is one scalar string. Never pack independent
+candidates into one `prediction` with `|`, semicolons, newlines, or a JSON
+array; the strict validator blocks these attachments. If the question truly
+requires multiple answers, do not evade the check with a different delimiter.
+Route it explicitly as a supported multi-answer type and review its cardinality
+first; otherwise submit one canonical most-likely answer.
+
+The AFL question from 2026-08-19 (`25cd695a325d2ab9b3474844`) is the permanent
+regression case. The Fable and Opus strings both contained the eventual correct
+fixture, `Essendon v Port Adelaide`, plus wrong extras. The ground truth was one
+string, so the whole item scored zero. With 17 resolved L4 questions that week,
+one full-credit item was worth about 2.35 overall points.
 
 ## Body fields
 

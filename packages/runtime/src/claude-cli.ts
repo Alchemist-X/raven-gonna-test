@@ -17,6 +17,7 @@
 // login); an unauthenticated CLI fails the call with its own message.
 
 import { spawn } from "node:child_process";
+import { tmpdir } from "node:os";
 import type { ModelPort, ModelRequest, ModelResponse } from "@raven-gonna-test/forecast-core";
 
 export interface ClaudeCliConfig {
@@ -32,6 +33,11 @@ export interface ClaudeCliConfig {
   executable?: string;
   /** Working directory for the spawned CLI. */
   cwd?: string;
+  /** Retries for transient failures. Earned the hard way: one transient burst
+   *  from a slow upstream (kimi via ANTHROPIC_BASE_URL, 2026-08-22) failed
+   *  every trial of a six-question batch that passed cleanly when rerun. */
+  maxRetries?: number;
+  retryBaseMs?: number;
 }
 
 export type ClaudeCliEffort = "low" | "medium" | "high" | "xhigh" | "max";
@@ -63,6 +69,17 @@ export function buildClaudeCliArgs(
     "--output-format",
     "stream-json",
     "--verbose",
+    // Context isolation, so the same model is the same harness on every
+    // machine. Without these the CLI injects the operator's user-level rules
+    // files into every forecast (measured: ~29k tokens of engineering/server
+    // docs on the dev machine, different again on the fleet server), and a
+    // cross-machine comparison silently stops being one. An empty
+    // --setting-sources drops user/project/local settings while WebSearch and
+    // the CLI's own auth keep working (verified empirically);
+    // --strict-mcp-config guarantees no MCP servers ride along.
+    "--setting-sources",
+    "",
+    "--strict-mcp-config",
     ...(allowedTools ? ["--allowedTools", allowedTools] : []),
     "--model",
     config.model,
@@ -82,19 +99,22 @@ export function buildClaudeCliArgs(
  *   - tool_use blocks carrying an `input.url` (a WebFetch the model requested)
  *   - `{title, url}` pairs (WebSearch results handed back to the model)
  */
-function collectToolUrls(node: unknown, urls: Set<string>): void {
+function collectToolActivity(node: unknown, urls: Set<string>, queries: Set<string>): void {
   if (!node || typeof node !== "object") return;
   if (Array.isArray(node)) {
-    for (const item of node) collectToolUrls(item, urls);
+    for (const item of node) collectToolActivity(item, urls, queries);
     return;
   }
   const record = node as Record<string, unknown>;
   if (record.type === "tool_use" && record.input && typeof record.input === "object") {
-    const url = (record.input as Record<string, unknown>).url;
+    const input = record.input as Record<string, unknown>;
+    const url = input.url;
     if (typeof url === "string" && url) urls.add(url);
+    const query = input.query;
+    if (typeof query === "string" && query) queries.add(query);
   }
   if (typeof record.url === "string" && typeof record.title === "string") urls.add(record.url);
-  for (const value of Object.values(record)) collectToolUrls(value, urls);
+  for (const value of Object.values(record)) collectToolActivity(value, urls, queries);
 }
 
 export interface ParsedClaudeStream {
@@ -107,6 +127,7 @@ export interface ParsedClaudeStream {
    */
   thinking: string;
   citations: string[];
+  searchQueries: string[];
   usage: Record<string, unknown> | undefined;
   model: string | undefined;
   isError: boolean;
@@ -114,6 +135,7 @@ export interface ParsedClaudeStream {
 
 export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   const urls = new Set<string>();
+  const searchQueries = new Set<string>();
   const assistantTexts: string[] = [];
   const thinkingBlocks: string[] = [];
   let content = "";
@@ -130,7 +152,7 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
     } catch {
       continue; // A partial or non-JSON line is not fatal; keep reading.
     }
-    collectToolUrls(event, urls);
+    collectToolActivity(event, urls, searchQueries);
     if (event.type === "assistant") {
       const message = event.message as { content?: unknown; model?: unknown } | undefined;
       if (typeof message?.model === "string") model = message.model;
@@ -156,7 +178,31 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
   // The CLI omits the result event when it dies mid-stream; the last assistant
   // turn is still usable, and a salvageable answer beats a deleted trial.
   if (!content && assistantTexts.length) content = assistantTexts[assistantTexts.length - 1] ?? "";
-  return { content, thinking: thinkingBlocks.join("\n\n"), citations: [...urls], usage, model, isError };
+  return {
+    content,
+    thinking: thinkingBlocks.join("\n\n"),
+    citations: [...urls],
+    searchQueries: [...searchQueries],
+    usage,
+    model,
+    isError
+  };
+}
+
+/**
+ * Permanent failures a retry cannot fix: revoked or missing credentials,
+ * malformed requests, and our own per-attempt timeout (retrying a full timeout
+ * doubles the damage; the engine's trial timeout governs the total). Everything
+ * else — dropped streams, 5xx bursts from an ANTHROPIC_BASE_URL upstream,
+ * process flakes — is worth a bounded retry.
+ */
+export function isRetryableClaudeFailure(message: string): boolean {
+  // "Failed to authenticate. API Error: 403 Request not allowed" arrived in a
+  // burst under twelve concurrent CLIs on 2026-09-02 and cost 13 trials; the
+  // same questions passed on rerun. Worth the bounded retry despite the 403 —
+  // a revoked or missing credential says so in other words.
+  if (/403 Request not allowed/i.test(message)) return true;
+  return !/401|403|OAuth|revoked|unauthorized|invalid_request|log.?in|logged.?in|timed out/i.test(message);
 }
 
 export class ClaudeCliPredictor implements ModelPort {
@@ -169,11 +215,30 @@ export class ClaudeCliPredictor implements ModelPort {
 
   async generate(request: ModelRequest, signal: AbortSignal): Promise<ModelResponse> {
     if (signal.aborted) throw signal.reason ?? new Error("Claude CLI call aborted before start.");
+    const maxRetries = this.config.maxRetries ?? 2;
+    const retryBaseMs = this.config.retryBaseMs ?? 1000;
+    let lastError: Error | undefined;
+    for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
+      if (attempt > 0) await claudeRetryDelay(Math.min(30_000, retryBaseMs * 2 ** (attempt - 1)), signal);
+      try {
+        return await this.runOnce(request, signal);
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        if (signal.aborted || !isRetryableClaudeFailure(lastError.message)) throw lastError;
+      }
+    }
+    throw lastError ?? new Error("Claude CLI retry loop exited unexpectedly.");
+  }
+
+  private async runOnce(request: ModelRequest, signal: AbortSignal): Promise<ModelResponse> {
     const args = buildClaudeCliArgs(this.config, request);
     const timeoutMs = this.config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
     return await new Promise<ModelResponse>((resolve, reject) => {
-      const child = spawn(this.config.executable ?? "claude", args, { cwd: this.config.cwd });
+      // Default the working directory away from any project tree: CLAUDE.md
+      // auto-discovery walks up from cwd, and a forecast must not absorb
+      // whatever repository the operator happened to launch from.
+      const child = spawn(this.config.executable ?? "claude", args, { cwd: this.config.cwd ?? tmpdir() });
       let stdout = "";
       let stderr = "";
       let settled = false;
@@ -212,7 +277,10 @@ export class ClaudeCliPredictor implements ModelPort {
         resolve({
           content: parsed.content,
           ...(parsed.thinking ? { thinking: parsed.thinking } : {}),
-          citations: parsed.citations,
+          citations: [
+            ...parsed.searchQueries.map((query) => `search://${encodeURIComponent(query)}`),
+            ...parsed.citations
+          ],
           ...(parsed.usage ? { usage: parsed.usage } : {}),
           model: parsed.model ?? this.model
         });
@@ -224,4 +292,22 @@ export class ClaudeCliPredictor implements ModelPort {
       child.stdin.end(request.userPrompt);
     });
   }
+}
+
+async function claudeRetryDelay(milliseconds: number, signal: AbortSignal): Promise<void> {
+  if (signal.aborted) throw signal.reason ?? new Error("Retry wait aborted.");
+  await new Promise<void>((resolve, reject) => {
+    let onAbort: () => void;
+    const cleanup = (): void => signal.removeEventListener("abort", onAbort);
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve();
+    }, milliseconds);
+    onAbort = (): void => {
+      clearTimeout(timer);
+      cleanup();
+      reject(signal.reason ?? new Error("Retry wait aborted."));
+    };
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
 }

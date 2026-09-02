@@ -1,0 +1,23 @@
+To: FutureX-ai@outlook.com
+CC: issue.00.gui@gmail.com, millank0817@gmail.com, 1700012744@pku.edu.cn
+Subject: FutureX submission — round 2026-09-02 — raven_labs/claude-opus-5
+Attachment: submission-opus.jsonl
+
+Hello FutureX team,
+
+Please find attached our submission for the 2026-09-02 round.
+
+- Entry name: raven_labs/claude-opus-5
+- Organization: raven_labs
+- Model: claude-opus-5 (Anthropic), with live web research
+- Agent framework: raven-gonna-test, commit d2b86a1a017ffe6bb34bd1c8b8b475d32eef0588 (github.com/Alchemist-X/raven-gonna-test)
+- Dataset revision: c8fcda646d7186ffcdff745b10862a116f9df36e
+- Coverage: 75/75 questions
+- Evidence cutoff: all answers were produced with research frozen at 2026-09-02T08:26:26Z, before every question's end time; the four questions already closed at that time were answered without any retrieval
+- Attachment SHA-256: cf85bca15d74dd580933ad99b11d1b683d54867428bb6adf499e932dcac2ef36
+- Visibility: public — fine to list on the leaderboard
+
+Per-question reasoning traces and provenance manifests are archived in the repository above and available on request.
+
+Best regards,
+raven_labs

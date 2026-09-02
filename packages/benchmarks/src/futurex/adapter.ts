@@ -14,9 +14,10 @@ import {
 
 const CHOICE_LINE = /^\s*([A-Z])\.\s+(?:the outcome be\s+)?(.+?)\s*$/gim;
 const NUMERIC_PATTERN = /\b(?:numeric prediction|how (?:many|much)|what (?:will|is|was)(?: be)? (?:the )?(?:closing )?(?:price|value|number|total|rate|percentage|percent|index|close|open|margin|duration)|average price|day(?:'s)? close|grain index|revenue|gross bookings?|gross merchandise volume|market capitalization|adjusted ebitda|sales|reserves?|inventor(?:y|ies)|storage|claims|gdp growth|pmi|box office gross|working gas|productivity growth|policy repo rate|elo rating|runs?|winning margin|rated good or excellent)\b|\b(?:usd|cny|dkk|nt\$)\s*(?:millions?|billions?)\b|\b(?:millions?|billions?|two decimal places|one decimal place|annualized quarter-over-quarter)\b/i;
-const RANKING_PATTERN = /\b(?:rank|ranking|ranked|ordered|in order|top \d+)\b/i;
+const RANKING_PATTERN =
+  /\b(?:rank|ranking|ranked|ordered|in order|top (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)|winners? of the (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten))\b/i;
 const MULTI_PATTERN = /\b(?:select all|choose all|all that apply|more than one)\b/i;
-const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates)\s+will\b/i;
+const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates|fixtures|matches|games)\s+will\b/i;
 const STRONG_SINGLE_PATTERN = /\b(?:who will win|winner of|which (?:candidate|ticket|club|team|player|person) will (?:win|receive)|most votes|\bvs\.?\b)\b/i;
 const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)\}/i;
 // The prompt often DECLARES its answer type outright ("Return only the exact
@@ -27,30 +28,47 @@ const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)
 // aggregated by exact-string vote and tie-broken alphabetically.
 const NUMERIC_CONTRACT_PATTERN =
   /boxed numeric value|exact published numeric value|only the exact numeric|numeric prediction only/i;
+// The 2026-08-26 wire format removed the target field/unit from many L3/L4
+// prompts and replaced it with this generic settlement-contract sentence.
+// It is numeric only after ranking language has had first refusal: the same
+// sentence also appears on "top five" and "six winners" list questions.
+const SOURCE_NATIVE_VALUE_PATTERN = /return exactly the source-native value required by the settlement contract/i;
 // "what exact <measurement> will X report" asks for a quantity even when the
 // prompt only supplies the generic \boxed{YOUR_PREDICTION} envelope, so the
 // contract pattern above does not fire. Routed as free text these produce prose
 // ("Composite CPI +2.1% year-on-year (Census…"), which the grader compares by
 // exact string and scores 0. The noun list is what makes this safe: "what exact
 // film/winner/team" stays an entity question.
-// An entity name or a ` | `-separated list, never a sentence. Sentence-ending
-// punctuation mid-string, a parenthetical gloss, or sheer length all mark an
-// answer the grader will score 0 on an exact-string comparison.
-const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\b|:\s/i;
+// An entity name, never a sentence. Sentence-ending punctuation mid-string, a
+// parenthetical gloss, or a "label: 1.2%" construction all mark an answer the
+// grader will score 0 on an exact-string comparison. A colon alone is not
+// prose: "Hollow Knight: Silksong" is a title, so the colon rule needs a digit
+// somewhere after it before it fires.
+const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\b|:\s[^\n]*\d/i;
 // A refusal dressed as an answer. R1 says never abstain: a wrong guess and an
 // "unknown" both score 0, so hedging forfeits the upside for nothing.
 const HEDGED_PREDICTION =
   /\b(?:not yet|unknown|unclear|cannot|can't|unable|to be (?:announced|confirmed|determined)|tbd|n\/a|no (?:public|official) )/i;
+// FutureX stores a submission row as one scalar string. Packing independent
+// candidates into that scalar made the 2026-08-19 AFL answer
+// "A | B | Essendon v Port Adelaide" score zero even though it contained the
+// resolved fixture. A true multi-answer task must be routed and reviewed as
+// such; a scalar open-text answer must commit to one canonical value.
+const PACKED_OPEN_TEXT_PREDICTION = /\||[\r\n]|;\s*\S|^\s*\[[\s\S]*\]\s*$/;
 // A count of discrete things: the truth is necessarily a whole number. Sigma is
 // 5% of it, so on a small count a fractional answer falls outside the parabola
 // completely — 2.22 against a truth of 2 scores 0 where 2 scores 1. Rates,
 // revenues and percentages are excluded: those are genuinely continuous.
 const COUNT_TITLE_PATTERN =
-  /\bhow many\b|\b(?:total |exact )?number of\b|\bhow many .*\bwins?\b/i;
+  /\bhow many\b|\b(?:total |exact )?number of\b|\bhow many .*\bwins?\b|\b(?:exact )?total (?:runs|goals|points|wins)\b/i;
 const NON_COUNT_PATTERN = /\b(?:rate|percentage|percent|inflation|revenue|price|index|balance|receipts|yield|change)\b/i;
+// A prose unit naming discrete things ("patients", "filtered wind reports") is
+// a count as surely as a _count field suffix is.
+const COUNT_UNIT_PATTERN =
+  /_(?:count|items|patients|runs|wins|games)$|^(?:[\w-]+\s+)*(?:patients|kits|vulnerabilities|deaths|outbreaks|cases|reports|runs|goals|points|games|wins|matches|people|persons|units|items)$/i;
 
 export function isCountQuestion(title: string, unit?: string): boolean {
-  if (unit && /_(?:count|items|patients|runs|wins|games)$/i.test(unit)) return true;
+  if (unit && COUNT_UNIT_PATTERN.test(unit.trim())) return true;
   return COUNT_TITLE_PATTERN.test(title) && !NON_COUNT_PATTERN.test(title);
 }
 
@@ -82,8 +100,13 @@ function rankingCount(text: string): number | undefined {
     const end = Number(range[2]);
     if (end >= start) return end - start + 1;
   }
-  const count = text.match(/(?:top|rank)\s+(\d+)/i)?.[1];
-  return count ? Number(count) : undefined;
+  const token = text.match(/(?:top|rank)\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i)?.[1]
+    ?? text.match(/winners? of the (\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i)?.[1];
+  if (!token) return undefined;
+  if (/^\d+$/.test(token)) return Number(token);
+  return ({ one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 } as const)[
+    token.toLowerCase() as "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine" | "ten"
+  ];
 }
 
 function semanticPrompt(prompt: string): string {
@@ -91,12 +114,18 @@ function semanticPrompt(prompt: string): string {
 }
 
 const NUMERIC_TARGET_FIELD = /numeric value for\s+([A-Za-z0-9_]+)/i;
+// The 2026-08-26+ wire format states the unit as prose ("Report the value in
+// thousand barrels.") instead of naming a field. Without it the task carries
+// no unit and each trial picks its own scale — which is how the 2026-08-19
+// HMRC receipts answer came back a thousandfold apart across trials.
+const REPORT_UNIT_SENTENCE = /\breport the value in\s+([^.\n]+?)\.?\s*(?:\n|$)/i;
 
 /** The snake_case field FutureX will publish the answer under, when the prompt
  *  names one. It encodes both the quantity and its scale (usd_millions,
- *  yoy_percent), which is exactly what the model must be told. */
+ *  yoy_percent), which is exactly what the model must be told. Falls back to
+ *  the prose unit sentence, in which case the value is words ("USD billion"). */
 export function numericTargetField(prompt: string): string | undefined {
-  return prompt.match(NUMERIC_TARGET_FIELD)?.[1];
+  return prompt.match(NUMERIC_TARGET_FIELD)?.[1] ?? prompt.match(REPORT_UNIT_SENTENCE)?.[1]?.trim();
 }
 
 export function routeFutureXQuestion(
@@ -152,6 +181,14 @@ export function routeFutureXQuestion(
       return route;
     }
   }
+  if (SOURCE_NATIVE_VALUE_PATTERN.test(question.prompt)) {
+    return {
+      kind: "numeric",
+      choices: [],
+      confidence: 0.9,
+      reasons: ["generic source-native settlement value after ranking exclusion"]
+    };
+  }
   if (extractedChoices.length >= 2) {
     const multi = MULTI_PATTERN.test(semantic) || STRONG_MULTI_PATTERN.test(semantic);
     const single = STRONG_SINGLE_PATTERN.test(semantic);
@@ -160,6 +197,14 @@ export function routeFutureXQuestion(
       choices: extractedChoices,
       confidence: multi || single ? 0.9 : 0.75,
       reasons: [multi ? "multi-answer semantics before instruction boilerplate" : single ? "single-winner semantics" : "enumerated choices; default singleton"]
+    };
+  }
+  if (STRONG_MULTI_PATTERN.test(semantic)) {
+    return {
+      kind: "open_text",
+      choices: [],
+      confidence: 0.55,
+      reasons: ["open-ended multi-answer wording requires explicit answer-cardinality review"]
     };
   }
   if (NUMERIC_PATTERN.test(question.en_title) || NUMERIC_PATTERN.test(question.prompt)) {
@@ -253,6 +298,48 @@ function decimal(value: number): string {
   return String(Number(value.toPrecision(15)));
 }
 
+/** CSV is the only reversible representation available inside FutureX's one
+ * string prediction field. In particular, ranking entities can themselves
+ * contain commas (song and film titles), so a plain split/join silently changes
+ * the number of answers. */
+export function parseFutureXList(value: string): string[] {
+  const fields: string[] = [];
+  let field = "";
+  let quoted = false;
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index]!;
+    if (character === '"') {
+      if (quoted && value[index + 1] === '"') {
+        field += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === "," && !quoted) {
+      const normalized = field.trim();
+      if (normalized) fields.push(normalized);
+      field = "";
+    } else {
+      field += character;
+    }
+  }
+  const normalized = field.trim();
+  if (normalized) fields.push(normalized);
+  return fields;
+}
+
+// The official extractor splits the submitted string on every raw comma and
+// does not parse CSV quoting, so a quoted "I Knew It, I Knew You" reaches the
+// grader as two items and breaks the position-by-position match for the whole
+// list. A comma inside a name is dropped instead: the semantic judge still
+// recognises the entity, and the list keeps its cardinality on both scorers.
+function formatFutureXList(values: readonly string[]): string {
+  return values.map((value) => {
+    const commaFree = value.replace(/\s*,\s*/g, " ").replace(/\s{2,}/g, " ").trim();
+    return /["\r\n]/.test(commaFree) ? `"${commaFree.replaceAll('"', '""')}"` : commaFree;
+  }).join(", ");
+}
+
 export function futureXPredictionFromResult(result: ForecastResult): string {
   switch (result.answer.kind) {
     case "binary":
@@ -260,9 +347,9 @@ export function futureXPredictionFromResult(result: ForecastResult): string {
     case "categorical":
       return result.answer.choice;
     case "multi_label":
-      return result.answer.selected.join(", ");
+      return formatFutureXList(result.answer.selected);
     case "ranking":
-      return result.answer.order.join(", ");
+      return formatFutureXList(result.answer.order);
     case "numeric":
       return decimal(result.answer.value);
     case "free_response":
@@ -322,7 +409,7 @@ export function validateFutureXSubmission(
     const prediction = row.prediction.trim();
     if (!prediction && options.requireComplete !== false) errors.push(`Empty prediction for ${question.id}`);
     const route = routeFutureXQuestion(question, options.routeOverrides?.[question.id]);
-    const labels = prediction.split(",").map((part) => part.trim()).filter(Boolean);
+    const labels = parseFutureXList(prediction);
     const allowed = new Set(route.choices.map((choice) => choice.key));
     if (route.kind === "single_choice" && (labels.length !== 1 || !allowed.has(labels[0] ?? ""))) {
       errors.push(`Invalid single-choice prediction for ${question.id}: ${prediction}`);
@@ -351,6 +438,12 @@ export function validateFutureXSubmission(
     // These are errors, not warnings: a sentence is never a right answer, and a
     // silent 0 on an L4 question is expensive.
     if (route.kind === "open_text") {
+      if (PACKED_OPEN_TEXT_PREDICTION.test(prediction)) {
+        errors.push(
+          `Open-text prediction for ${question.id} packs multiple candidates into one scalar answer: ${prediction.slice(0, 80)}. ` +
+            "Commit to one canonical answer, or route and review the task as a supported multi-answer type."
+        );
+      }
       if (PROSE_PREDICTION.test(prediction)) {
         errors.push(`Open-text prediction for ${question.id} reads as prose, not an answer: ${prediction.slice(0, 80)}`);
       }
