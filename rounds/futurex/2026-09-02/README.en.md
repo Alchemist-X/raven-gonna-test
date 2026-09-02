@@ -117,9 +117,26 @@ See the command block in [`README.md`](README.md); it is identical.
    if the official truth is recorded negative the question scores 0.
 2. **Two MLB total-runs questions with zero research**: the base-rate answers (9, 8)
    were accepted; a single game's total has little retrievable edge.
-3. **The fable-5 slot** was launched after opus finished (as-of `2026-09-02T09:23:20Z`).
-   From question 29 every trial failed because the subscription session limit was
-   exhausted ("session limit · resets 8:50pm"); after the reset at 20:52 it was
-   resumed with `--resume --retry-fallbacks`. If it completes and validates before the
-   deadline it is archived separately as `submission-fable.jsonl`; otherwise it is not
-   submitted.
+3. **The fable-5 second candidate**: see the next section. The two models agree on 55/75
+   questions (numeric within the 5% tolerance) and differ on 20 (weight 0.375); the
+   disagreement sits in the L4 rankings (10 of 12 differ in at least one position) and
+   in sports/chart questions, while the macro releases mostly agree.
+
+## Second candidate: claude-fable-5
+
+Launched after opus finished (as-of `2026-09-02T09:23:20Z`, concurrency 8). From
+question 29 every trial failed because the subscription session limit was exhausted
+("session limit · resets 8:50pm"); after the 20:52 (UTC+8) reset it was resumed with
+`--resume --retry-fallbacks` and finished at `2026-09-02T13:35:11Z`. **The research
+window is therefore 09:23Z–13:35Z**, but every question's retrieval is hard-stopped one
+minute before that question's own end time (the batch's per-task cutoff), so no
+question was researched after it resolved; the email body states this window.
+
+| Item | Value |
+| --- | --- |
+| Attachment | `submission-fable.jsonl`, sha256 `25519f9639ff5b997f7142e025e5cdf3521ba438d5321bf7b95658a8c02f9e9d` |
+| Validation | valid, 75/75, 0 fallback, 0 zero-research (the 4 closed questions answered with retrieval withheld: B/B/A/C, same as opus) |
+| Trials | 184 (L1 24 / L2 42 / L3 59 / L4 59), 1,038 searches, 6,466 source URLs; 2 trials lost to the session limit |
+| Ranking re-derivation | 4 rows changed (two Swedish chart answers carried a case-variant duplicate, now gone) |
+| Email body | `email-fable.txt` |
+| Other files | `submission-fable.{jsonl.manifest.json,reasoning.jsonl,review.html,stats.json,audit.json,closed-no-web.json,run-metadata.json}` |

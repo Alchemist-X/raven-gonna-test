@@ -17,6 +17,30 @@
       "emailBody": "email-opus.txt",
       "status": "awaiting human send",
       "note": "4 already-closed questions answered with retrieval withheld (spliced, recorded in manifest); 2 MLB total-runs questions answered from base rates with zero retrieval; 2 ranking rows re-derived after the aggregation fix."
+    },
+    {
+      "entry": "raven_labs/claude-fable-5",
+      "attachment": "submission-fable.jsonl",
+      "sha256": "25519f9639ff5b997f7142e025e5cdf3521ba438d5321bf7b95658a8c02f9e9d",
+      "evidenceCutoffUtc": "2026-09-02T09:23:20Z",
+      "researchWindowUtc": [
+        "2026-09-02T09:23:20Z",
+        "2026-09-02T13:35:11Z"
+      ],
+      "agentFrameworkCommit": "b069a853becd26774da8f09853b42d7265b295e2",
+      "emailBody": "email-fable.txt",
+      "status": "awaiting human send",
+      "note": "Launched after opus; 46 questions lost every trial to the subscription session limit and were re-forecast on resume after the 20:50 (UTC+8) reset, each still bounded by its own end time. 4 closed questions answered with retrieval withheld; 4 ranking rows re-derived after the aggregation fix (two had a case-variant duplicate)."
     }
-  ]
+  ],
+  "crossModelAgreement": {
+    "models": [
+      "claude-opus-5",
+      "claude-fable-5"
+    ],
+    "identicalWithinTolerance": 55,
+    "differ": 20,
+    "weightOfDisagreement": 0.375,
+    "note": "numeric compared within the grader's 5% tolerance; every L4 ranking except two differs in at least one position"
+  }
 }

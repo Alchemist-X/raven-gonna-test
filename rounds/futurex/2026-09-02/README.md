@@ -112,6 +112,21 @@ node scripts/futurex-review-page.mjs <round> <out>/submission-release.jsonl
 1. **贸易逆差正负号（`baf399b4`）**：题面问 "deficit"、单位 USD billion，按 BEA 头条口径提交正数。
    未加代码层钳制；若官方真值记为负数则该题 0 分。
 2. **两道 MLB 总得分题零检索**：接受模型的基率作答（9、8），未强制重跑——单场总得分检索边际价值低。
-3. **fable-5 槽位**：opus 跑完后追加启动（as-of `2026-09-02T09:23:20Z`），第 29 题起因订阅会话额度耗尽
-   （"session limit · resets 8:50pm"）46 题全 trial 失败；20:52 额度重置后 `--resume --retry-fallbacks` 补跑中。
-   若在截止前完成并通过校验，另行归档为 `submission-fable.jsonl`；未完成则不提交。
+3. **fable-5 第二候选**：见下节。两个模型在 55/75 题上一致（数值按 5% 容差），20 题不同（权重 0.375），
+   分歧集中在 L4 排序题（12 道里 10 道至少一个位置不同）和体育/榜单类；宏观数据题基本一致。
+
+## 第二候选：claude-fable-5
+
+opus 跑完后追加启动（as-of `2026-09-02T09:23:20Z`，并发 8）。第 29 题起订阅会话额度耗尽
+（"session limit · resets 8:50pm"），46 题全 trial 失败；20:52 额度重置后 `--resume --retry-fallbacks`
+补跑至 `2026-09-02T13:35:11Z` 完成。**检索时间窗因此是 09:23Z–13:35Z**，但每题检索都在其自身
+end_time 前一分钟被硬性截断（batch 的 per-task cutoff），没有题目在结算后被检索；邮件正文如实写了这个窗口。
+
+| 项 | 值 |
+| --- | --- |
+| 提交件 | `submission-fable.jsonl`，sha256 `25519f9639ff5b997f7142e025e5cdf3521ba438d5321bf7b95658a8c02f9e9d` |
+| 校验 | valid，75/75，0 fallback，0 零检索（4 道已结算题走零联网作答：B/B/A/C，与 opus 相同） |
+| trials | 184（L1 24 / L2 42 / L3 59 / L4 59），1,038 次搜索，6,466 来源 URL；trial 损失 2（额度限制） |
+| 排序重推导 | 4 行改动（两道瑞典榜单存在大小写重复实体，修正后消除） |
+| 邮件正文 | `email-fable.txt` |
+| 其余文件 | `submission-fable.{jsonl.manifest.json,reasoning.jsonl,review.html,stats.json,audit.json,closed-no-web.json,run-metadata.json}` |

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-run-audit.v1",
+  "generatedAtUtc": "2026-09-02T13:34:57.633Z",
+  "records": 75,
+  "trials": 172,
+  "fallbackAnswers": 4,
+  "researchedAnswers": 71,
+  "searchQueries": 1038,
+  "sourceUrls": 6466,
+  "usageTotals": {
+    "input_tokens": 2912,
+    "cache_creation_input_tokens": 4170168,
+    "cache_read_input_tokens": 62073673,
+    "output_tokens": 1222468,
+    "total_cost_usd": 237.27654900000002,
+    "num_turns": 2129
+  }
+}

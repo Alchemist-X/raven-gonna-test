@@ -1,0 +1,915 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-closed-no-web.v1",
+  "evidencePolicy": "futurex-closed-no-web-v1",
+  "description": "Questions already past end_time at the evidence cutoff, answered from training knowledge with retrieval tools withheld.",
+  "revision": "c8fcda646d7186ffcdff745b10862a116f9df36e",
+  "roundId": "2026-09-02",
+  "asOfUtc": "2026-09-02T09:23:20Z",
+  "generatedAtUtc": "2026-09-02T09:27:55.755Z",
+  "model": "claude-fable-5",
+  "provider": "claude-cli",
+  "trials": 3,
+  "codeSha": "866c0a5f4c1ec3bae0842d7f584d5c80dd86ce39",
+  "selectedIds": [
+    "b6f2c50f7fc43ef08c155929",
+    "f56b0a7cf127f36c2f90df85",
+    "b72f7bee1d55898d662fb392",
+    "9a31115b723473ad80c73c4f"
+  ],
+  "submission": [
+    {
+      "id": "b6f2c50f7fc43ef08c155929",
+      "prediction": "B"
+    },
+    {
+      "id": "f56b0a7cf127f36c2f90df85",
+      "prediction": "B"
+    },
+    {
+      "id": "b72f7bee1d55898d662fb392",
+      "prediction": "A"
+    },
+    {
+      "id": "9a31115b723473ad80c73c4f",
+      "prediction": "C"
+    }
+  ],
+  "results": [
+    {
+      "schemaVersion": "raven-gonna-test.forecast-result.v1",
+      "taskId": "futurex:c8fcda646d7186ffcdff745b10862a116f9df36e:b6f2c50f7fc43ef08c155929",
+      "answer": {
+        "kind": "categorical",
+        "choice": "B",
+        "probabilities": {
+          "A": 0.24666666666666662,
+          "B": 0.72,
+          "C": 0.03333333333333333
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "answer": {
+            "kind": "categorical",
+            "choice": "B",
+            "probabilities": {
+              "A": 0.18,
+              "B": 0.78,
+              "C": 0.04
+            }
+          },
+          "citations": [],
+          "rawResponse": "**Release timing (Option C):** Statistics Korea publishes monthly CPI at 08:00 KST on the first business days of the following month — August CPI is reliably released around September 2 (e.g., Aug 2025 CPI came out Sept 2, 2025). September 2, 2026 is a Wednesday, and 08:00 KST = 07:00 GMT+8, comfortably before the 09:00 GMT+8 deadline. So \"no release\" is a small tail risk (~4%).\n\n**The level (A vs B):** Korean headline inflation through 2025 ran close to the Bank of Korea's 2% target — readings mostly in the 1.7–2.3% band (Aug 2025 was notably soft at ~1.7%). The BOK's forecasts for 2026 inflation were around 1.8–1.9%, with easing policy predicated on contained price pressures. \n\nFor August 2026 to print ≥2.5% YoY would require a meaningful acceleration above both trend and official forecasts. The soft August 2025 base (~1.7%) does add a mechanical upward tilt of perhaps 0.2–0.4pp to the YoY comparison if monthly momentum is normal, which makes something in the 2.0–2.4% range plausible — but 2.5%+ still needs an additional upside surprise (energy spike, food/won shock). Historical base rates: over the past ~2 years of near-target inflation, monthly prints reached 2.5%+ only occasionally (early 2025 briefly touched ~2.2%; the last 2.5%+ prints were in early 2024).\n\nWeighing the trend (~2%), forecasts (~1.9%), and the favorable base effect against the required surprise, I put the probability of ≥2.5% at roughly 18%.\n\n<answer>{\"probabilities\": {\"A\": 0.18, \"B\": 0.78, \"C\": 0.04}}</answer>\n\n\\boxed{B}",
+          "latencyMs": 31086,
+          "role": "base-rate analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8294,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2006,
+            "output_tokens_details": {
+              "thinking_tokens": 1376
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8294,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2006,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8294,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8294
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.295443,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 1,
+          "answer": {
+            "kind": "categorical",
+            "choice": "B",
+            "probabilities": {
+              "A": 0.16,
+              "B": 0.81,
+              "C": 0.03
+            }
+          },
+          "citations": [],
+          "rawResponse": "This question asks whether South Korea's August 2026 headline CPI will come in at ≥2.5% year-on-year, with the release expected around September 2, 2026 (Statistics Korea typically publishes CPI at 8:00 AM KST on roughly the second day of the following month).\n\n**Release timing (option C):** Statistics Korea is highly reliable on schedule — August CPI has consistently been published in the first days of September at 8:00 KST, which falls before the 10:00 KST (09:00 GMT+8) deadline. Probability of no release is small (~3%), covering only unusual delays.\n\n**Level analysis (A vs. B):**\n- Through 2025, Korean headline inflation ran in a fairly tight 1.7%–2.4% band: roughly 2.0–2.2% for most of the year, dipping to 1.7% in August 2025, then rising to ~2.4% in October–November 2025 partly on base effects and won weakness.\n- The Bank of Korea's forecasts for 2026 inflation were around 1.9–2.0%, and consensus expected inflation near the 2% target through 2026.\n- Base effect: the August 2025 reading was low (1.7% y/y), meaning the comparison base is somewhat depressed. That tilts the August 2026 y/y print higher than the annual average — plausibly into the 2.2–2.5% zone even if underlying inflation runs near 2%.\n- Offsetting: 2.5%+ has been rare in Korea since 2023; even the elevated late-2025 prints topped out at ~2.4%. Reaching 2.5% would require a meaningful upside surprise (sustained won depreciation pass-through, food/energy shocks, or summer weather-driven food price spikes, which do occasionally push August readings up).\n\nBalancing the ~2% central expectation against the low-base effect and the tail risk of food/FX shocks, the probability of a ≥2.5% print is moderate but clearly below even odds — roughly 15–18%.\n\n<answer>{\"probabilities\": {\"A\": 0.16, \"B\": 0.81, \"C\": 0.03}}</answer>\n\n\\boxed{B}",
+          "latencyMs": 29156,
+          "role": "case-specific evidence analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8297,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 1810,
+            "output_tokens_details": {
+              "thinking_tokens": 1107
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8297,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1810,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8297,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8297
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.285704,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 2,
+          "answer": {
+            "kind": "categorical",
+            "choice": "B",
+            "probabilities": {
+              "A": 0.4,
+              "B": 0.57,
+              "C": 0.03
+            }
+          },
+          "citations": [],
+          "rawResponse": "I'll reason through this without live research, using what I know through my evidence cutoff.\n\n**Resolution mechanics (option C):** Statistics Korea (KOSTAT) releases monthly CPI extremely reliably at 08:00 KST on roughly the 2nd of the following month. The deadline of 2026-09-02 09:00 GMT+8 (= 10:00 KST) falls after the customary 08:00 KST release time on the usual release date. KOSTAT essentially never misses this schedule, so C deserves only a small residual probability (~2–3%) for calendar shifts or delays.\n\n**A vs. B — will August 2026 CPI be ≥ 2.5% y/y?**\n\nWhat I know through my training/evidence window:\n- Korean headline CPI ran near the Bank of Korea's 2% target through 2025: roughly 2.0–2.2% in H1 2025, dipping to **1.7% in August 2025** (a notably soft print), then re-accelerating to ~2.1% in September and ~2.4% in October–November 2025, driven by food prices and a weak won (~1,450–1,470/USD).\n- BOK's forecasts for 2026 inflation were around 1.9–2.1% — i.e., near target, not 2.5%+.\n\nKey considerations:\n1. **Base effect favors A:** August 2025's 1.7% is a low base. If sequential inflation in 2026 runs at a pace consistent with ~2.0–2.4% annual inflation, the August 2026 y/y print gets mechanically boosted, plausibly into the 2.3–2.7% range.\n2. **Skeptical counterweights:** BOK's central projection is below 2.5%; the government typically deploys measures to cap food/energy prices when inflation gets politically sensitive; and summer prints can be dampened by government subsidies (e.g., utility/telecom support seen in 2025). Late-2025 momentum (~2.4%) was itself partly base-effect and won-weakness driven, and could fade if the won stabilized. A threshold of 2.5% requires an above-target print — most months in 2024–2025 came in below it.\n3. Momentum entering 2026 was on the firmer side (~2.4%), and the low August base is a genuine tailwind, so this is not a low-probability event — but 2.5% is still above where the distribution's center likely sits.\n\nBalancing the low-base tailwind against BOK's sub-2.5% central forecast and the government's price-management tendencies, I put the probability of ≥2.5% moderately below even.\n\n- A (Yes, ≥2.5%): ~0.40\n- B (No, below 2.5%): ~0.57\n- C (No release): ~0.03\n\n<answer>{\"probabilities\": {\"A\": 0.40, \"B\": 0.57, \"C\": 0.03}}</answer>\n\n\\boxed{B}",
+          "latencyMs": 64243,
+          "role": "adversarial skeptic",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8293,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2273,
+            "output_tokens_details": {
+              "thinking_tokens": 1340
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8293,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2273,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8293,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8293
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.308774,
+            "num_turns": 1
+          }
+        }
+      ],
+      "model": "claude-fable-5",
+      "strategyId": "independent-trials-logit-v1",
+      "policyId": "futurex-closed-no-web-v1",
+      "generatedAtUtc": "2026-09-02T09:24:49.900Z",
+      "fallbackUsed": false,
+      "warnings": [],
+      "derivation": [
+        {
+          "method": "mean-simplex-argmax",
+          "inputs": {
+            "trialChoices": [
+              "B",
+              "B",
+              "B"
+            ],
+            "trialProbabilities": [
+              {
+                "A": 0.18,
+                "B": 0.78,
+                "C": 0.04
+              },
+              {
+                "A": 0.16,
+                "B": 0.81,
+                "C": 0.03
+              },
+              {
+                "A": 0.4,
+                "B": 0.57,
+                "C": 0.03
+              }
+            ]
+          },
+          "chosen": "B",
+          "detail": {
+            "pooledProbabilities": {
+              "A": 0.24666666666666662,
+              "B": 0.72,
+              "C": 0.03333333333333333
+            },
+            "runnerUp": "A",
+            "margin": 0.4733333333333334
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "raven-gonna-test.forecast-result.v1",
+      "taskId": "futurex:c8fcda646d7186ffcdff745b10862a116f9df36e:f56b0a7cf127f36c2f90df85",
+      "answer": {
+        "kind": "categorical",
+        "choice": "B",
+        "probabilities": {
+          "A": 0.31,
+          "B": 0.6,
+          "C": 0.09
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "answer": {
+            "kind": "categorical",
+            "choice": "B",
+            "probabilities": {
+              "A": 0.30000000000000004,
+              "B": 0.6100000000000001,
+              "C": 0.09000000000000001
+            }
+          },
+          "citations": [],
+          "rawResponse": "**Assessing the base rates and context** (no live research permitted; reasoning from pre-cutoff knowledge):\n\n**What this is:** The Nature Restoration Levy comes from Part 3 of the Planning and Infrastructure Act, one of the most contested parts of that legislation in the Lords. Lord Roborough is the Conservative frontbench Defra spokesperson in the Lords and led opposition scrutiny of Part 3, so a regret amendment from him against the implementing regulations fits his established role.\n\n**Base rates for regret amendments/motions in the Lords:**\n- A large share of regret motions are debated but **withdrawn without a division** — that resolves as \"not agreed\" (No).\n- When pressed to a division under the current Labour government, opposition regret motions succeed only sometimes. The government has no Lords majority, but a Conservative-moved regret motion typically needs Liberal Democrat support or heavy crossbench turnout to pass. Lib Dems often abstain on Conservative regret motions, and crossbench turnout on SI debates is low. Frontbench Conservative regret motions in this parliament have passed on occasion (the Lords has inflicted many defeats), but losing or withdrawing is the modal outcome for any single tabled regret amendment.\n- Roborough's likely framing (burdens on farmers/landowners, viability of the levy) is a Conservative-angled critique; Lib Dem environmental objections to Part 3 came from the opposite direction, making a combined opposition vote less certain.\n\n**NO_OFFICIAL_RESULT:** Some chance the motion was not moved, the debate was rescheduled, or no clear record exists by the resolution timestamp — a modest tail probability.\n\n**Estimate:** Combining (i) meaningful probability the amendment is withdrawn without division, (ii) roughly even-to-unfavourable odds if divided, given uncertain Lib Dem/crossbench support, I put \"agreed\" at around 30%, \"not agreed\" at around 60%, and no official result at around 10%.\n\n\\boxed{B}\n\n<answer>{\"probabilities\": {\"A\": 0.3, \"B\": 0.61, \"C\": 0.09}}</answer>",
+          "latencyMs": 69851,
+          "role": "base-rate analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8310,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2420,
+            "output_tokens_details": {
+              "thinking_tokens": 1697
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8310,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2420,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8310,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8310
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.316428,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 1,
+          "answer": {
+            "kind": "categorical",
+            "choice": "B",
+            "probabilities": {
+              "A": 0.30000000000000004,
+              "B": 0.6200000000000001,
+              "C": 0.08000000000000002
+            }
+          },
+          "citations": [],
+          "rawResponse": "This question asks whether the House of Lords agreed to a regret amendment moved by Lord Roborough (Conservative frontbench Defra spokesperson) against the Nature Restoration Levy Regulations 2026 — secondary legislation implementing the levy created by Part 3 of the Planning and Infrastructure Act, under which developers pay Natural England toward environmental delivery plans. The debate would have taken place around 1 September 2026, just as the Lords returned from summer recess. I can't do live research, so this is a base-rate plus case-specific analysis.\n\nKey considerations:\n\n1. **Base rate for regret amendments.** Most regret motions/amendments in the Lords are moved to force a debate and then either withdrawn or, if pressed, decided by division. A substantial share (roughly 30–40%) are withdrawn without a vote — which would mean the House did not agree to it (outcome \"No\" rather than no result, since \"amendment withdrawn\" or \"amendment disagreed\" is an official recorded outcome).\n\n2. **If pressed to a division.** In the current Parliament, the Labour government is a minority in the Lords and has lost divisions frequently. A Conservative frontbench regret amendment can pass when Conservatives whip and Liberal Democrats either support or largely abstain. However, on nature-restoration matters the Lib Dems' critique came from the opposite (pro-environment) direction to the likely Conservative critique (farmland, compulsory purchase, burdens on landowners/developers), so Lib Dem support is uncertain; they often abstain on regret motions. Historically, opposition regret motions pressed to a division under this government have succeeded a bit under half the time — turnout on a first day back from recess adds uncertainty for both sides, though the government whips hard against regret motions.\n\n3. **NO_OFFICIAL_RESULT.** Possible only if the debate slipped past the resolution time or the motion wasn't moved. The question's framing implies it was scheduled for the sitting immediately before resolution, so a modest tail probability for scheduling slippage or the SI being pulled.\n\nPutting it together: P(pressed to division) ≈ 0.55–0.65; conditional P(carried) ≈ 0.45–0.55; withdrawal or defeat both resolve \"No.\"\n\n- P(Yes) ≈ 0.6 × 0.5 ≈ 0.30\n- P(No) ≈ 0.62\n- P(NO_OFFICIAL_RESULT) ≈ 0.08\n\n\\boxed{B}\n\n<answer>{\"probabilities\": {\"A\": 0.30, \"B\": 0.62, \"C\": 0.08}}</answer>",
+          "latencyMs": 152481,
+          "role": "case-specific evidence analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8304,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2766,
+            "output_tokens_details": {
+              "thinking_tokens": 1893
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8304,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2766,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8304,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8304
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.333609,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 2,
+          "answer": {
+            "kind": "categorical",
+            "choice": "B",
+            "probabilities": {
+              "A": 0.33000000000000007,
+              "B": 0.5700000000000001,
+              "C": 0.10000000000000002
+            }
+          },
+          "citations": [],
+          "rawResponse": "This is a political forecasting question about a House of Lords regret motion, so I'll reason from what I know about Lords procedure and the current parliamentary arithmetic rather than tool use (live research is off-limits).\n\n**Context I can establish:**\n- The Nature Restoration Levy stems from Part 3 of the Planning and Infrastructure Act (the Nature Restoration Fund scheme), with implementing regulations expected in 2026.\n- Lord Roborough is the Conservative frontbench Defra spokesman in the Lords and led opposition to Part 3 during the bill's passage, so a frontbench regret motion on the implementing SI is in character.\n- The resolution time (2026-09-02 00:00 UTC) implies the debate was scheduled for around 1 September 2026, right at the Lords' return from summer recess.\n\n**Key considerations, wearing the skeptic's hat:**\n\n1. **Base rate for regret motions:** A large share of regret motions are debated and then withdrawn without a division, or defeated on division. When withdrawn, the Lords has not \"agreed\" to it, which maps to \"No.\" Fatal and regret motions against government SIs fail more often than they succeed.\n\n2. **Arithmetic when pressed to a division:** Labour lacks a Lords majority, and the Conservatives are the largest group. A whipped frontbench regret motion *can* pass — this has happened several times in this Parliament — but success typically requires Liberal Democrat support or abstention plus decent crossbench turnout. Lib Dems frequently decline to back Conservative regret motions, and on nature-restoration matters their critique comes from the opposite (pro-environment) direction from a Tory/landowner critique, making a combined lobby less likely. An early-September sitting day right after recess also tends to have thinner opposition turnout.\n\n3. **Even \"passing\" is not the modal outcome:** Regret motions moved by the official opposition frontbench are pressed to a vote more often than backbench ones, and some have carried in 2024–2026, so \"Yes\" is a live possibility — I'd put it meaningfully above a generic base rate, but still below even odds.\n\n4. **NO_OFFICIAL_RESULT:** Possible if the debate slipped, the motion wasn't moved, or scheduling changed — a modest tail probability, since these questions are usually created off a confirmed order paper listing.\n\nWeighing these: the single most likely outcome is that the motion is either withdrawn after debate or defeated on division (\"No\"), with a substantial minority chance the opposition presses and wins given the government's lack of a Lords majority.\n\nMy calibrated estimate: Yes ≈ 0.33, No ≈ 0.57, NO_OFFICIAL_RESULT ≈ 0.10.\n\n<answer>{\"probabilities\": {\"A\": 0.33, \"B\": 0.57, \"C\": 0.10}}</answer>\n\n\\boxed{B}",
+          "latencyMs": 155436,
+          "role": "adversarial skeptic",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8303,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 3175,
+            "output_tokens_details": {
+              "thinking_tokens": 2217
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8303,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 3175,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8303,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8303
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.35405899999999996,
+            "num_turns": 1
+          }
+        }
+      ],
+      "model": "claude-fable-5",
+      "strategyId": "independent-trials-logit-v1",
+      "policyId": "futurex-closed-no-web-v1",
+      "generatedAtUtc": "2026-09-02T09:26:21.093Z",
+      "fallbackUsed": false,
+      "warnings": [],
+      "derivation": [
+        {
+          "method": "mean-simplex-argmax",
+          "inputs": {
+            "trialChoices": [
+              "B",
+              "B",
+              "B"
+            ],
+            "trialProbabilities": [
+              {
+                "A": 0.30000000000000004,
+                "B": 0.6100000000000001,
+                "C": 0.09000000000000001
+              },
+              {
+                "A": 0.30000000000000004,
+                "B": 0.6200000000000001,
+                "C": 0.08000000000000002
+              },
+              {
+                "A": 0.33000000000000007,
+                "B": 0.5700000000000001,
+                "C": 0.10000000000000002
+              }
+            ]
+          },
+          "chosen": "B",
+          "detail": {
+            "pooledProbabilities": {
+              "A": 0.31,
+              "B": 0.6,
+              "C": 0.09
+            },
+            "runnerUp": "A",
+            "margin": 0.29
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "raven-gonna-test.forecast-result.v1",
+      "taskId": "futurex:c8fcda646d7186ffcdff745b10862a116f9df36e:b72f7bee1d55898d662fb392",
+      "answer": {
+        "kind": "categorical",
+        "choice": "A",
+        "probabilities": {
+          "A": 0.9466666666666668,
+          "B": 0.023333333333333338,
+          "C": 0.008333333333333335,
+          "D": 0.02166666666666667
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "answer": {
+            "kind": "categorical",
+            "choice": "A",
+            "probabilities": {
+              "A": 0.94,
+              "B": 0.03,
+              "C": 0.01,
+              "D": 0.02
+            }
+          },
+          "citations": [],
+          "rawResponse": "**Reasoning (base-rate analyst view):**\n\nBy late 2025 the RBNZ had cut the OCR aggressively through its easing cycle — down to 3.00% at the August 2025 MPS, a 50bp cut to 2.50% in October 2025, and a further 25bp cut to 2.25% in November 2025, with the Bank signalling it was at or very near the trough. Its own projections showed the OCR bottoming around 2.2% and staying low well into 2026–2027 as the economy recovered slowly and inflation returned toward the 2% target midpoint.\n\nFor the 2 September 2026 announcement:\n\n- **Path to \"2.50% or lower\" (A):** This is the default. The OCR entered 2026 at 2.25%. Holding flat, cutting once more to 2.00%, or even hiking a single 25bp step back to 2.50% all keep the outcome in bucket A. Central banks that have just finished an easing cycle typically hold for many quarters; nothing in the New Zealand outlook (weak growth, contained inflation) suggested rapid tightening in 2026.\n- **Path to 2.75% (B):** Would require two full 25bp hikes within roughly nine months of the final cut — historically rare so soon after an easing cycle ends, and inconsistent with RBNZ's published projections, which showed no tightening until late 2027 at the earliest.\n- **Path to 3.00%+ (C):** Would require three-plus hikes — essentially an inflation-shock scenario. Very unlikely.\n- **No official result (D):** RBNZ scheduled announcements are extremely reliable; only a scheduling mismatch or resolution glitch would trigger this. Small residual probability.\n\n**Probabilities:** A ≈ 0.94, B ≈ 0.03, C ≈ 0.01, D ≈ 0.02.\n\n\\boxed{A}\n\n<answer>{\"probabilities\": {\"A\": 0.94, \"B\": 0.03, \"C\": 0.01, \"D\": 0.02}}</answer>",
+          "latencyMs": 114219,
+          "role": "base-rate analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8344,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 1675,
+            "output_tokens_details": {
+              "thinking_tokens": 1007
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8344,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1675,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8344,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8344
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.27991800000000006,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 1,
+          "answer": {
+            "kind": "categorical",
+            "choice": "A",
+            "probabilities": {
+              "A": 0.96,
+              "B": 0.02,
+              "C": 0.005,
+              "D": 0.015
+            }
+          },
+          "citations": [],
+          "rawResponse": "This is a forecasting task I can answer from evidence available before my cutoff, without live research.\n\n**Case-specific analysis:**\n\n1. **Starting point:** At the November 2025 Monetary Policy Statement, the RBNZ cut the OCR to **2.25%**, and its published projections showed an endpoint around ~2.2%, signaling the easing cycle was essentially at or very near its trough. Market pricing at that time put the terminal rate at 2.00–2.25%, with any tightening not expected until well into 2027.\n\n2. **Meeting schedule:** The RBNZ's published 2026 calendar includes a Monetary Policy Review on 2 September 2026, announced at 2pm NZST (which matches the stated ~11:00 GMT+8 resolution window). So a decision on that date is expected, making \"NO_OFFICIAL_RESULT\" a small tail risk (schedule change, emergency postponement).\n\n3. **Path to each option:**\n   - **A (≤2.50%):** Covers holding at 2.25%, one further cut to 2.00%, or even one hike back to 2.50%. Given the NZ economy was weak through 2025 (soft GDP, rising unemployment, inflation back inside the 1–3% band), the OCR sitting at or near 2.25% in September 2026 is overwhelmingly the base case. Essentially every plausible path lands here.\n   - **B (2.75%):** Would require **two 25bp hikes** within ~9 months of the trough — a speed of reversal with almost no precedent absent an inflation shock, and contrary to all guidance as of late 2025.\n   - **C (≥3.00%):** Would require three-plus hikes; effectively negligible.\n   - **D:** Small residual for schedule disruption or resolution ambiguity.\n\n**Probabilities:** A ≈ 0.96, B ≈ 0.02, C ≈ 0.005, D ≈ 0.015.\n\n\\boxed{A}\n\n<answer>{\"probabilities\": {\"A\": 0.96, \"B\": 0.02, \"C\": 0.005, \"D\": 0.015}}</answer>",
+          "latencyMs": 124740,
+          "role": "case-specific evidence analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8350,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2232,
+            "output_tokens_details": {
+              "thinking_tokens": 1536
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8350,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2232,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8350,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8350
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.307884,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 2,
+          "answer": {
+            "kind": "categorical",
+            "choice": "A",
+            "probabilities": {
+              "A": 0.94,
+              "B": 0.02,
+              "C": 0.01,
+              "D": 0.03
+            }
+          },
+          "citations": [],
+          "rawResponse": "This question asks what OCR the RBNZ will announce on 2 September 2026. Working from what I know up to my evidence cutoff, no live research needed.\n\n**Where the OCR stands:** The RBNZ was deep into an easing cycle through 2024–2025: from 5.50% down through repeated cuts, reaching 3.00% in August 2025, 2.50% in October 2025, and 2.25% at the November 2025 Monetary Policy Statement. At that point the RBNZ signaled the OCR was at or near its trough, with market pricing implying at most one further cut (toward ~2.00%) in early-to-mid 2026, against a backdrop of a weak NZ economy, elevated unemployment, and inflation back inside the 1–3% band.\n\n**Skeptical assessment of each option:**\n\n- **A (≤2.50%):** For this *not* to happen, the RBNZ would need to have hiked at least 50bp above the late-2025 level within ~9 months. That would require a major inflation shock and a rapid policy reversal under a brand-new governor (Anna Breman, starting Dec 2025) — historically very rare so soon after an easing cycle ends. The overwhelmingly likely states in Sep 2026 are 2.25%, 2.00%, or 2.50% — all resolve A.\n- **B (2.75%) / C (≥3.00%):** Requires 2–3+ hikes from the trough within months. Central banks almost never pivot that fast absent a crisis-level inflation surprise. Small residual probability only.\n- **D (NO_OFFICIAL_RESULT):** The main skeptical concern — I can't fully verify that 2 September 2026 is on the RBNZ's official review calendar (the 2026 dates I recall clustered around Feb/Apr/May/Jul/Aug/Oct/Nov, though the schedule may have shifted under the new leadership structure). Questions like this are almost always constructed from the published calendar, and the resolution timestamp aligns with an RBNZ 2pm NZT announcement, so I'll keep this small but non-trivial.\n\n**Calibration:** A ~94%, D ~3% (schedule/postponement risk), B ~2%, C ~1%.\n\n<answer>{\"probabilities\": {\"A\": 0.94, \"B\": 0.02, \"C\": 0.01, \"D\": 0.03}}</answer>\n\n\\boxed{A}",
+          "latencyMs": 148735,
+          "role": "adversarial skeptic",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8346,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2226,
+            "output_tokens_details": {
+              "thinking_tokens": 1437
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8346,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2226,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8346,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8346
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.307504,
+            "num_turns": 1
+          }
+        }
+      ],
+      "model": "claude-fable-5",
+      "strategyId": "independent-trials-logit-v1",
+      "policyId": "futurex-closed-no-web-v1",
+      "generatedAtUtc": "2026-09-02T09:27:18.636Z",
+      "fallbackUsed": false,
+      "warnings": [],
+      "derivation": [
+        {
+          "method": "mean-simplex-argmax",
+          "inputs": {
+            "trialChoices": [
+              "A",
+              "A",
+              "A"
+            ],
+            "trialProbabilities": [
+              {
+                "A": 0.94,
+                "B": 0.03,
+                "C": 0.01,
+                "D": 0.02
+              },
+              {
+                "A": 0.96,
+                "B": 0.02,
+                "C": 0.005,
+                "D": 0.015
+              },
+              {
+                "A": 0.94,
+                "B": 0.02,
+                "C": 0.01,
+                "D": 0.03
+              }
+            ]
+          },
+          "chosen": "A",
+          "detail": {
+            "pooledProbabilities": {
+              "A": 0.9466666666666668,
+              "B": 0.023333333333333338,
+              "C": 0.008333333333333335,
+              "D": 0.02166666666666667
+            },
+            "runnerUp": "B",
+            "margin": 0.9233333333333335
+          }
+        }
+      ]
+    },
+    {
+      "schemaVersion": "raven-gonna-test.forecast-result.v1",
+      "taskId": "futurex:c8fcda646d7186ffcdff745b10862a116f9df36e:9a31115b723473ad80c73c4f",
+      "answer": {
+        "kind": "categorical",
+        "choice": "C",
+        "probabilities": {
+          "A": 0.060000000000000005,
+          "B": 0.32333333333333336,
+          "C": 0.4566666666666667,
+          "D": 0.09666666666666668,
+          "E": 0.06333333333333334
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "answer": {
+            "kind": "categorical",
+            "choice": "C",
+            "probabilities": {
+              "A": 0.06,
+              "B": 0.33,
+              "C": 0.44,
+              "D": 0.1,
+              "E": 0.07
+            }
+          },
+          "citations": [],
+          "rawResponse": "This question asks about Australia's June quarter 2026 real GDP quarterly growth (first release from the ABS National Accounts), resolving around 2026-09-02 12:00 GMT+8. I'll reason from base rates and the schedule, as an offline analysis.\n\n**Timing (option E):** The ABS releases June-quarter National Accounts on the first Wednesday of September at 11:30am AEST (Sept 3, 2025; Sept 4, 2024; Sept 6, 2023). The first Wednesday of September 2026 is September 2. 11:30 AEST = 09:30 GMT+8, about 2.5 hours before the resolution deadline. So the release should land just in time — the question's \"resolved around\" timestamp suggests the author anticipated this. Residual risk of a schedule shift or delay is small, ~5–8%.\n\n**Growth distribution:** Australian quarterly GDP first prints in recent years have clustered between 0.0% and 0.7%: Q1 2025 was 0.2%, Q2 2025 first print 0.6%, and late-2025 prints ran around 0.3–0.6% as the economy recovered on the back of RBA rate cuts and real income recovery. The RBA's forecasts through 2025 pointed to growth firming toward ~2% annualized in 2026, i.e., roughly 0.4–0.6% per quarter. Population growth alone (~0.3–0.4%/qtr) makes negative quarters rare outside shocks — Australia hasn't printed a negative quarter since the COVID/lockdown period. Prints of 0.8%+ are also uncommon in the current modest-growth environment.\n\nBase rates over the past ~4 years of first prints: below 0% roughly 5–10% of the time, 0.0–0.3% about 40%, 0.4–0.7% about 40%, 0.8%+ about 10%. Given the expected mild acceleration into 2026, I tilt slightly toward the 0.4–0.7% bucket, while keeping substantial weight on 0.0–0.3% given Australia's recent tendency to undershoot forecasts.\n\nFinal allocation: A 6%, B 33%, C 44%, D 10%, E 7%.\n\n\\boxed{C}\n\n<answer>{\"probabilities\": {\"A\": 0.06, \"B\": 0.33, \"C\": 0.44, \"D\": 0.10, \"E\": 0.07}}</answer>",
+          "latencyMs": 58939,
+          "role": "base-rate analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8383,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 1804,
+            "output_tokens_details": {
+              "thinking_tokens": 1010
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8383,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1804,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8383,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8383
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.28718,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 1,
+          "answer": {
+            "kind": "categorical",
+            "choice": "C",
+            "probabilities": {
+              "A": 0.05,
+              "B": 0.29,
+              "C": 0.51,
+              "D": 0.08,
+              "E": 0.07
+            }
+          },
+          "citations": [],
+          "rawResponse": "This question asks about Australia's June quarter 2026 real GDP growth (first release), resolving 2026-09-02 12:00 GMT+8. I'll reason from the ABS release schedule and recent Australian macro conditions, as instructed (no live research).\n\n**Release timing (option E):** The ABS publishes the June quarter National Accounts roughly nine weeks after quarter-end, on the Wednesday of the first week of September, at 11:30am AEST (Sep 4, 2024; Sep 3, 2025). September 2, 2026 is that Wednesday, and 11:30 AEST = 09:30 GMT+8 — about 2.5 hours before the deadline. The ABS almost never slips these releases, so E is a small tail risk (~5%), covering a schedule anomaly or a date one week later than the historical pattern.\n\n**Growth range:** Context as of my evidence window: the RBA was in an easing cycle through 2025 (cuts in February, May, August, November), inflation had returned toward the 2–3% band, real incomes were recovering, and quarterly GDP growth had firmed from the weak 2023–24 stretch (Q1 2025: +0.2%; Q2 2025: +0.6% on first release; Q3 2025: ~+0.4%). RBA and consensus forecasts had GDP growth accelerating to around 2–2.25% year-ended through 2026, implying quarterly prints of roughly 0.4–0.6%.\n\n- **A (<0.0%):** A negative quarter would require a shock not evident in the data through mid-2026; Australia hasn't printed a negative quarter since the COVID era. Low, ~5%.\n- **B (0.0–0.3%):** Quite plausible — Australian first prints frequently surprise soft (e.g., Q1 2025's 0.2% vs ~0.4% expected), and public demand/exports have been volatile. ~29%.\n- **C (0.4–0.7%):** The central case given consensus ~0.5% and the recovery trajectory. ~50%.\n- **D (≥0.8%):** Would need a meaningful upside surprise; quarterly prints ≥0.8% have been rare since 2022. ~8%.\n\nAustralia reports to one decimal place, so the option boundaries (0.3/0.4, 0.7/0.8) partition cleanly.\n\nFinal probabilities: A 0.05, B 0.29, C 0.50, D 0.08, E 0.08 → rounding E down slightly given the ABS's near-perfect punctuality: A 0.05, B 0.29, C 0.51, D 0.08, E 0.07.\n\nMost likely outcome: **C** (0.4% to 0.7%).\n\n\\boxed{C}\n\n<answer>{\"probabilities\": {\"A\": 0.05, \"B\": 0.29, \"C\": 0.51, \"D\": 0.08, \"E\": 0.07}}</answer>",
+          "latencyMs": 94659,
+          "role": "case-specific evidence analyst",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8387,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2659,
+            "output_tokens_details": {
+              "thinking_tokens": 1705
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8387,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2659,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8387,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8387
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.330011,
+            "num_turns": 1
+          }
+        },
+        {
+          "trial": 2,
+          "answer": {
+            "kind": "categorical",
+            "choice": "C",
+            "probabilities": {
+              "A": 0.07,
+              "B": 0.35,
+              "C": 0.42,
+              "D": 0.11,
+              "E": 0.05
+            }
+          },
+          "citations": [],
+          "rawResponse": "This is a forecasting question I can reason through directly from known facts (no live research permitted).\n\n**Release timing (option E):** The ABS publishes the quarterly National Accounts about nine weeks after quarter end, on the first Wednesday of the month, at 11:30am AEST. For the June quarter: 7 Sep 2022, 6 Sep 2023, 4 Sep 2024, 3 Sep 2025 — always the first Wednesday of September. The first Wednesday of September 2026 is **2 September 2026**, and 11:30 AEST is 09:30 GMT+8, comfortably before the 12:00 GMT+8 deadline. The main residual risk is an unusual calendar shift or a resolver timing issue, so E deserves a small but non-trivial probability (~5%).\n\n**The growth number:** As of my evidence cutoff, the Australian economy had been in a gradual recovery: quarterly real GDP growth ran 0.2–0.3% through 2024, then Q1 2025 ~0.3% and Q2 2025 +0.6%, with the RBA easing (cash rate cut through 2025) and forecasting annual growth firming toward ~2%+ into 2026 — implying quarterly prints centred around 0.4–0.6%. Consumer spending was recovering on real income gains, though productivity and public-demand handoff risks kept downside scenarios alive.\n\nBase-rate view of recent first-release prints (last ~4 years, excluding COVID distortions): most fall in 0.0–0.7%, with 0.2–0.6% the dominant zone. Prints below zero are rare outside shocks (~5–8% chance); prints of 0.8%+ are also uncommon in a mid-cycle economy (~8–10%), though slightly more plausible if rate cuts fed a stronger 2026 rebound.\n\nAs an adversarial check against overconfidence in the \"recovery continues\" narrative: forecasters in 2024–25 repeatedly over-predicted Australian growth (several 0.2% prints against ~0.4% consensus), so I keep substantial weight on the 0.0–0.3% band rather than loading everything on C.\n\nMy allocation:\n- A (<0.0%): 7%\n- B (0.0–0.3%): 35%\n- C (0.4–0.7%): 42%\n- D (≥0.8%): 11%\n- E (no release): 5%\n\n<answer>{\"probabilities\": {\"A\": 0.07, \"B\": 0.35, \"C\": 0.42, \"D\": 0.11, \"E\": 0.05}}</answer>\n\n\\boxed{C}",
+          "latencyMs": 93151,
+          "role": "adversarial skeptic",
+          "usage": {
+            "input_tokens": 2,
+            "cache_creation_input_tokens": 8385,
+            "cache_read_input_tokens": 27868,
+            "output_tokens": 2273,
+            "output_tokens_details": {
+              "thinking_tokens": 1423
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 8385,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 2273,
+                "cache_read_input_tokens": 27868,
+                "cache_creation_input_tokens": 8385,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 8385
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "total_cost_usd": 0.31067100000000003,
+            "num_turns": 1
+          }
+        }
+      ],
+      "model": "claude-fable-5",
+      "strategyId": "independent-trials-logit-v1",
+      "policyId": "futurex-closed-no-web-v1",
+      "generatedAtUtc": "2026-09-02T09:27:55.753Z",
+      "fallbackUsed": false,
+      "warnings": [],
+      "derivation": [
+        {
+          "method": "mean-simplex-argmax",
+          "inputs": {
+            "trialChoices": [
+              "C",
+              "C",
+              "C"
+            ],
+            "trialProbabilities": [
+              {
+                "A": 0.06,
+                "B": 0.33,
+                "C": 0.44,
+                "D": 0.1,
+                "E": 0.07
+              },
+              {
+                "A": 0.05,
+                "B": 0.29,
+                "C": 0.51,
+                "D": 0.08,
+                "E": 0.07
+              },
+              {
+                "A": 0.07,
+                "B": 0.35,
+                "C": 0.42,
+                "D": 0.11,
+                "E": 0.05
+              }
+            ]
+          },
+          "chosen": "C",
+          "detail": {
+            "pooledProbabilities": {
+              "A": 0.060000000000000005,
+              "B": 0.32333333333333336,
+              "C": 0.4566666666666667,
+              "D": 0.09666666666666668,
+              "E": 0.06333333333333334
+            },
+            "runnerUp": "B",
+            "margin": 0.13333333333333336
+          }
+        }
+      ]
+    }
+  ]
+}
