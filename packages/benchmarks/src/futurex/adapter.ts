@@ -16,7 +16,7 @@ const CHOICE_LINE = /^\s*([A-Z])\.\s+(?:the outcome be\s+)?(.+?)\s*$/gim;
 const NUMERIC_PATTERN = /\b(?:numeric prediction|how (?:many|much)|what (?:will|is|was)(?: be)? (?:the )?(?:closing )?(?:price|value|number|total|rate|percentage|percent|index|close|open|margin|duration)|average price|day(?:'s)? close|grain index|revenue|gross bookings?|gross merchandise volume|market capitalization|adjusted ebitda|sales|reserves?|inventor(?:y|ies)|storage|claims|gdp growth|pmi|box office gross|working gas|productivity growth|policy repo rate|elo rating|runs?|winning margin|rated good or excellent)\b|\b(?:usd|cny|dkk|nt\$)\s*(?:millions?|billions?)\b|\b(?:millions?|billions?|two decimal places|one decimal place|annualized quarter-over-quarter)\b/i;
 const RANKING_PATTERN = /\b(?:rank|ranking|ranked|ordered|in order|top \d+)\b/i;
 const MULTI_PATTERN = /\b(?:select all|choose all|all that apply|more than one)\b/i;
-const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates)\s+will\b/i;
+const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates|fixtures|matches|games)\s+will\b/i;
 const STRONG_SINGLE_PATTERN = /\b(?:who will win|winner of|which (?:candidate|ticket|club|team|player|person) will (?:win|receive)|most votes|\bvs\.?\b)\b/i;
 const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)\}/i;
 // The prompt often DECLARES its answer type outright ("Return only the exact
@@ -41,6 +41,12 @@ const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\
 // "unknown" both score 0, so hedging forfeits the upside for nothing.
 const HEDGED_PREDICTION =
   /\b(?:not yet|unknown|unclear|cannot|can't|unable|to be (?:announced|confirmed|determined)|tbd|n\/a|no (?:public|official) )/i;
+// FutureX stores a submission row as one scalar string. Packing independent
+// candidates into that scalar made the 2026-08-19 AFL answer
+// "A | B | Essendon v Port Adelaide" score zero even though it contained the
+// resolved fixture. A true multi-answer task must be routed and reviewed as
+// such; a scalar open-text answer must commit to one canonical value.
+const PACKED_OPEN_TEXT_PREDICTION = /\||[\r\n]|;\s*\S|^\s*\[[\s\S]*\]\s*$/;
 // A count of discrete things: the truth is necessarily a whole number. Sigma is
 // 5% of it, so on a small count a fractional answer falls outside the parabola
 // completely — 2.22 against a truth of 2 scores 0 where 2 scores 1. Rates,
@@ -160,6 +166,14 @@ export function routeFutureXQuestion(
       choices: extractedChoices,
       confidence: multi || single ? 0.9 : 0.75,
       reasons: [multi ? "multi-answer semantics before instruction boilerplate" : single ? "single-winner semantics" : "enumerated choices; default singleton"]
+    };
+  }
+  if (STRONG_MULTI_PATTERN.test(semantic)) {
+    return {
+      kind: "open_text",
+      choices: [],
+      confidence: 0.55,
+      reasons: ["open-ended multi-answer wording requires explicit answer-cardinality review"]
     };
   }
   if (NUMERIC_PATTERN.test(question.en_title) || NUMERIC_PATTERN.test(question.prompt)) {
@@ -351,6 +365,12 @@ export function validateFutureXSubmission(
     // These are errors, not warnings: a sentence is never a right answer, and a
     // silent 0 on an L4 question is expensive.
     if (route.kind === "open_text") {
+      if (PACKED_OPEN_TEXT_PREDICTION.test(prediction)) {
+        errors.push(
+          `Open-text prediction for ${question.id} packs multiple candidates into one scalar answer: ${prediction.slice(0, 80)}. ` +
+            "Commit to one canonical answer, or route and review the task as a supported multi-answer type."
+        );
+      }
       if (PROSE_PREDICTION.test(prediction)) {
         errors.push(`Open-text prediction for ${question.id} reads as prose, not an answer: ${prediction.slice(0, 80)}`);
       }

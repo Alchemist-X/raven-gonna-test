@@ -366,7 +366,33 @@ describe("FutureX open-text submission validation", () => {
 
   it("accepts a bare entity name", () => {
     expect(check("Kyle Larson").valid).toBe(true);
-    expect(check("St Kilda v Gold Coast | Collingwood v Brisbane").valid).toBe(true);
+    // A slash can be part of one official bilingual/alias answer; it is not a
+    // candidate-list separator.
+    expect(check("Geister / Ghost Song").valid).toBe(true);
+  });
+
+  it("rejects packed candidates and flags the 2026-08-19 AFL regression for cardinality review", () => {
+    for (const prediction of [
+      "St Kilda v Gold Coast | Carlton v Fremantle | Essendon v Port Adelaide",
+      "St Kilda v Gold Coast; Essendon v Port Adelaide",
+      "St Kilda v Gold Coast\nEssendon v Port Adelaide",
+      '["St Kilda v Gold Coast", "Essendon v Port Adelaide"]'
+    ]) {
+      const report = check(prediction);
+      expect(report.valid).toBe(false);
+      expect(report.errors.join("\n")).toMatch(/packs multiple candidates/i);
+    }
+
+    const aflQuestion = {
+      ...question,
+      id: "25cd695a325d2ab9b3474844",
+      en_title: "Which AFL Round 24 fixtures will be decided by 12 points or fewer?"
+    };
+    expect(routeFutureXQuestion(aflQuestion)).toMatchObject({
+      kind: "open_text",
+      confidence: 0.55,
+      reasons: ["open-ended multi-answer wording requires explicit answer-cardinality review"]
+    });
   });
 
   it("rejects prose, which the grader scores 0 on an exact-string comparison", () => {
