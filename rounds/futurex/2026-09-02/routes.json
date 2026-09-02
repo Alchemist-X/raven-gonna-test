@@ -1,0 +1,1762 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-routes.v1",
+  "revision": "c8fcda646d7186ffcdff745b10862a116f9df36e",
+  "routes": {
+    "53291015d4ceea45d1941cfd": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:20:36.891Z"
+      }
+    },
+    "167bb4ef370014543026294c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, above 0.0%"
+        },
+        {
+          "key": "B",
+          "text": "No, 0.0% or lower"
+        },
+        {
+          "key": "C",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "97d22dafd8711544e1d3c321": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "352abcb9053b93f7758938d9": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "e36c90edc3f4fdb6ff1670cc": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, 6.0% or higher"
+        },
+        {
+          "key": "B",
+          "text": "No, below 6.0%"
+        },
+        {
+          "key": "C",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "b6f2c50f7fc43ef08c155929": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, 2.5% or higher"
+        },
+        {
+          "key": "B",
+          "text": "No, below 2.5%"
+        },
+        {
+          "key": "C",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "7977e7f0d71d56afeda047e8": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "705f8dc5c3a438565cbba782": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below 2.75%"
+        },
+        {
+          "key": "B",
+          "text": "2.75%"
+        },
+        {
+          "key": "C",
+          "text": "Above 2.75%"
+        },
+        {
+          "key": "D",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "74108d07fe402e68cce26270": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Fremantle"
+        },
+        {
+          "key": "B",
+          "text": "Hawthorn"
+        },
+        {
+          "key": "C",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "04300853f6cb3b71028ec448": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "75964739cdee0deaa1fcfbf0": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "fb6c144e036ad8a646d8836d": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "261308fc52ee4cbeb68db7a6": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_DATA"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "0e1f9599763ffd0323cfc2e6": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "79ed0ceb4422d1d2eb107dce": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, above 0.0%"
+        },
+        {
+          "key": "B",
+          "text": "No, 0.0% or lower"
+        },
+        {
+          "key": "C",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "c275e1bd537b1e378a7d5a42": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, above 0.0%"
+        },
+        {
+          "key": "B",
+          "text": "No, 0.0% or below"
+        },
+        {
+          "key": "C",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "691082df3b869fae4fd63f14": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "f56b0a7cf127f36c2f90df85": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "e23fc79e458a357350007175": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "5b711b4e9c0087b57ecf492a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "6cfb9525761abee18c55fb9a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0 to 49"
+        },
+        {
+          "key": "B",
+          "text": "50 to 99"
+        },
+        {
+          "key": "C",
+          "text": "100 to 199"
+        },
+        {
+          "key": "D",
+          "text": "200 or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "e2f0db167f4d38e5ecd38147": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 17%"
+        },
+        {
+          "key": "B",
+          "text": "17% to under 20%"
+        },
+        {
+          "key": "C",
+          "text": "20% to under 23%"
+        },
+        {
+          "key": "D",
+          "text": "23% or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "4be47864d3acb5095cf189b6": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0.0 mm"
+        },
+        {
+          "key": "B",
+          "text": "0.1 to 4.9 mm"
+        },
+        {
+          "key": "C",
+          "text": "5.0 to 19.9 mm"
+        },
+        {
+          "key": "D",
+          "text": "20.0 mm or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_DATA"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "8c54f57ee223b4a798175cb0": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 0.5%"
+        },
+        {
+          "key": "B",
+          "text": "0.5% to under 0.8%"
+        },
+        {
+          "key": "C",
+          "text": "0.8% to under 1.1%"
+        },
+        {
+          "key": "D",
+          "text": "1.1% or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "54cda0cb1f93bf01e01f1f05": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0.0 mm"
+        },
+        {
+          "key": "B",
+          "text": "0.1 to 4.9 mm"
+        },
+        {
+          "key": "C",
+          "text": "5.0 to 19.9 mm"
+        },
+        {
+          "key": "D",
+          "text": "20.0 mm or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_DATA"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "f74f3f9dc1f61cb210bdd19c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 8%"
+        },
+        {
+          "key": "B",
+          "text": "8% to under 10%"
+        },
+        {
+          "key": "C",
+          "text": "10% to under 12%"
+        },
+        {
+          "key": "D",
+          "text": "12% or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "6e8507c15cf3415c5924696f": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below 52.00%"
+        },
+        {
+          "key": "B",
+          "text": "52.00% to 55.99%"
+        },
+        {
+          "key": "C",
+          "text": "56.00% to 59.99%"
+        },
+        {
+          "key": "D",
+          "text": "60.00% or above"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "b72f7bee1d55898d662fb392": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "2.50% or lower"
+        },
+        {
+          "key": "B",
+          "text": "2.75%"
+        },
+        {
+          "key": "C",
+          "text": "3.00% or higher"
+        },
+        {
+          "key": "D",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "fac981828c6bb295a8797d22": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Separation confirmed and a healthy post-separation signal acquired"
+        },
+        {
+          "key": "B",
+          "text": "Separation confirmed but no healthy post-separation signal acquired"
+        },
+        {
+          "key": "C",
+          "text": "Separation not confirmed"
+        },
+        {
+          "key": "D",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "86115720e39351aaa8ea7264": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below 3.75%"
+        },
+        {
+          "key": "B",
+          "text": "3.75%"
+        },
+        {
+          "key": "C",
+          "text": "Above 3.75%"
+        },
+        {
+          "key": "D",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "b5bea707524108175c5d0bfd": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "a3480f0d4f6a2552d63c185a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "3 games"
+        },
+        {
+          "key": "B",
+          "text": "4 games"
+        },
+        {
+          "key": "C",
+          "text": "5 games"
+        },
+        {
+          "key": "D",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "d41b2e392fa07b75c57ab8db": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0 or 1"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        },
+        {
+          "key": "C",
+          "text": "3"
+        },
+        {
+          "key": "D",
+          "text": "4 or more"
+        },
+        {
+          "key": "E",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "9a31115b723473ad80c73c4f": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below 0.0%"
+        },
+        {
+          "key": "B",
+          "text": "0.0% to 0.3%"
+        },
+        {
+          "key": "C",
+          "text": "0.4% to 0.7%"
+        },
+        {
+          "key": "D",
+          "text": "0.8% or higher"
+        },
+        {
+          "key": "E",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "e8a6c1cdedeb89d9b8232377": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Deficit below A$1.0 billion"
+        },
+        {
+          "key": "B",
+          "text": "Deficit of A$1.0 billion or more"
+        },
+        {
+          "key": "C",
+          "text": "Surplus below A$2.0 billion"
+        },
+        {
+          "key": "D",
+          "text": "Surplus of A$2.0 billion or more"
+        },
+        {
+          "key": "E",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "0df67389ed472f6e5d471a3c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "-0.6% or lower"
+        },
+        {
+          "key": "B",
+          "text": "-0.5% to -0.1%"
+        },
+        {
+          "key": "C",
+          "text": "0.0% to 0.4%"
+        },
+        {
+          "key": "D",
+          "text": "0.5% or higher"
+        },
+        {
+          "key": "E",
+          "text": "No official release by the deadline"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "98d31711ae611ab34507be3c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "South Africa Women win"
+        },
+        {
+          "key": "B",
+          "text": "Draw"
+        },
+        {
+          "key": "C",
+          "text": "Black Ferns win"
+        },
+        {
+          "key": "D",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "69383e45d4a428a1fa5ba541": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Aston Martin"
+        },
+        {
+          "key": "B",
+          "text": "BMW"
+        },
+        {
+          "key": "C",
+          "text": "Cadillac"
+        },
+        {
+          "key": "D",
+          "text": "Ferrari"
+        },
+        {
+          "key": "E",
+          "text": "Peugeot"
+        },
+        {
+          "key": "F",
+          "text": "Porsche"
+        },
+        {
+          "key": "G",
+          "text": "Toyota"
+        },
+        {
+          "key": "H",
+          "text": "Other listed manufacturer"
+        },
+        {
+          "key": "I",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "6ac9b2cf8ba5f8d0d824f81d": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Australia"
+        },
+        {
+          "key": "B",
+          "text": "Bahrain"
+        },
+        {
+          "key": "C",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "da756a7d6fd2b98f94b1e09e": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "South Sydney Rabbitohs"
+        },
+        {
+          "key": "B",
+          "text": "Sydney Roosters"
+        },
+        {
+          "key": "C",
+          "text": "Draw"
+        },
+        {
+          "key": "D",
+          "text": "CANCELLED"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "9c7282360a154debbb2b3db5": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Single entity (one music video title); the source-native sentence made the detector fall through to numeric. Graded by semantic string match."
+      }
+    },
+    "761caad018e2345555057250": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:20:36.891Z"
+      }
+    },
+    "28def5ab1dc56c7802ecf240": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "a4c46a21175d880887403c7e": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "7eeebb6d4af2dbcc83d97184": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "baf399b495512d3a19d5e1f6": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "44fc17b46782c7a47ac33778": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "87d39957157f6b3e5310ae2b": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "a77953b50e6b5861b9b55fde": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Single entity (stage winner rider name); detector fell through to numeric."
+      }
+    },
+    "8c5e24989b4d71c55f527637": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Single entity (stage winner rider name); detector fell through to numeric."
+      }
+    },
+    "6f10e2d8bd613daae5e261cd": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Single entity (game title); detector fell through to numeric."
+      }
+    },
+    "a4e4e2301524b264b22a45fa": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "29b0af29dd8c2c65d6765ee4": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "558ed9f7989cd1211e9bdfe3": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "c5b37f70132c134c0d1f0f41": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "0794938eee8080b862598e67": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "1454affbbe6be9905c9f4416": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "07af37dcb6badd38f94f3d70": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "3f59413b5d41e7e4b348364b": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "bcb7549ddc47c050c87f0138": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "c6dd2dd3411c817b5d2814ea": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "89f11790932ac7bdb27ca560": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "9572328a3b73c04d4a536e77": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "5ae08cdb254f9da682a3bf2c": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "a7a05bd60a3e47ca647fa2bf": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Five boards ordered by waiting-list size (largest first); official L4 grading is position-by-position with 0.8x overlap credit. Detector had no top-N phrase and fell to numeric."
+      }
+    },
+    "8bdd168b874092d9457e012f": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "db9d6bbe2ccb32799cd58612": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "7c35c0432b4e55946d807d43": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Five drivers in official classification order; detector missed the ordering phrase."
+      }
+    },
+    "a3b899fb1a3e3e35ee7a0836": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "b05b2e464b83a90983fbbcbc": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "ac023fa48f27f8729e242987": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "asks for an exact measured quantity"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewedAtUtc": "2026-09-02T08:26:26.137Z"
+      }
+    },
+    "15d8f8f66e2afb25b7582d16": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Five drivers in official classification order; detector missed the ordering phrase."
+      }
+    },
+    "0274869d6fa8453ee0c405ed": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "First five leaderboard rows in order; open candidate set."
+      }
+    },
+    "81e4babe368b85ab78612646": {
+      "kind": "ranking",
+      "rankCount": 4,
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Four semifinalists — semantically an unordered set; submitted as four comma-joined names, which both the ordered and unordered official metrics accept."
+      }
+    },
+    "6e0f01a1bf944ba8ae599891": {
+      "kind": "ranking",
+      "rankCount": 3,
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-02T08:20:36.834Z",
+        "notes": "Podium in official finishing order; detector missed the ordering phrase."
+      }
+    }
+  }
+}

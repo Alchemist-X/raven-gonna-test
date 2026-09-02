@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-submission-log.v1",
+  "round": "2026-09-02",
+  "deadlineUtc": "2026-09-02T16:00:00Z",
+  "recipient": "FutureX-ai@outlook.com",
+  "channel": "email (FutureX has no submission API)",
+  "datasetRevision": "c8fcda646d7186ffcdff745b10862a116f9df36e",
+  "leaderboardUpdateDue": "2026-09-10T16:00:00Z",
+  "submissions": [],
+  "candidates": [
+    {
+      "entry": "raven_labs/claude-opus-5",
+      "attachment": "submission-opus.jsonl",
+      "sha256": "cf85bca15d74dd580933ad99b11d1b683d54867428bb6adf499e932dcac2ef36",
+      "evidenceCutoffUtc": "2026-09-02T08:26:26Z",
+      "agentFrameworkCommit": "d2b86a1a017ffe6bb34bd1c8b8b475d32eef0588",
+      "emailBody": "email-opus.txt",
+      "status": "awaiting human send",
+      "note": "4 already-closed questions answered with retrieval withheld (spliced, recorded in manifest); 2 MLB total-runs questions answered from base rates with zero retrieval; 2 ranking rows re-derived after the aggregation fix."
+    }
+  ]
+}

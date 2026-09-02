@@ -1,0 +1,99 @@
+{
+  "rows": 75,
+  "byKind": {
+    "single_choice": 40,
+    "open_text": 4,
+    "numeric": 19,
+    "ranking": 12
+  },
+  "byLevel": {
+    "1": {
+      "questions": 20,
+      "trials": 24,
+      "searches": 134,
+      "urls": 799,
+      "researched": 18,
+      "meanSearchesPerTrial": 5.6,
+      "meanUrlsPerTrial": 33.3
+    },
+    "2": {
+      "questions": 20,
+      "trials": 42,
+      "searches": 211,
+      "urls": 1293,
+      "researched": 18,
+      "meanSearchesPerTrial": 5,
+      "meanUrlsPerTrial": 30.8
+    },
+    "3": {
+      "questions": 20,
+      "trials": 59,
+      "searches": 423,
+      "urls": 2227,
+      "researched": 18,
+      "meanSearchesPerTrial": 7.2,
+      "meanUrlsPerTrial": 37.7
+    },
+    "4": {
+      "questions": 15,
+      "trials": 56,
+      "searches": 623,
+      "urls": 4107,
+      "researched": 15,
+      "meanSearchesPerTrial": 11.1,
+      "meanUrlsPerTrial": 73.3
+    }
+  },
+  "trials": 181,
+  "searches": 1391,
+  "sourceUrls": 8426,
+  "fallbackAnswers": [],
+  "zeroResearchAnswers": [
+    {
+      "id": "44fc17b46782c7a47ac33778",
+      "level": 3,
+      "title": "What exact total runs will the New York Yankees and Los Angeles Angels score in MLB game 823983?",
+      "prediction": "9"
+    },
+    {
+      "id": "87d39957157f6b3e5310ae2b",
+      "level": 3,
+      "title": "What exact total runs will the New York Yankees and San Diego Padres score in MLB game 823257?",
+      "prediction": "8"
+    }
+  ],
+  "closedNoWebAnswers": [
+    {
+      "id": "b6f2c50f7fc43ef08c155929",
+      "level": 1,
+      "title": "Will South Korea's August 2026 headline CPI inflation be at least 2.5% year on year?",
+      "prediction": "B"
+    },
+    {
+      "id": "f56b0a7cf127f36c2f90df85",
+      "level": 1,
+      "title": "Will the UK House of Lords agree to Lord Roborough's regret amendment on the Nature Restoration Levy Regulations 2026?",
+      "prediction": "B"
+    },
+    {
+      "id": "b72f7bee1d55898d662fb392",
+      "level": 2,
+      "title": "What Official Cash Rate will the Reserve Bank of New Zealand announce on 2 September 2026?",
+      "prediction": "A"
+    },
+    {
+      "id": "9a31115b723473ad80c73c4f",
+      "level": 2,
+      "title": "What range will Australia's real GDP quarterly growth occupy in the June quarter 2026 first release?",
+      "prediction": "C"
+    }
+  ],
+  "usageTotals": {
+    "input_tokens": 3330,
+    "cache_creation_input_tokens": 4774553,
+    "cache_read_input_tokens": 75464387,
+    "output_tokens": 1472445,
+    "total_cost_usd": 166.36,
+    "num_turns": 2778
+  }
+}
