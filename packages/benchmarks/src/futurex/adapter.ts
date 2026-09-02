@@ -39,10 +39,12 @@ const SOURCE_NATIVE_VALUE_PATTERN = /return exactly the source-native value requ
 // ("Composite CPI +2.1% year-on-year (Census…"), which the grader compares by
 // exact string and scores 0. The noun list is what makes this safe: "what exact
 // film/winner/team" stays an entity question.
-// An entity name or a ` | `-separated list, never a sentence. Sentence-ending
-// punctuation mid-string, a parenthetical gloss, or sheer length all mark an
-// answer the grader will score 0 on an exact-string comparison.
-const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\b|:\s/i;
+// An entity name, never a sentence. Sentence-ending punctuation mid-string, a
+// parenthetical gloss, or a "label: 1.2%" construction all mark an answer the
+// grader will score 0 on an exact-string comparison. A colon alone is not
+// prose: "Hollow Knight: Silksong" is a title, so the colon rule needs a digit
+// somewhere after it before it fires.
+const PROSE_PREDICTION = /[.!?]\s+\S|\s\(|\bapprox(?:imately)?\b|\byear-on-year\b|:\s[^\n]*\d/i;
 // A refusal dressed as an answer. R1 says never abstain: a wrong guess and an
 // "unknown" both score 0, so hedging forfeits the upside for nothing.
 const HEDGED_PREDICTION =

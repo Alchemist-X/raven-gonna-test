@@ -197,6 +197,11 @@ export function parseClaudeStream(stdout: string): ParsedClaudeStream {
  * process flakes — is worth a bounded retry.
  */
 export function isRetryableClaudeFailure(message: string): boolean {
+  // "Failed to authenticate. API Error: 403 Request not allowed" arrived in a
+  // burst under twelve concurrent CLIs on 2026-09-02 and cost 13 trials; the
+  // same questions passed on rerun. Worth the bounded retry despite the 403 —
+  // a revoked or missing credential says so in other words.
+  if (/403 Request not allowed/i.test(message)) return true;
   return !/401|403|OAuth|revoked|unauthorized|invalid_request|log.?in|logged.?in|timed out/i.test(message);
 }
 

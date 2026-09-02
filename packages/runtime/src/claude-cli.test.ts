@@ -3,7 +3,17 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import type { ModelRequest } from "@raven-gonna-test/forecast-core";
 import { describe, expect, it } from "vitest";
-import { buildClaudeCliArgs, ClaudeCliPredictor, parseClaudeStream } from "./claude-cli.js";
+import { buildClaudeCliArgs, ClaudeCliPredictor, isRetryableClaudeFailure, parseClaudeStream } from "./claude-cli.js";
+
+describe("isRetryableClaudeFailure", () => {
+  it("retries the transient 403 burst seen under concurrent CLIs, but not a revoked credential or a timeout", () => {
+    expect(isRetryableClaudeFailure("Claude CLI exited 1: Failed to authenticate. API Error: 403 Request not allowed")).toBe(true);
+    expect(isRetryableClaudeFailure("Claude CLI exited 1: OAuth token revoked")).toBe(false);
+    expect(isRetryableClaudeFailure("Claude CLI exited 1: 403 forbidden")).toBe(false);
+    expect(isRetryableClaudeFailure("Claude CLI timed out after 900000ms.")).toBe(false);
+    expect(isRetryableClaudeFailure("Claude CLI exited 1: stream disconnected")).toBe(true);
+  });
+});
 
 const request = (overrides: Partial<ModelRequest> = {}): ModelRequest =>
   ({

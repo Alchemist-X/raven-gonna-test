@@ -417,6 +417,10 @@ describe("FutureX open-text submission validation", () => {
 
   it("accepts a bare entity name", () => {
     expect(check("Kyle Larson").valid).toBe(true);
+    // A colon inside a title is not a sentence: this exact answer was rejected
+    // as prose on the 2026-09-02 live run and blocked the whole submission.
+    expect(check("Hollow Knight: Silksong").valid).toBe(true);
+    expect(check("Spider-Man: Brand New Day").valid).toBe(true);
     // A slash can be part of one official bilingual/alias answer; it is not a
     // candidate-list separator.
     expect(check("Geister / Ghost Song").valid).toBe(true);
