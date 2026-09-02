@@ -58,11 +58,15 @@ const PACKED_OPEN_TEXT_PREDICTION = /\||[\r\n]|;\s*\S|^\s*\[[\s\S]*\]\s*$/;
 // completely — 2.22 against a truth of 2 scores 0 where 2 scores 1. Rates,
 // revenues and percentages are excluded: those are genuinely continuous.
 const COUNT_TITLE_PATTERN =
-  /\bhow many\b|\b(?:total |exact )?number of\b|\bhow many .*\bwins?\b/i;
+  /\bhow many\b|\b(?:total |exact )?number of\b|\bhow many .*\bwins?\b|\b(?:exact )?total (?:runs|goals|points|wins)\b/i;
 const NON_COUNT_PATTERN = /\b(?:rate|percentage|percent|inflation|revenue|price|index|balance|receipts|yield|change)\b/i;
+// A prose unit naming discrete things ("patients", "filtered wind reports") is
+// a count as surely as a _count field suffix is.
+const COUNT_UNIT_PATTERN =
+  /_(?:count|items|patients|runs|wins|games)$|^(?:[\w-]+\s+)*(?:patients|kits|vulnerabilities|deaths|outbreaks|cases|reports|runs|goals|points|games|wins|matches|people|persons|units|items)$/i;
 
 export function isCountQuestion(title: string, unit?: string): boolean {
-  if (unit && /_(?:count|items|patients|runs|wins|games)$/i.test(unit)) return true;
+  if (unit && COUNT_UNIT_PATTERN.test(unit.trim())) return true;
   return COUNT_TITLE_PATTERN.test(title) && !NON_COUNT_PATTERN.test(title);
 }
 
@@ -108,12 +112,18 @@ function semanticPrompt(prompt: string): string {
 }
 
 const NUMERIC_TARGET_FIELD = /numeric value for\s+([A-Za-z0-9_]+)/i;
+// The 2026-08-26+ wire format states the unit as prose ("Report the value in
+// thousand barrels.") instead of naming a field. Without it the task carries
+// no unit and each trial picks its own scale — which is how the 2026-08-19
+// HMRC receipts answer came back a thousandfold apart across trials.
+const REPORT_UNIT_SENTENCE = /\breport the value in\s+([^.\n]+?)\.?\s*(?:\n|$)/i;
 
 /** The snake_case field FutureX will publish the answer under, when the prompt
  *  names one. It encodes both the quantity and its scale (usd_millions,
- *  yoy_percent), which is exactly what the model must be told. */
+ *  yoy_percent), which is exactly what the model must be told. Falls back to
+ *  the prose unit sentence, in which case the value is words ("USD billion"). */
 export function numericTargetField(prompt: string): string | undefined {
-  return prompt.match(NUMERIC_TARGET_FIELD)?.[1];
+  return prompt.match(NUMERIC_TARGET_FIELD)?.[1] ?? prompt.match(REPORT_UNIT_SENTENCE)?.[1]?.trim();
 }
 
 export function routeFutureXQuestion(

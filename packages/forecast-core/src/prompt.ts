@@ -33,6 +33,16 @@ function answerShape(task: ForecastTask): string {
   }
 }
 
+// A snake_case field name carries its scale in its suffix (_usd_millions); a
+// prose unit ("USD billion") carries it in words. Each needs its own wording.
+function isFieldName(unit: string): boolean {
+  return /^[A-Za-z0-9_]+$/.test(unit) && unit.includes("_");
+}
+
+function unitLabel(unit: string): string {
+  return isFieldName(unit) ? `field: \`${unit}\`` : `unit: ${unit}`;
+}
+
 function taskContract(task: ForecastTask): string {
   switch (task.kind) {
     case "binary_probability":
@@ -44,10 +54,16 @@ function taskContract(task: ForecastTask): string {
     case "ranking":
       return task.candidates.length > 0
         ? `Return exactly ${task.rankCount} candidates in predicted order. Candidates: ${task.candidates.join(", ")}.`
-        : `Return exactly ${task.rankCount} canonical entity names in predicted order as a JSON array.`;
+        // Graded position by position against the resolving source's own
+        // list, and the grader splits the submitted string on commas — so a
+        // comma inside a name would be read as two entries.
+        : `Return exactly ${task.rankCount} entity names in predicted order as a JSON array, each spelled exactly as the resolving source publishes it (official title or full name, no commentary); if a name itself contains a comma, write it without the comma.`;
     case "numeric":
       if (task.integerValued) {
-        return `Return a whole number — this quantity is a count and cannot be fractional${task.unit ? ` (field: \`${task.unit}\`)` : ""}. Bare integer only: no units, commas, decimals, or ranges.`;
+        return `Return a whole number — this quantity is a count and cannot be fractional${task.unit ? ` (${unitLabel(task.unit)})` : ""}. Bare integer only: no units, commas, decimals, or ranges.`;
+      }
+      if (task.unit && !isFieldName(task.unit)) {
+        return `Return the value in exactly this unit and scale: ${task.unit}. Read the scale carefully (for example "USD billion" means 78.3 for $78.3 billion, "JPY 100 million" means 32000 for ¥3.2 trillion, "thousand barrels" means 418000 for 418 million barrels, "percent" means percentage points such as 2.7, not 0.027). Bare number only: no units, commas, or ranges.`;
       }
       return task.unit
         ? `Return the value for the published field \`${task.unit}\`, in exactly that field's units and scale — read the field name carefully (for example _usd_millions means millions, _percent means percentage points such as 2.7, not 0.027). Bare number only: no units, commas, or ranges.`

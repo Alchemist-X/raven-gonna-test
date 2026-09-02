@@ -10,7 +10,9 @@ import {
   buildProphetCurrentResponse,
   expandForecastBenchQuestionSet,
   futureXQuestionsToTasks,
+  isCountQuestion,
   normalizeProphetRequest,
+  numericTargetField,
   prophetEventToTasks,
   scoreForecastBenchRaw,
   scoreFutureX,
@@ -453,5 +455,38 @@ describe("FutureX open-text submission validation", () => {
     expect(check("Not yet publicly confirmed as of Aug 18, 2026").valid).toBe(false);
     expect(check("unknown").valid).toBe(false);
     expect(check("To be announced").valid).toBe(false);
+  });
+});
+
+describe("FutureX prose-unit wire format (2026-09-02)", () => {
+  const base = {
+    id: "0794938eee8080b862598e67",
+    end_time: "2026-09-02T23:30:00+08:00",
+    level: 3,
+    en_title: "What U.S. commercial crude-oil stock level will EIA report for the week ending 28 August 2026?",
+    prompt:
+      "You are an agent that can predict future events. The event to be predicted: \"What U.S. commercial crude-oil stock level will EIA report for the week ending 28 August 2026? (resolved around 2026-09-02T23:30:00+08:00 (GMT+8)).\"\n" +
+      "Return exactly the source-native value required by the settlement contract, with no units or commentary.\n" +
+      "Report the value in thousand barrels.\n" +
+      "IMPORTANT: End with \\boxed{YOUR_PREDICTION}."
+  };
+  const options = { revision: "c8fcda646d7186ffcdff745b10862a116f9df36e", roundId: "2026-09-02", asOfUtc: "2026-09-02T08:00:00.000Z" };
+
+  it("carries the prose unit sentence onto the task as its unit", () => {
+    expect(numericTargetField(base.prompt)).toBe("thousand barrels");
+    const { tasks } = futureXQuestionsToTasks([base], options);
+    expect(tasks[0]).toMatchObject({ kind: "numeric", unit: "thousand barrels" });
+    expect((tasks[0] as { integerValued?: boolean }).integerValued).toBeUndefined();
+    expect(numericTargetField("Return only the exact published numeric value for revenue_usd_millions.")).toBe("revenue_usd_millions");
+  });
+
+  it("marks a prose count unit and a 'total runs' title as integer-valued, but not a scaled unit", () => {
+    expect(isCountQuestion("How many filtered wind reports will NOAA SPC list?", "filtered wind reports")).toBe(true);
+    expect(isCountQuestion("What cumulative number of cases will ECDC state?", "cases")).toBe(true);
+    expect(isCountQuestion("What exact total runs will the Yankees and Angels score in MLB game 823983?")).toBe(true);
+    expect(isCountQuestion("What U.S. goods-and-services trade deficit will BEA report?", "USD billion")).toBe(false);
+    expect(isCountQuestion("What current-account balance will Japan report?", "JPY 100 million")).toBe(false);
+    const counted = futureXQuestionsToTasks([{ ...base, id: "c5b37f70132c134c0d1f0f41", en_title: "How many filtered wind reports will NOAA SPC list for the convective day of 5 September 2026?", prompt: base.prompt.replace("thousand barrels", "filtered wind reports") }], options).tasks[0];
+    expect(counted).toMatchObject({ kind: "numeric", unit: "filtered wind reports", integerValued: true });
   });
 });
