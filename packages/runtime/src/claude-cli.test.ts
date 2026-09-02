@@ -1,4 +1,4 @@
-import { chmodSync, mkdtempSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import type { ModelRequest } from "@raven-gonna-test/forecast-core";
@@ -40,6 +40,14 @@ describe("buildClaudeCliArgs", () => {
     expect(args[args.indexOf("--allowedTools") + 1]).toBe("WebSearch WebFetch");
   });
 
+  it("isolates the call from operator context so every machine runs the same harness", () => {
+    const args = buildClaudeCliArgs({ model: "m" }, request());
+    // Empty setting-sources drops user/project/local settings (and the rules
+    // files they inject) while retrieval and auth keep working.
+    expect(args[args.indexOf("--setting-sources") + 1]).toBe("");
+    expect(args).toContain("--strict-mcp-config");
+  });
+
   it("appends rather than replaces the system prompt, keeping tool-use behaviour", () => {
     const args = buildClaudeCliArgs({ model: "m" }, request({ systemPrompt: "Cutoff: 2026-08-17." }));
     expect(args).toContain("--append-system-prompt");
@@ -79,6 +87,7 @@ describe("parseClaudeStream", () => {
         message: {
           model: "claude-opus-5",
           content: [
+            { type: "tool_use", name: "WebSearch", input: { query: "official guidance midpoint" } },
             { type: "tool_use", name: "WebFetch", input: { url: "https://fetched.example/a" } },
             { type: "text", text: "thinking out loud" }
           ]
@@ -94,6 +103,7 @@ describe("parseClaudeStream", () => {
     const parsed = parseClaudeStream(stream);
     expect(parsed.content).toBe("<answer>0.62</answer>");
     expect(parsed.citations.sort()).toEqual(["https://fetched.example/a", "https://search.example/b"]);
+    expect(parsed.searchQueries).toEqual(["official guidance midpoint"]);
     expect(parsed.usage).toMatchObject({ input_tokens: 10, total_cost_usd: 0.25, num_turns: 3 });
     expect(parsed.model).toBe("claude-opus-5");
     expect(parsed.isError).toBe(false);
@@ -177,8 +187,38 @@ describe("ClaudeCliPredictor", () => {
   });
 
   it("fails the trial when the CLI exits non-zero", async () => {
-    const predictor = new ClaudeCliPredictor({ model: "m", executable: fakeClaude("Not logged in", 1) });
+    const predictor = new ClaudeCliPredictor({ model: "m", maxRetries: 0, executable: fakeClaude("Not logged in", 1) });
     await expect(predictor.generate(request(), new AbortController().signal)).rejects.toThrow(/exited 1/);
+  });
+
+  it("retries a transient failure and succeeds on the second attempt", async () => {
+    // Earned by a real incident: a transient upstream burst (kimi base URL)
+    // failed every trial of a batch that passed cleanly when rerun.
+    const directory = mkdtempSync(path.join(tmpdir(), "claude-retry-"));
+    const flag = path.join(directory, "failed-once");
+    const script = path.join(directory, "fake-claude");
+    writeFileSync(
+      script,
+      `#!/bin/sh\ncat > /dev/null\nif [ ! -f "${flag}" ]; then\n  touch "${flag}"\n  echo "upstream 529 overloaded" >&2\n  exit 1\nfi\ncat <<'STREAM'\n${resultEvent("<answer>0.5</answer>")}\nSTREAM\nexit 0\n`
+    );
+    chmodSync(script, 0o755);
+    const predictor = new ClaudeCliPredictor({ model: "m", maxRetries: 1, retryBaseMs: 1, executable: script });
+    const response = await predictor.generate(request(), new AbortController().signal);
+    expect(response.content).toBe("<answer>0.5</answer>");
+  });
+
+  it("does not retry a revoked credential, which no retry can fix", async () => {
+    const directory = mkdtempSync(path.join(tmpdir(), "claude-count-"));
+    const countFile = path.join(directory, "attempts");
+    const script = path.join(directory, "fake-claude");
+    writeFileSync(
+      script,
+      `#!/bin/sh\ncat > /dev/null\necho attempt >> "${countFile}"\necho "API Error: 401 OAuth access token has been revoked." >&2\nexit 1\n`
+    );
+    chmodSync(script, 0o755);
+    const predictor = new ClaudeCliPredictor({ model: "m", maxRetries: 2, retryBaseMs: 1, executable: script });
+    await expect(predictor.generate(request(), new AbortController().signal)).rejects.toThrow(/revoked/);
+    expect(readFileSync(countFile, "utf8").trim().split("\n")).toHaveLength(1);
   });
 
   it("fails rather than returning an empty answer the parser would choke on", async () => {

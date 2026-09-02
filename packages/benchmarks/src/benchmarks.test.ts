@@ -75,6 +75,27 @@ describe("FutureX adapter", () => {
     expect(validateFutureXSubmission(questions, submission, { deadlineUtc: options.deadlineUtc, now: new Date("2026-08-12T15:00:00Z") }).valid).toBe(true);
   });
 
+  it("CSV-quotes ranking entities that contain commas without changing cardinality", () => {
+    const id = "comma-rank";
+    const question = {
+      id,
+      prompt: "Return the top five titles in order.",
+      end_time: "2026-09-01T23:59:59+08:00",
+      level: 4 as const,
+      en_title: "Billboard top five titles"
+    };
+    const result: ForecastResult = {
+      ...binaryResult(`futurex:${"a".repeat(40)}:${id}`, 0.5),
+      answer: {
+        kind: "ranking",
+        order: ["Boston", "Choosin' Texas", "I Knew It, I Knew You", "Been By Now", "Second Wind"]
+      }
+    };
+    const submission = buildFutureXSubmission([question], [result]);
+    expect(submission[0]?.prediction).toContain('"I Knew It, I Knew You"');
+    expect(validateFutureXSubmission([question], submission).valid).toBe(true);
+  });
+
   it("scores deterministic FutureX types and returns null for unavailable semantics", () => {
     const resolved = [
       { id: "a", prompt: "A or B", end_time: "2026-01-01", level: 1, en_title: "choice", task_type: "single_choice", ground_truth: "A" },
@@ -169,6 +190,32 @@ describe("FutureX adapter", () => {
       en_title: "What exact film will the festival announce as its opening selection?",
       prompt: "IMPORTANT: end with \\boxed{YOUR_PREDICTION}"
     }).kind).toBe("open_text");
+  });
+
+  it("routes the 2026-08-26 source-native wire format without flattening lists into numerics", () => {
+    const common = { end_time: "2026-09-01", level: 4 as const };
+    const prompt = (title: string) =>
+      `The event to be predicted: "${title}"\n` +
+      "Return exactly the source-native value required by the settlement contract, with no units or commentary.";
+    for (const title of [
+      "U.S. job openings — July 2026 JOLTS",
+      "Utility patents issued in the USPTO Official Gazette dated 1 September 2026",
+      "Australia total construction work done — June quarter 2026"
+    ]) {
+      expect(routeFutureXQuestion({ ...common, id: title, en_title: title, prompt: prompt(title) })).toMatchObject({
+        kind: "numeric"
+      });
+    }
+    for (const [title, rankCount] of [
+      ["Box Office Mojo Domestic Weekend 35 top five film titles", 5],
+      ["La Vuelta 2026 official general-classification top ten after Stage 9", 10],
+      ["Official winners of the six UFC Shanghai main-card bouts", 6]
+    ] as const) {
+      expect(routeFutureXQuestion({ ...common, id: title, en_title: title, prompt: prompt(title) })).toMatchObject({
+        kind: "ranking",
+        rankCount
+      });
+    }
   });
 
   it("does not call a question a ranking when there is nothing to order", () => {

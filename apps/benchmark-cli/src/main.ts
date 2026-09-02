@@ -46,6 +46,7 @@ import {
 } from "@raven-gonna-test/benchmarks";
 import {
   ClaudeCliPredictor,
+  CodexCliPredictor,
   ConcurrencyLimitedModel,
   OpenAICompatiblePredictor,
   loadPredictorConfig,
@@ -216,7 +217,18 @@ function createPort(config: ReturnType<typeof loadPredictorConfig>) {
     return new ClaudeCliPredictor({
       model: config.model,
       timeoutMs: config.timeoutMs,
-      ...(config.claudeEffort ? { effort: config.claudeEffort } : {})
+      ...(config.claudeEffort ? { effort: config.claudeEffort } : {}),
+      ...(config.maxRetries !== undefined ? { maxRetries: config.maxRetries } : {}),
+      ...(config.retryBaseMs !== undefined ? { retryBaseMs: config.retryBaseMs } : {})
+    });
+  }
+  if (config.provider === "codex-cli") {
+    return new CodexCliPredictor({
+      model: config.model,
+      timeoutMs: config.timeoutMs,
+      ...(config.codexEffort ? { effort: config.codexEffort } : {}),
+      ...(config.maxRetries !== undefined ? { maxRetries: config.maxRetries } : {}),
+      ...(config.retryBaseMs !== undefined ? { retryBaseMs: config.retryBaseMs } : {})
     });
   }
   return new OpenAICompatiblePredictor(config);
@@ -297,6 +309,16 @@ async function writeReasoningArtifact(
         role: trial.role ?? null,
         answer: trial.answer,
         citations: trial.citations,
+        searchQueries: trial.citations
+          .filter((citation) => citation.startsWith("search://"))
+          .map((citation) => {
+            try {
+              return decodeURIComponent(citation.slice("search://".length));
+            } catch {
+              return citation.slice("search://".length);
+            }
+          }),
+        sourceUrls: trial.citations.filter((citation) => /^https?:\/\//i.test(citation)),
         thinking: trial.thinking ?? null,
         rawResponse: trial.rawResponse,
         latencyMs: trial.latencyMs,
@@ -307,6 +329,62 @@ async function writeReasoningArtifact(
   const reasoningPath = `${output.replace(/\.jsonl?$/i, "")}.reasoning.jsonl`;
   await writeJsonLinesAtomic(reasoningPath, records);
   return reasoningPath;
+}
+
+const USAGE_TOTAL_FIELDS = [
+  "input_tokens",
+  "cached_input_tokens",
+  "cache_creation_input_tokens",
+  "cache_read_input_tokens",
+  "output_tokens",
+  "reasoning_output_tokens",
+  "web_search_requests",
+  "total_cost_usd",
+  "num_turns"
+] as const;
+
+function resultAuditSummary(result: ForecastResult) {
+  const usageTotals: Record<string, number> = {};
+  let searchQueries = 0;
+  let sourceUrls = 0;
+  for (const trial of result.trials) {
+    searchQueries += trial.citations.filter((citation) => citation.startsWith("search://")).length;
+    sourceUrls += trial.citations.filter((citation) => /^https?:\/\//i.test(citation)).length;
+    for (const field of USAGE_TOTAL_FIELDS) {
+      const value = trial.usage?.[field];
+      if (typeof value === "number" && Number.isFinite(value)) {
+        usageTotals[field] = (usageTotals[field] ?? 0) + value;
+      }
+    }
+  }
+  return { usageTotals, searchQueries, sourceUrls };
+}
+
+async function writeRunAuditArtifact(output: string, results: readonly ForecastResult[]): Promise<string> {
+  const totals: Record<string, number> = {};
+  let trials = 0;
+  let searchQueries = 0;
+  let sourceUrls = 0;
+  for (const result of results) {
+    const summary = resultAuditSummary(result);
+    trials += result.trials.length;
+    searchQueries += summary.searchQueries;
+    sourceUrls += summary.sourceUrls;
+    for (const [field, value] of Object.entries(summary.usageTotals)) totals[field] = (totals[field] ?? 0) + value;
+  }
+  const auditPath = `${output.replace(/\.jsonl?$/i, "")}.audit.json`;
+  await writeJsonAtomic(auditPath, {
+    schemaVersion: "raven-gonna-test.futurex-run-audit.v1",
+    generatedAtUtc: new Date().toISOString(),
+    records: results.length,
+    trials,
+    fallbackAnswers: results.filter((result) => result.fallbackUsed).length,
+    researchedAnswers: results.filter((result) => result.trials.some((trial) => trial.citations.length > 0)).length,
+    searchQueries,
+    sourceUrls,
+    usageTotals: totals
+  });
+  return auditPath;
 }
 
 /**
@@ -459,10 +537,14 @@ async function loadResumeResults(
 
 async function commandDoctor(): Promise<void> {
   const provider = process.env.PREDICTOR_PROVIDER ?? "openai-compatible";
-  const claudeCli = provider === "claude-cli";
-  // The CLI provider is ready when the CLI itself is authenticated, which this
+  const subscriptionCli = provider === "claude-cli" || provider === "codex-cli";
+  // A CLI provider is ready when the CLI itself is authenticated, which this
   // process cannot see; reporting an API-key check for it would be misleading.
-  const providerReady = claudeCli ? "check `claude auth status`" : Boolean(process.env.PREDICTOR_API_KEY?.trim());
+  const providerReady = provider === "claude-cli"
+    ? "check `claude auth status`"
+    : provider === "codex-cli"
+      ? "check `codex login status`"
+      : Boolean(process.env.PREDICTOR_API_KEY?.trim());
   process.stdout.write(`${JSON.stringify({
     repository: "raven-gonna-test",
     node: process.version,
@@ -470,8 +552,10 @@ async function commandDoctor(): Promise<void> {
     predictor: {
       provider,
       ready: providerReady,
-      model: process.env.PREDICTOR_MODEL ?? (claudeCli ? "claude-sonnet-5" : "foresight-v4"),
-      ...(claudeCli
+      model:
+        process.env.PREDICTOR_MODEL ??
+        (provider === "claude-cli" ? "claude-sonnet-5" : provider === "codex-cli" ? "gpt-5.6-sol" : "foresight-v4"),
+      ...(subscriptionCli
         ? {}
         : { baseUrl: safeProviderUrl(process.env.PREDICTOR_BASE_URL ?? "https://api.lightningrod.ai/v1/openai") })
     },
@@ -551,7 +635,7 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       // back to the live detector, so drift means we would optimize one kind
       // while the grader parses another.
       const drifted = inferred !== undefined && inferred.kind !== route.kind;
-      const unsure = (route.inference?.confidence ?? 1) < lowConfidence;
+      const unsure = (route.inference?.confidence ?? 1) <= lowConfidence;
       return { id, kind: route.kind, inferredKind: inferred?.kind, drifted, unsure, status: route.review?.status ?? "pending" };
     });
     const needsEyes = rows.filter((row) => row.drifted || row.unsure);
@@ -570,6 +654,14 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     );
     const reviewed = FutureXRouteOverrideFileSchema.parse({ ...routeFile, routes: updated });
     await writeJsonAtomic(routePath, reviewed);
+    await writeManifest(routePath, {
+      benchmark: "futurex",
+      revision: routeFile.revision,
+      records: rows.length,
+      kind: "route-review",
+      reviewedRoutes: targets.length,
+      reviewStatus: status
+    });
     ok(`FutureX routes marked ${status}: ${targets.length}/${rows.length} (reviewedAtUtc=${reviewedAtUtc})`);
     if (needsEyes.length > 0) {
       warn(
@@ -669,12 +761,21 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     }
     if (window.open.length === 0) throw new Error("Every FutureX question is past its end_time; nothing to research.");
     assertFutureXRoutesReviewed(questions.map((question) => question.id), routeFile);
-    const { tasks } = futureXQuestionsToTasks(questions, {
+    const { tasks: unsortedTasks } = futureXQuestionsToTasks(questions, {
       revision,
       roundId,
       asOfUtc,
       deadlineUtc,
       routeOverrides: routeFile.routes
+    });
+    // Questions can resolve before the round's submission deadline. Put the
+    // soonest ones first, then enforce the earlier of event end and submission
+    // deadline inside the batch so a queued/in-flight task cannot research the
+    // answer after it becomes public.
+    const tasks = [...unsortedTasks].sort((left, right) => {
+      const leftEnd = left.resolution.dateUtc ? new Date(left.resolution.dateUtc).getTime() : Number.POSITIVE_INFINITY;
+      const rightEnd = right.resolution.dateUtc ? new Date(right.resolution.dateUtc).getTime() : Number.POSITIVE_INFINITY;
+      return leftEnd - rightEnd;
     });
     const { config, engine } = createEngine();
     requirePaidOptIn(args, tasks.length * config.trials);
@@ -685,7 +786,12 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       asOfUtc,
       deadlineUtc,
       model: config.model,
+      provider: config.provider,
       trials: config.trials,
+      reasoningEffort: config.reasoningEffort,
+      effortOverride: config.claudeEffort ?? config.codexEffort ?? "none",
+      researchSources: config.researchSources.join(","),
+      inputSha256: await sha256File(input),
       // A checkpoint entry is keyed by taskId, which does not encode the route
       // kind. Re-routing a question and resuming would therefore hand back a
       // cached answer of the WRONG kind — a free-text sentence for a question
@@ -693,15 +799,39 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       routesSha256: await sha256File(required(args, "routes"))
     };
     const resumeResults = await loadResumeResults(args, checkpointPath, tasks, checkpointIdentity);
+    if (resumeResults && enabled(args, "retry-fallbacks")) {
+      let removed = 0;
+      for (const [taskId, result] of resumeResults) {
+        const cutoffFallback = result.fallbackUsed && result.warnings.some((warning) =>
+          warning.startsWith("Live research skipped: task cutoff ")
+        );
+        if (result.fallbackUsed && !cutoffFallback) {
+          resumeResults.delete(taskId);
+          removed += 1;
+        }
+      }
+      info(`resume retry-fallbacks removed ${removed} provider/timeout fallback(s); preserved cutoff fallbacks`);
+    }
     const results = await runForecastBatch(tasks, engine, policyForFutureXTask, {
       concurrency: config.concurrency,
       checkpointPath,
       checkpointIdentity,
       ...(resumeResults ? { resumeResults } : {}),
+      checkpointEvery: 5,
       // R1: a missing answer scores 0 and a wrong one is not penalised, so
       // never abstain. Without this one pathological question yields no
       // submission row at all, because buildFutureXSubmission throws on a gap.
       fallbackFor: (task) => defaultAnswerForTask(task),
+      notAfterUtcFor: (task) => {
+        const candidates = [task.resolution.dateUtc, deadlineUtc]
+          .filter((value): value is string => Boolean(value))
+          .map((value) => new Date(value).getTime())
+          .filter(Number.isFinite);
+        if (candidates.length === 0) return undefined;
+        // Stop retrieval one minute before the published boundary so clock
+        // skew and a last response chunk cannot cross into resolved evidence.
+        return new Date(Math.min(...candidates) - 60_000).toISOString();
+      },
       forecastOptions: {
         trials: config.trials,
         concurrency: Math.min(config.trials, 3),
@@ -713,7 +843,15 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       // 3.6x spread that uniform spend ignores. metadata.level was already
       // written by the adapter and read by nothing.
       forecastOptionsFor: (task) => futureXLevelOptions(task, config),
-      onProgress: (completed, total, task) => info(`FutureX ${completed}/${total}: ${task.origin.externalId}`)
+      onProgress: (completed, total, task, result) => {
+        const audit = resultAuditSummary(result);
+        const tokenTotal = (audit.usageTotals.input_tokens ?? 0) + (audit.usageTotals.output_tokens ?? 0);
+        info(
+          `FutureX ${completed}/${total}: ${task.origin.externalId}` +
+          ` trials=${result.trials.length} searches=${audit.searchQueries} urls=${audit.sourceUrls}` +
+          ` tokens=${tokenTotal}${result.fallbackUsed ? " [fallback]" : ""}`
+        );
+      }
     });
     const submission = buildFutureXSubmission(questions, results);
     const report = validateFutureXSubmission(questions, submission, {
@@ -724,6 +862,7 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     if (!report.valid) throw new Error(report.errors.join("\n"));
     await writeJsonLinesAtomic(output, submission);
     const reasoningPath = await writeReasoningArtifact(output, tasks, results, submission);
+    const auditPath = await writeRunAuditArtifact(output, results);
     const unresearched = results.filter((result) => result.trials.every((trial) => trial.citations.length === 0));
     if (unresearched.length > 0) {
       warn(
@@ -739,16 +878,28 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       roundId,
       model: config.model,
       provider: config.provider,
+      // Enough harness identity to tell whether two runs are comparable:
+      // trials is the per-question ceiling, effortOverride the provider-level
+      // escalation past the engine's own reasoningEffort.
+      trials: config.trials,
+      effortOverride: config.claudeEffort ?? config.codexEffort ?? null,
+      reasoningEffort: config.reasoningEffort,
+      researchSources: config.researchSources,
+      inputSha256: await sha256File(input),
+      routesSha256: await sha256File(required(args, "routes")),
+      codeSha: process.env.RAVEN_CODE_SHA ?? null,
       records: submission.length,
       mode,
       evidenceCutoff: asOfUtc,
       routeFile: path.basename(required(args, "routes")),
       reasoning: path.basename(reasoningPath),
+      audit: path.basename(auditPath),
       fallbackAnswers: results.filter((result) => result.fallbackUsed).length,
       validation: report
     });
     ok(`FutureX validated artifact written: ${output}`);
     ok(`FutureX reasoning trace written: ${reasoningPath}`);
+    ok(`FutureX run audit written: ${auditPath}`);
     return;
   }
   if (action === "pilot") {
@@ -1113,5 +1264,13 @@ async function main(): Promise<void> {
 
 main().catch((error) => {
   process.stderr.write(`[ERR] ${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
+  // An AggregateError's message says only that every trial failed; the causes
+  // live in .errors, and swallowing them makes the failure undiagnosable from
+  // the log — which is the only thing a detached batch run leaves behind.
+  if (error instanceof AggregateError) {
+    for (const cause of error.errors) {
+      process.stderr.write(`[ERR]   cause: ${cause instanceof Error ? cause.message : String(cause)}\n`);
+    }
+  }
   process.exitCode = 1;
 });

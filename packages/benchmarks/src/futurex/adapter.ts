@@ -14,7 +14,8 @@ import {
 
 const CHOICE_LINE = /^\s*([A-Z])\.\s+(?:the outcome be\s+)?(.+?)\s*$/gim;
 const NUMERIC_PATTERN = /\b(?:numeric prediction|how (?:many|much)|what (?:will|is|was)(?: be)? (?:the )?(?:closing )?(?:price|value|number|total|rate|percentage|percent|index|close|open|margin|duration)|average price|day(?:'s)? close|grain index|revenue|gross bookings?|gross merchandise volume|market capitalization|adjusted ebitda|sales|reserves?|inventor(?:y|ies)|storage|claims|gdp growth|pmi|box office gross|working gas|productivity growth|policy repo rate|elo rating|runs?|winning margin|rated good or excellent)\b|\b(?:usd|cny|dkk|nt\$)\s*(?:millions?|billions?)\b|\b(?:millions?|billions?|two decimal places|one decimal place|annualized quarter-over-quarter)\b/i;
-const RANKING_PATTERN = /\b(?:rank|ranking|ranked|ordered|in order|top \d+)\b/i;
+const RANKING_PATTERN =
+  /\b(?:rank|ranking|ranked|ordered|in order|top (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)|winners? of the (?:\d+|one|two|three|four|five|six|seven|eight|nine|ten))\b/i;
 const MULTI_PATTERN = /\b(?:select all|choose all|all that apply|more than one)\b/i;
 const STRONG_MULTI_PATTERN = /\bwhich\s+(?:[\w'-]+\s+){0,4}(?:cards|accounts|countries|states|teams|players|projects|movies|songs|works|events|companies|nominees|candidates|fixtures|matches|games)\s+will\b/i;
 const STRONG_SINGLE_PATTERN = /\b(?:who will win|winner of|which (?:candidate|ticket|club|team|player|person) will (?:win|receive)|most votes|\bvs\.?\b)\b/i;
@@ -27,6 +28,11 @@ const BOXED_ALTERNATIVES_PATTERN = /\\boxed\{([^{}]+)\}\s*or\s*\\boxed\{([^{}]+)
 // aggregated by exact-string vote and tie-broken alphabetically.
 const NUMERIC_CONTRACT_PATTERN =
   /boxed numeric value|exact published numeric value|only the exact numeric|numeric prediction only/i;
+// The 2026-08-26 wire format removed the target field/unit from many L3/L4
+// prompts and replaced it with this generic settlement-contract sentence.
+// It is numeric only after ranking language has had first refusal: the same
+// sentence also appears on "top five" and "six winners" list questions.
+const SOURCE_NATIVE_VALUE_PATTERN = /return exactly the source-native value required by the settlement contract/i;
 // "what exact <measurement> will X report" asks for a quantity even when the
 // prompt only supplies the generic \boxed{YOUR_PREDICTION} envelope, so the
 // contract pattern above does not fire. Routed as free text these produce prose
@@ -88,8 +94,13 @@ function rankingCount(text: string): number | undefined {
     const end = Number(range[2]);
     if (end >= start) return end - start + 1;
   }
-  const count = text.match(/(?:top|rank)\s+(\d+)/i)?.[1];
-  return count ? Number(count) : undefined;
+  const token = text.match(/(?:top|rank)\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i)?.[1]
+    ?? text.match(/winners? of the (\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/i)?.[1];
+  if (!token) return undefined;
+  if (/^\d+$/.test(token)) return Number(token);
+  return ({ one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 } as const)[
+    token.toLowerCase() as "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine" | "ten"
+  ];
 }
 
 function semanticPrompt(prompt: string): string {
@@ -157,6 +168,14 @@ export function routeFutureXQuestion(
       if (count) route.rankCount = count;
       return route;
     }
+  }
+  if (SOURCE_NATIVE_VALUE_PATTERN.test(question.prompt)) {
+    return {
+      kind: "numeric",
+      choices: [],
+      confidence: 0.9,
+      reasons: ["generic source-native settlement value after ranking exclusion"]
+    };
   }
   if (extractedChoices.length >= 2) {
     const multi = MULTI_PATTERN.test(semantic) || STRONG_MULTI_PATTERN.test(semantic);
@@ -267,6 +286,43 @@ function decimal(value: number): string {
   return String(Number(value.toPrecision(15)));
 }
 
+/** CSV is the only reversible representation available inside FutureX's one
+ * string prediction field. In particular, ranking entities can themselves
+ * contain commas (song and film titles), so a plain split/join silently changes
+ * the number of answers. */
+export function parseFutureXList(value: string): string[] {
+  const fields: string[] = [];
+  let field = "";
+  let quoted = false;
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index]!;
+    if (character === '"') {
+      if (quoted && value[index + 1] === '"') {
+        field += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === "," && !quoted) {
+      const normalized = field.trim();
+      if (normalized) fields.push(normalized);
+      field = "";
+    } else {
+      field += character;
+    }
+  }
+  const normalized = field.trim();
+  if (normalized) fields.push(normalized);
+  return fields;
+}
+
+function formatFutureXList(values: readonly string[]): string {
+  return values.map((value) => /[",\r\n]/.test(value)
+    ? `"${value.replaceAll('"', '""')}"`
+    : value
+  ).join(", ");
+}
+
 export function futureXPredictionFromResult(result: ForecastResult): string {
   switch (result.answer.kind) {
     case "binary":
@@ -274,9 +330,9 @@ export function futureXPredictionFromResult(result: ForecastResult): string {
     case "categorical":
       return result.answer.choice;
     case "multi_label":
-      return result.answer.selected.join(", ");
+      return formatFutureXList(result.answer.selected);
     case "ranking":
-      return result.answer.order.join(", ");
+      return formatFutureXList(result.answer.order);
     case "numeric":
       return decimal(result.answer.value);
     case "free_response":
@@ -336,7 +392,7 @@ export function validateFutureXSubmission(
     const prediction = row.prediction.trim();
     if (!prediction && options.requireComplete !== false) errors.push(`Empty prediction for ${question.id}`);
     const route = routeFutureXQuestion(question, options.routeOverrides?.[question.id]);
-    const labels = prediction.split(",").map((part) => part.trim()).filter(Boolean);
+    const labels = parseFutureXList(prediction);
     const allowed = new Set(route.choices.map((choice) => choice.key));
     if (route.kind === "single_choice" && (labels.length !== 1 || !allowed.has(labels[0] ?? ""))) {
       errors.push(`Invalid single-choice prediction for ${question.id}: ${prediction}`);
