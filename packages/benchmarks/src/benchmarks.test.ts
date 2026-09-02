@@ -77,7 +77,7 @@ describe("FutureX adapter", () => {
     expect(validateFutureXSubmission(questions, submission, { deadlineUtc: options.deadlineUtc, now: new Date("2026-08-12T15:00:00Z") }).valid).toBe(true);
   });
 
-  it("CSV-quotes ranking entities that contain commas without changing cardinality", () => {
+  it("drops commas inside ranking entities so the official comma split keeps the cardinality", () => {
     const id = "comma-rank";
     const question = {
       id,
@@ -94,7 +94,9 @@ describe("FutureX adapter", () => {
       }
     };
     const submission = buildFutureXSubmission([question], [result]);
-    expect(submission[0]?.prediction).toContain('"I Knew It, I Knew You"');
+    expect(submission[0]?.prediction).toBe("Boston, Choosin' Texas, I Knew It I Knew You, Been By Now, Second Wind");
+    // What the official extractor does: a raw split on commas must still yield five items.
+    expect(submission[0]!.prediction.split(",").map((part) => part.trim())).toHaveLength(5);
     expect(validateFutureXSubmission([question], submission).valid).toBe(true);
   });
 

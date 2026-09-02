@@ -326,11 +326,16 @@ export function parseFutureXList(value: string): string[] {
   return fields;
 }
 
+// The official extractor splits the submitted string on every raw comma and
+// does not parse CSV quoting, so a quoted "I Knew It, I Knew You" reaches the
+// grader as two items and breaks the position-by-position match for the whole
+// list. A comma inside a name is dropped instead: the semantic judge still
+// recognises the entity, and the list keeps its cardinality on both scorers.
 function formatFutureXList(values: readonly string[]): string {
-  return values.map((value) => /[",\r\n]/.test(value)
-    ? `"${value.replaceAll('"', '""')}"`
-    : value
-  ).join(", ");
+  return values.map((value) => {
+    const commaFree = value.replace(/\s*,\s*/g, " ").replace(/\s{2,}/g, " ").trim();
+    return /["\r\n]/.test(commaFree) ? `"${commaFree.replaceAll('"', '""')}"` : commaFree;
+  }).join(", ");
 }
 
 export function futureXPredictionFromResult(result: ForecastResult): string {
