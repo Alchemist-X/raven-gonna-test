@@ -1,8 +1,8 @@
 {
   "schemaVersion": "raven-gonna-test.artifact-manifest.v1",
-  "createdAtUtc": "2026-09-09T15:46:00.760Z",
+  "createdAtUtc": "2026-09-09T15:50:49.678Z",
   "output": "submission-fable51.jsonl",
-  "sha256": "55c7b0a9df56f400af867fb2d01da428f03a438bf51475b4f881ff8a8ac607cd",
+  "sha256": "9400a20c7a03ac4c01350c8da811cff4c3a68a7248c6941efa035fd0ecf4cd8f",
   "benchmark": "futurex",
   "revision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
   "roundId": "2026-09-09",
@@ -23,7 +23,7 @@
   "evidenceCutoff": "2026-09-09T15:03:16Z",
   "researchWindowUtc": [
     "2026-09-09T15:03:16Z",
-    "2026-09-09T15:45:58Z"
+    "2026-09-09T15:50:47Z"
   ],
   "routeFile": "routes.json",
   "reasoning": "submission-fable51.reasoning.jsonl",
@@ -57,6 +57,38 @@
       "before": "A",
       "after": "B",
       "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "356911c3e2fde65e5bf200f7",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "Sébastien Ogier, Elfyn Evans, Thierry Neuville, Adrien Fourmaux, Oliver Solberg",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "b0282e018de6df5b68a75f67",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "Kyle Larson, Denny Hamlin, Christopher Bell, William Byron, Ryan Blaney",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "a0500f7e4a7480a7f0a91d23",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "Hayden Wilde, Alex Yee, Matthew Hauser, Léo Bergère, Vasco Vilaça",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "bdea2cfcb452401b1eb67cb2",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4",
+      "after": "Kim Woojin, Marcus D'Almeida, Lee Woo-seok, Brady Ellison",
+      "source": "manual:knowledge-based-ranking",
       "wasFallback": true
     },
     {
@@ -108,6 +140,14 @@
       "wasFallback": true
     },
     {
+      "id": "745a1eac5b135235f099b0eb",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5, unknown_6, unknown_7, unknown_8",
+      "after": "Social Democrats, Sweden Democrats, Moderates, Left Party, Centre Party, Green Party, Christian Democrats, Liberals",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
       "id": "731e26ad5fbafb5dcd3b7660",
       "level": 2,
       "before": "A",
@@ -121,6 +161,14 @@
       "before": "A",
       "after": "A",
       "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "b88a2453228e3c8a02353bdb",
+      "level": 4,
+      "before": "Tokyo, Osaka, Sapporo, Fukuoka, Naha",
+      "after": "Osaka, Naha, Fukuoka, Tokyo, Sapporo",
+      "source": "manual:knowledge-based-ranking",
       "wasFallback": true
     },
     {
@@ -172,6 +220,30 @@
       "wasFallback": true
     },
     {
+      "id": "3a39f8dc07bc58fcfb8d45e1",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "Marc Márquez, Marco Bezzecchi, Álex Márquez, Francesco Bagnaia, Pedro Acosta",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "91777526d3dedcab5f79dd25",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "Tadej Pogačar, Arnaud De Lie, Julian Alaphilippe, Michael Matthews, Biniam Girmay",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "2c8a7280ff2d75cc7d1f4f1e",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3",
+      "after": "Melissa Jefferson-Wooden, Julien Alfred, Sha'Carri Richardson",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
       "id": "98add0882ec787466edb8e79",
       "level": 1,
       "before": "A",
@@ -218,6 +290,38 @@
       "after": "Rein Me In",
       "source": "agent-research:tail-M",
       "wasFallback": true
+    },
+    {
+      "id": "b1b7a7db24ae27f314771965",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "BbY WOW, Man I Need, Golden, Ordinary, SaWaDiKa",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "5305d4a9b1101e9ae384db80",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "KAROL G, Bad Bunny, Taylor Swift, HUNTR/X, Sombr",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "44c19bd15de66ea6f6680fdb",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "Blingy, Golden, Soda Pop, Your Idol, Whiplash",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
+    },
+    {
+      "id": "4be6b327e5ca97d7597998c0",
+      "level": 4,
+      "before": "unknown_1, unknown_2, unknown_3, unknown_4, unknown_5",
+      "after": "The Odyssey, Spider-Man Brand New Day, Toy Story 5, Supergirl, Disclosure Day",
+      "source": "manual:knowledge-based-ranking",
+      "wasFallback": true
     }
   ],
   "remainingFallback": [
@@ -226,14 +330,8 @@
     "L3:4431863a8022d2e4e588575d",
     "L4:27f6c68fe4a8e79b95bad4d3",
     "L4:d0ad12703a9c38beb524ccda",
-    "L4:356911c3e2fde65e5bf200f7",
-    "L4:b0282e018de6df5b68a75f67",
-    "L4:a0500f7e4a7480a7f0a91d23",
-    "L4:bdea2cfcb452401b1eb67cb2",
     "L3:e9d2d4ccda33a152b89096db",
-    "L4:745a1eac5b135235f099b0eb",
     "L3:b32fad0f6a4248995b18a151",
-    "L4:b88a2453228e3c8a02353bdb",
     "L3:3b32ab1678b5b10821f2d041",
     "L3:c3988497b5970d8b31ebd51c",
     "L3:e53fb8c98852886c0fe95531",
@@ -241,17 +339,10 @@
     "L3:7b8770061fc37ebb787d9995",
     "L3:c5e3d86de072587644116f53",
     "L3:45f01f5415bca6653313b474",
-    "L3:42df558b87c159506af6194b",
-    "L4:3a39f8dc07bc58fcfb8d45e1",
-    "L4:91777526d3dedcab5f79dd25",
-    "L4:2c8a7280ff2d75cc7d1f4f1e",
-    "L4:b1b7a7db24ae27f314771965",
-    "L4:5305d4a9b1101e9ae384db80",
-    "L4:44c19bd15de66ea6f6680fdb",
-    "L4:4be6b327e5ca97d7597998c0"
+    "L3:42df558b87c159506af6194b"
   ],
-  "fallbackAnswers": 28,
-  "splicedAnswers": 23,
+  "fallbackAnswers": 15,
+  "splicedAnswers": 36,
   "harnessAnswers": 29,
   "researchedAnswers": 29,
   "trialsTotal": 39,

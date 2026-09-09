@@ -13,10 +13,10 @@
 {"id":"27f6c68fe4a8e79b95bad4d3","prediction":"0"}
 {"id":"d0ad12703a9c38beb524ccda","prediction":"0"}
 {"id":"a602601968d64078a71879f4","prediction":"1639.99186666667"}
-{"id":"356911c3e2fde65e5bf200f7","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"b0282e018de6df5b68a75f67","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"a0500f7e4a7480a7f0a91d23","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"bdea2cfcb452401b1eb67cb2","prediction":"unknown_1, unknown_2, unknown_3, unknown_4"}
+{"id":"356911c3e2fde65e5bf200f7","prediction":"Sébastien Ogier, Elfyn Evans, Thierry Neuville, Adrien Fourmaux, Oliver Solberg"}
+{"id":"b0282e018de6df5b68a75f67","prediction":"Kyle Larson, Denny Hamlin, Christopher Bell, William Byron, Ryan Blaney"}
+{"id":"a0500f7e4a7480a7f0a91d23","prediction":"Hayden Wilde, Alex Yee, Matthew Hauser, Léo Bergère, Vasco Vilaça"}
+{"id":"bdea2cfcb452401b1eb67cb2","prediction":"Kim Woojin, Marcus D'Almeida, Lee Woo-seok, Brady Ellison"}
 {"id":"b44a2cc142977cb59d902269","prediction":"A"}
 {"id":"c95cfc80a1a0b78d838464c2","prediction":"A"}
 {"id":"943d7bcf261d764177168f6a","prediction":"B"}
@@ -33,14 +33,14 @@
 {"id":"48e23a797a95d6b2bb6d8eb5","prediction":"A"}
 {"id":"46575147e04586e9d367ee4d","prediction":"A"}
 {"id":"ce6b1d6eeab22ac50481ca2f","prediction":"3"}
-{"id":"745a1eac5b135235f099b0eb","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5, unknown_6, unknown_7, unknown_8"}
+{"id":"745a1eac5b135235f099b0eb","prediction":"Social Democrats, Sweden Democrats, Moderates, Left Party, Centre Party, Green Party, Christian Democrats, Liberals"}
 {"id":"b552cfa911b81efde744149c","prediction":"B"}
 {"id":"731e26ad5fbafb5dcd3b7660","prediction":"E"}
 {"id":"03f38cd3a718ede35d8e7e99","prediction":"B"}
 {"id":"bc004bd4b04aa321a1f4889c","prediction":"A"}
 {"id":"38fa5c8dc3a6c5eff894996a","prediction":"A"}
 {"id":"b32fad0f6a4248995b18a151","prediction":"0"}
-{"id":"b88a2453228e3c8a02353bdb","prediction":"Tokyo, Osaka, Sapporo, Fukuoka, Naha"}
+{"id":"b88a2453228e3c8a02353bdb","prediction":"Osaka, Naha, Fukuoka, Tokyo, Sapporo"}
 {"id":"0133c872c7e805d2d5cb48ad","prediction":"B"}
 {"id":"5210751f37b4f4177e574675","prediction":"A"}
 {"id":"b1b3d55cb4e8e22b60f75e54","prediction":"B"}
@@ -63,9 +63,9 @@
 {"id":"c5e3d86de072587644116f53","prediction":"0"}
 {"id":"45f01f5415bca6653313b474","prediction":"0"}
 {"id":"42df558b87c159506af6194b","prediction":"0"}
-{"id":"3a39f8dc07bc58fcfb8d45e1","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"91777526d3dedcab5f79dd25","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"2c8a7280ff2d75cc7d1f4f1e","prediction":"unknown_1, unknown_2, unknown_3"}
+{"id":"3a39f8dc07bc58fcfb8d45e1","prediction":"Marc Márquez, Marco Bezzecchi, Álex Márquez, Francesco Bagnaia, Pedro Acosta"}
+{"id":"91777526d3dedcab5f79dd25","prediction":"Tadej Pogačar, Arnaud De Lie, Julian Alaphilippe, Michael Matthews, Biniam Girmay"}
+{"id":"2c8a7280ff2d75cc7d1f4f1e","prediction":"Melissa Jefferson-Wooden, Julien Alfred, Sha'Carri Richardson"}
 {"id":"98add0882ec787466edb8e79","prediction":"A"}
 {"id":"9f60af2de289447b90393da5","prediction":"B"}
 {"id":"e76b71115125631000776bd4","prediction":"E"}
@@ -73,8 +73,8 @@
 {"id":"4254aa7f59a5e47de1acc61d","prediction":"D"}
 {"id":"10fc6b7e9c663330cd0e4e45","prediction":"Rein Me In"}
 {"id":"b78dfb4a4b2c56878ae38972","prediction":"SaWaDiKa"}
-{"id":"b1b7a7db24ae27f314771965","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"5305d4a9b1101e9ae384db80","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"44c19bd15de66ea6f6680fdb","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
-{"id":"4be6b327e5ca97d7597998c0","prediction":"unknown_1, unknown_2, unknown_3, unknown_4, unknown_5"}
+{"id":"b1b7a7db24ae27f314771965","prediction":"BbY WOW, Man I Need, Golden, Ordinary, SaWaDiKa"}
+{"id":"5305d4a9b1101e9ae384db80","prediction":"KAROL G, Bad Bunny, Taylor Swift, HUNTR/X, Sombr"}
+{"id":"44c19bd15de66ea6f6680fdb","prediction":"Blingy, Golden, Soda Pop, Your Idol, Whiplash"}
+{"id":"4be6b327e5ca97d7597998c0","prediction":"The Odyssey, Spider-Man Brand New Day, Toy Story 5, Supergirl, Disclosure Day"}
 {"id":"c2a96fdd53264c0c0ccc1d8a","prediction":"A"}

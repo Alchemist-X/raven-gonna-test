@@ -11,19 +11,19 @@
     {
       "entry": "raven_labs/claude-fable-5-1",
       "attachment": "submission-fable51.jsonl",
-      "sha256": "55c7b0a9df56f400af867fb2d01da428f03a438bf51475b4f881ff8a8ac607cd",
+      "sha256": "9400a20c7a03ac4c01350c8da811cff4c3a68a7248c6941efa035fd0ecf4cd8f",
       "evidenceCutoffUtc": "2026-09-09T15:03:16Z",
       "researchWindowUtc": [
         "2026-09-09T15:03:16Z",
-        "2026-09-09T15:45:58Z"
+        "2026-09-09T15:50:47Z"
       ],
       "agentFrameworkCommit": "f7941fe8a8ea378df5cc307412445087aa167dec (Huginn worktree) / c62f147407ddbd34a62655597832fd92582e1219 (local, docs-only delta)",
       "emailBody": "email-fable51.txt",
       "status": "awaiting human send",
       "answerSources": {
         "harness": 29,
-        "splicedAgentResearch": 23,
-        "deterministicFallback": 28
+        "splicedAgentResearch": 36,
+        "deterministicFallback": 15
       },
       "note": "Time-boxed round (50 min). See README for the run history and per-row answer sources."
     }
