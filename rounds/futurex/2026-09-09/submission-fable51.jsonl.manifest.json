@@ -1,0 +1,269 @@
+{
+  "schemaVersion": "raven-gonna-test.artifact-manifest.v1",
+  "createdAtUtc": "2026-09-09T15:46:00.760Z",
+  "output": "submission-fable51.jsonl",
+  "sha256": "55c7b0a9df56f400af867fb2d01da428f03a438bf51475b4f881ff8a8ac607cd",
+  "benchmark": "futurex",
+  "revision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
+  "roundId": "2026-09-09",
+  "model": "claude-fable-5-1",
+  "provider": "claude-cli",
+  "effortOverride": "max",
+  "reasoningEffort": "high",
+  "trials": "ceiling 3 (L1/L2/L3+/L4 = 1/2/3/3) on Huginn until the shared token hit its 5-hour session limit; ceiling 1 for the local resume runs",
+  "researchSources": [
+    "perplexity",
+    "google_news"
+  ],
+  "inputSha256": "7c21d0fe88ea9165838b336d78dc0394ba3b51a7c03d6788bbe42f511d438616",
+  "routesSha256": "5fbc84387ba97affc0acd1b653258204b70cf061b31021e76917f8c425a87927",
+  "codeSha": "f7941fe8a8ea378df5cc307412445087aa167dec (Huginn worktree) / c62f147407ddbd34a62655597832fd92582e1219 (local, docs-only delta)",
+  "records": 80,
+  "mode": "submission-candidate",
+  "evidenceCutoff": "2026-09-09T15:03:16Z",
+  "researchWindowUtc": [
+    "2026-09-09T15:03:16Z",
+    "2026-09-09T15:45:58Z"
+  ],
+  "routeFile": "routes.json",
+  "reasoning": "submission-fable51.reasoning.jsonl",
+  "assembly": "Huginn run (24-way, trials 1/2/3/3) until the shared Claude Max token hit its 5-hour session limit at ~15:09Z; local resume runs (16-way: 403 Request-not-allowed burst; 8-way trials=1) until the assembly cutoff; rows still on the deterministic fallback were spliced from Fable 5.1 research-agent answers (recorded per row); the rest remain deterministic fallbacks.",
+  "checkpoints": [
+    "submission.jsonl.checkpoint.json",
+    "submission.jsonl.checkpoint.json",
+    "huginn-checkpoint-final.json",
+    "submission.jsonl.checkpoint.json"
+  ],
+  "spliced": [
+    {
+      "id": "90b29c36047d822dde719e58",
+      "level": 1,
+      "before": "A",
+      "after": "B",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "b686795eff906a09b78367f4",
+      "level": 2,
+      "before": "A",
+      "after": "C",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "6709be26eb54591b89413d66",
+      "level": 2,
+      "before": "A",
+      "after": "B",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "e4be83cb65d492aed4ea6ddc",
+      "level": 2,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "b41754667f5c2af634d676ac",
+      "level": 3,
+      "before": "unknown",
+      "after": "C5.8",
+      "source": "agent-research:tail-M",
+      "wasFallback": true
+    },
+    {
+      "id": "015307b6d0b309d6538e74ca",
+      "level": 4,
+      "before": "unknown",
+      "after": "[]",
+      "source": "manual:empty-identifier-set",
+      "wasFallback": true
+    },
+    {
+      "id": "cd393fae33b637a951085586",
+      "level": 4,
+      "before": "unknown",
+      "after": "[]",
+      "source": "manual:empty-identifier-set",
+      "wasFallback": true
+    },
+    {
+      "id": "1568681a24a002cc3586e3dd",
+      "level": 1,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "46575147e04586e9d367ee4d",
+      "level": 2,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "731e26ad5fbafb5dcd3b7660",
+      "level": 2,
+      "before": "A",
+      "after": "E",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "bc004bd4b04aa321a1f4889c",
+      "level": 2,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "5210751f37b4f4177e574675",
+      "level": 1,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "87b5cb1b6fac6650227f5202",
+      "level": 2,
+      "before": "A",
+      "after": "B",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "033ca841cdcb25657da04ff0",
+      "level": 2,
+      "before": "A",
+      "after": "B",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "f9b156d1890ff5815ef968ee",
+      "level": 2,
+      "before": "A",
+      "after": "B",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "79d923cec7af2918e80c285e",
+      "level": 2,
+      "before": "A",
+      "after": "D",
+      "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "5657a98e0dfb902403bf0439",
+      "level": 1,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "98add0882ec787466edb8e79",
+      "level": 1,
+      "before": "A",
+      "after": "A",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "9f60af2de289447b90393da5",
+      "level": 1,
+      "before": "A",
+      "after": "B",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "e76b71115125631000776bd4",
+      "level": 2,
+      "before": "A",
+      "after": "E",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "d969f65abc65d186eefd7534",
+      "level": 2,
+      "before": "A",
+      "after": "E",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "4254aa7f59a5e47de1acc61d",
+      "level": 2,
+      "before": "A",
+      "after": "D",
+      "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "10fc6b7e9c663330cd0e4e45",
+      "level": 3,
+      "before": "unknown",
+      "after": "Rein Me In",
+      "source": "agent-research:tail-M",
+      "wasFallback": true
+    }
+  ],
+  "remainingFallback": [
+    "L3:d4731b70b821438a12b76743",
+    "L3:7b3076d1c39fe494a657a14d",
+    "L3:4431863a8022d2e4e588575d",
+    "L4:27f6c68fe4a8e79b95bad4d3",
+    "L4:d0ad12703a9c38beb524ccda",
+    "L4:356911c3e2fde65e5bf200f7",
+    "L4:b0282e018de6df5b68a75f67",
+    "L4:a0500f7e4a7480a7f0a91d23",
+    "L4:bdea2cfcb452401b1eb67cb2",
+    "L3:e9d2d4ccda33a152b89096db",
+    "L4:745a1eac5b135235f099b0eb",
+    "L3:b32fad0f6a4248995b18a151",
+    "L4:b88a2453228e3c8a02353bdb",
+    "L3:3b32ab1678b5b10821f2d041",
+    "L3:c3988497b5970d8b31ebd51c",
+    "L3:e53fb8c98852886c0fe95531",
+    "L3:c791f9de99593982d9c71cf3",
+    "L3:7b8770061fc37ebb787d9995",
+    "L3:c5e3d86de072587644116f53",
+    "L3:45f01f5415bca6653313b474",
+    "L3:42df558b87c159506af6194b",
+    "L4:3a39f8dc07bc58fcfb8d45e1",
+    "L4:91777526d3dedcab5f79dd25",
+    "L4:2c8a7280ff2d75cc7d1f4f1e",
+    "L4:b1b7a7db24ae27f314771965",
+    "L4:5305d4a9b1101e9ae384db80",
+    "L4:44c19bd15de66ea6f6680fdb",
+    "L4:4be6b327e5ca97d7597998c0"
+  ],
+  "fallbackAnswers": 28,
+  "splicedAnswers": 23,
+  "harnessAnswers": 29,
+  "researchedAnswers": 29,
+  "trialsTotal": 39,
+  "sourceUrls": 4354,
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "warnings": [],
+    "stats": {
+      "expected": 80,
+      "submitted": 80,
+      "coverage": 1
+    }
+  }
+}

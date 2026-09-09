@@ -1,0 +1,23 @@
+To: FutureX-ai@outlook.com
+CC: issue.00.gui@gmail.com, millank0817@gmail.com, 1700012744@pku.edu.cn
+Subject: FutureX submission — round 2026-09-09 — raven_labs/claude-fable-5-1
+Attachment: submission-fable51.jsonl
+
+Hello FutureX team,
+
+Please find attached our submission for the 2026-09-09 round.
+
+- Entry name: raven_labs/claude-fable-5-1
+- Organization: raven_labs
+- Model: claude-fable-5-1 (Anthropic), with live web research
+- Agent framework: raven-gonna-test, commit c62f147407ddbd34a62655597832fd92582e1219 (github.com/Alchemist-X/raven-gonna-test)
+- Dataset revision: 30c9fba49e4b37b12db857714a0b6884d80c6cfa
+- Coverage: 80/80 questions
+- Evidence cutoff: research was performed between 2026-09-09T15:03:16Z and 2026-09-09T15:45:58Z, and retrieval for every question was stopped before that question's own end time; the eight questions already closed at the start were researched for their published results after their end time
+- Attachment SHA-256: 55c7b0a9df56f400af867fb2d01da428f03a438bf51475b4f881ff8a8ac607cd
+- Visibility: public — fine to list on the leaderboard
+
+Per-question reasoning traces and provenance manifests are archived in the repository above and available on request.
+
+Best regards,
+raven_labs
