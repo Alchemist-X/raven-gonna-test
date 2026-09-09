@@ -31,7 +31,7 @@ function answerShape(task: ForecastTask): string {
         ? JSON.stringify({ value: 123.45, target_field: task.numericContract.targetField, unit: task.numericContract.unit })
         : '{"value": 123.45}';
     case "free_response":
-      return '{"answer": "Official Entity Name"}';
+      return task.responseFormat === "identifier_set" ? '{"answer": ["IDENTIFIER_1", "IDENTIFIER_2"]}' : '{"answer": "Official Entity Name"}';
   }
 }
 
@@ -81,6 +81,9 @@ function taskContract(task: ForecastTask): string {
         ? `Return the value for the published field \`${task.unit}\`, in exactly that field's units and scale — read the field name carefully (for example _usd_millions means millions, _percent means percentage points such as 2.7, not 0.027). Bare number only: no units, commas, or ranges.`
         : "Return a single numeric value, not a prose-only answer. Bare number only: no units, commas, or ranges.";
     case "free_response":
+      if (task.responseFormat === "identifier_set") {
+        return `Return the complete predicted set of identifiers in answer as a JSON string array. Preserve every digit exactly; no descriptions, ordering claim or fixed count. Use [] for an empty set.${task.identifierPattern ? ` Each identifier must match ${task.identifierPattern}.` : ""}`;
+      }
       // Graded by exact string match, so a sentence, a gloss or a hedge all
       // score 0 — and an "unknown" scores the same as a wrong guess, which
       // makes hedging pure downside.

@@ -16,6 +16,7 @@ import { answerTypeForTask, buildPrompts } from "./prompt.js";
 import { extractJsonLenient, salvageChoice, salvageNumber } from "./parse.js";
 import { normalizeProbabilities } from "./probability.js";
 import { normalizeNumericAnswer } from "./numeric-contract.js";
+import { canonicalIdentifierSet } from "./identifier-set.js";
 
 export interface ForecastEngineOptions extends AggregationOptions {
   trials?: number;
@@ -166,6 +167,9 @@ export function parseModelAnswer(task: ForecastTask, response: ModelResponse): F
     }
     case "free_response": {
       const raw = typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : {};
+      if (task.responseFormat === "identifier_set") {
+        return ForecastAnswerSchema.parse({ kind: "free_response", value: canonicalIdentifierSet(raw.answer ?? parsed, task.identifierPattern) });
+      }
       const value = String(raw.answer ?? raw.prediction ?? parsed).trim();
       if (!value) throw new Error("Model returned an empty answer.");
       return ForecastAnswerSchema.parse({ kind: "free_response", value });

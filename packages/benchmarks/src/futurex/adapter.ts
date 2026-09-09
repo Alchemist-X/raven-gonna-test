@@ -1,5 +1,5 @@
 import type { ForecastResult, ForecastTask } from "@raven-gonna-test/forecast-core";
-import { futureXPolicy, normalizeNumericAnswer, NumericOutputContractSchema } from "@raven-gonna-test/forecast-core";
+import { futureXPolicy, normalizeNumericAnswer, NumericOutputContractSchema, normalizeIdentifierSet } from "@raven-gonna-test/forecast-core";
 import type { ValidationReport } from "../contract.js";
 import {
   FutureXQuestionSchema,
@@ -33,6 +33,8 @@ const NUMERIC_CONTRACT_PATTERN =
 // It is numeric only after ranking language has had first refusal: the same
 // sentence also appears on "top five" and "six winners" list questions.
 const SOURCE_NATIVE_VALUE_PATTERN = /return exactly the source-native value required by the settlement contract/i;
+const SOURCE_NATIVE_ENTITY_PATTERN = /\bwhich\b|\bwhat (?:exact )?(?:track|music video)\b|\bsolar-flare class\b|\bnational ranking\b|^rank\b/i;
+const IDENTIFIER_PATTERNS = { cve: "^CVE-[0-9]{4}-[0-9]{4,}$", nct: "^NCT[0-9]{8}$" } as const;
 // "what exact <measurement> will X report" asks for a quantity even when the
 // prompt only supplies the generic \boxed{YOUR_PREDICTION} envelope, so the
 // contract pattern above does not fire. Routed as free text these produce prose
@@ -96,6 +98,8 @@ export function extractFutureXChoices(prompt: string): Array<{ key: string; text
 }
 
 function rankingCount(text: string): number | undefined {
+  const through = text.match(/first through (second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\b/i)?.[1]?.toLowerCase();
+  if (through) return ({ second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10 } as Record<string, number>)[through];
   const range = text.match(/ranked\s+from\s+(\d+)\s+to\s+(\d+)/i);
   if (range?.[1] && range[2]) {
     const start = Number(range[1]);
@@ -157,6 +161,11 @@ export function routeFutureXQuestion(
       reasons: ["explicit boxed alternative contract"]
     };
   }
+  // A count ABOUT a top-five chart can still request one option letter.
+  if (extractedChoices.length >= 2 && /selected option letter\(s\)/i.test(question.prompt)) {
+    const multi = MULTI_PATTERN.test(semantic) || STRONG_MULTI_PATTERN.test(semantic);
+    return { kind: multi ? "multi_choice" : "single_choice", choices: extractedChoices, confidence: 0.95, reasons: ["explicit option-letter output contract"] };
+  }
   // Checked before the title heuristics: an explicit output contract beats any
   // inference drawn from how the question is phrased.
   if (NUMERIC_CONTRACT_PATTERN.test(question.prompt)) {
@@ -165,7 +174,7 @@ export function routeFutureXQuestion(
   if (NUMERIC_TITLE_PATTERN.test(question.en_title)) {
     return { kind: "numeric", choices: [], confidence: 0.9, reasons: ["asks for an exact measured quantity"] };
   }
-  if (RANKING_PATTERN.test(question.en_title) || RANKING_PATTERN.test(question.prompt)) {
+  if (RANKING_PATTERN.test(question.en_title) || RANKING_PATTERN.test(question.prompt) || /first through (?:second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\b/i.test(question.en_title)) {
     const count = rankingCount(semantic);
     // "ranking" is frequently a noun for the standings rather than an
     // instruction to order things — "which club will be FIRST in the final
@@ -184,6 +193,9 @@ export function routeFutureXQuestion(
     }
   }
   if (SOURCE_NATIVE_VALUE_PATTERN.test(question.prompt)) {
+    if (SOURCE_NATIVE_ENTITY_PATTERN.test(question.en_title)) {
+      return { kind: "open_text", choices: [], confidence: 0.55, reasons: ["source-native value is not a numeric declaration; review entity/list cardinality"] };
+    }
     return {
       kind: "numeric",
       choices: [],
@@ -320,7 +332,11 @@ export function futureXQuestionsToTasks(
         };
       }
       case "open_text":
-        return { ...common, kind: "free_response" as const };
+        return {
+          ...common, kind: "free_response" as const,
+          ...(options.routeOverrides?.[question.id]?.responseFormat ? { responseFormat: options.routeOverrides[question.id]!.responseFormat! } : {}),
+          ...(options.routeOverrides?.[question.id]?.identifierFormat ? { identifierPattern: IDENTIFIER_PATTERNS[options.routeOverrides[question.id]!.identifierFormat!] } : {})
+        };
     }
   });
   return { tasks, routes };
@@ -503,6 +519,17 @@ export function validateFutureXSubmission(
     // These are errors, not warnings: a sentence is never a right answer, and a
     // silent 0 on an L4 question is expensive.
     if (route.kind === "open_text") {
+      const override = options.routeOverrides?.[question.id];
+      if (override?.responseFormat === "identifier_set") {
+        try {
+          if (!override.identifierFormat) throw new Error("missing identifier format");
+          const canonical = normalizeIdentifierSet(prediction, IDENTIFIER_PATTERNS[override.identifierFormat]);
+          if (canonical !== prediction) throw new Error("identifiers must be unique, sorted and comma-separated");
+        } catch (error) {
+          errors.push(`Invalid identifier-set prediction for ${question.id}: ${error instanceof Error ? error.message : String(error)}`);
+        }
+        continue;
+      }
       if (PACKED_OPEN_TEXT_PREDICTION.test(prediction)) {
         errors.push(
           `Open-text prediction for ${question.id} packs multiple candidates into one scalar answer: ${prediction.slice(0, 80)}. ` +

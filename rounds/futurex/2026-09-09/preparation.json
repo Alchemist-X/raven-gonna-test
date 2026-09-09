@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-preparation.v1",
+  "executionMode": "configuration-only",
+  "submissionEligible": false,
+  "revision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
+  "asOfUtc": "2026-09-09T14:51:46Z",
+  "informationPolicy": {
+    "id": "question-contract-review-v1",
+    "sources": [
+      "pinned question text"
+    ],
+    "outcomeEvidence": "not-used"
+  },
+  "reviewedBy": "Codex at user request; not a human-submission receipt",
+  "records": 80,
+  "numericContracts": 21,
+  "routeCorrections": [
+    {
+      "id": "356911c3e2fde65e5bf200f7",
+      "title": "Which five drivers will finish first through fifth overall at WRC Rally Chile Bio Bío 2026?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "b0282e018de6df5b68a75f67",
+      "title": "Which five drivers will finish first through fifth in the 2026 NASCAR Cup Series race at World Wide Technology Raceway?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "a0500f7e4a7480a7f0a91d23",
+      "title": "Which five athletes will finish first through fifth in the elite men race at 2026 WTCS Karlovy Vary?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "bdea2cfcb452401b1eb67cb2",
+      "title": "Which four archers will occupy first through fourth place in the recurve men classification at the Saltillo 2026 Hyundai Archery World Cup Final?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "b41754667f5c2af634d676ac",
+      "title": "What will be the strongest solar-flare class reported by NASA DONKI from 9 through 11 September 2026 UTC?",
+      "before": "numeric",
+      "after": "open_text"
+    },
+    {
+      "id": "015307b6d0b309d6538e74ca",
+      "title": "Which CVE identifiers will CISA add to its Known Exploited Vulnerabilities Catalog from 9 through 14 September 2026?",
+      "before": "numeric",
+      "after": "open_text"
+    },
+    {
+      "id": "9a932fe3e18109d8bd027a7e",
+      "title": "Which five PDB entries first released on 9 September 2026 will have the best experimental resolution?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "cd393fae33b637a951085586",
+      "title": "Which Phase 3 study NCT identifiers will ClinicalTrials.gov first post on 10 September 2026?",
+      "before": "numeric",
+      "after": "open_text"
+    },
+    {
+      "id": "745a1eac5b135235f099b0eb",
+      "title": "What will be the preliminary national ranking of Sweden's eight incumbent Riksdag parties by vote share in the 2026 election?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "b88a2453228e3c8a02353bdb",
+      "title": "Rank Tokyo, Osaka, Sapporo, Fukuoka, and Naha from highest to lowest JMA daily maximum temperature on 12 September 2026.",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "3a39f8dc07bc58fcfb8d45e1",
+      "title": "Which five riders will finish first through fifth in the 2026 San Marino MotoGP Grand Prix race?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "91777526d3dedcab5f79dd25",
+      "title": "Which five riders will finish first through fifth at the 2026 Grand Prix Cycliste de Québec?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "2c8a7280ff2d75cc7d1f4f1e",
+      "title": "Which three athletes will finish first through third in the women's 100 metres final at the 2026 World Athletics Ultimate Championship?",
+      "before": "numeric",
+      "after": "ranking"
+    },
+    {
+      "id": "4254aa7f59a5e47de1acc61d",
+      "title": "How many songs from YouTube's prior United States Weekly Top Songs top five will remain in the top five for 4–10 September 2026?",
+      "before": "ranking",
+      "after": "single_choice"
+    },
+    {
+      "id": "10fc6b7e9c663330cd0e4e45",
+      "title": "What exact track will rank No. 1 on Spotify's United Kingdom Weekly Top Songs chart dated 10 September 2026?",
+      "before": "numeric",
+      "after": "open_text"
+    },
+    {
+      "id": "b78dfb4a4b2c56878ae38972",
+      "title": "What exact music video will rank No. 1 on YouTube's Global Weekly Top Music Videos chart for 4–10 September 2026?",
+      "before": "numeric",
+      "after": "open_text"
+    }
+  ],
+  "questionsSha256": "7c21d0fe88ea9165838b336d78dc0394ba3b51a7c03d6788bbe42f511d438616",
+  "routesSha256": "5fbc84387ba97affc0acd1b653258204b70cf061b31021e76917f8c425a87927"
+}

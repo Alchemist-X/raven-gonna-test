@@ -258,6 +258,9 @@ export function answerSchemaForTask(task: ForecastTask): Record<string, unknown>
         }
       });
     case "free_response":
+      if (task.responseFormat === "identifier_set") {
+        return objectSchema({ answer: { type: "array", description: "Complete unordered set of exact identifiers; [] for none.", items: { type: "string" } } });
+      }
       return objectSchema({
         answer: {
           type: "string",

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "raven-gonna-test.artifact-manifest.v1",
+  "createdAtUtc": "2026-09-09T14:46:17.826Z",
+  "output": "questions.json",
+  "sha256": "7c21d0fe88ea9165838b336d78dc0394ba3b51a7c03d6788bbe42f511d438616",
+  "benchmark": "futurex",
+  "revision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
+  "records": 80,
+  "provenance": {
+    "revision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
+    "files": [
+      {
+        "path": "data/train-00000-of-00001.parquet",
+        "gitOid": "82a7d0db4563f5c8c6a2ce2a59d22dbfdc1f57f3",
+        "size": 19971,
+        "sha256": "7c221738ade9cb9262c1e276f2ae160cb8673ef6925cfcf18e8552f727342a17"
+      }
+    ],
+    "recordCount": 80,
+    "recordsSha256": "b0aa6d67fdf0effc4fee22913e727cf254fd1b78e657b97b28ea118bd77306d6"
+  }
+}

@@ -1,0 +1,2219 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-routes.v1",
+  "revision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
+  "routes": {
+    "5fcfacd0ff632fb6997e66ce": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, 0.8% or higher"
+        },
+        {
+          "key": "B",
+          "text": "No, below 0.8%"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "2afe5ef465c3e93903cc3751": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, 5.0% or higher"
+        },
+        {
+          "key": "B",
+          "text": "No, below 5.0%"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "2045107c3e41c849221a4274": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, above 0.0%"
+        },
+        {
+          "key": "B",
+          "text": "No, 0.0% or below"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "90b29c36047d822dde719e58": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Raise the key rate"
+        },
+        {
+          "key": "B",
+          "text": "Keep the key rate at 14.00%"
+        },
+        {
+          "key": "C",
+          "text": "Cut the key rate"
+        },
+        {
+          "key": "D",
+          "text": "NO_OFFICIAL_DECISION"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "b686795eff906a09b78367f4": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0.1% or lower"
+        },
+        {
+          "key": "B",
+          "text": "0.2%-0.3%"
+        },
+        {
+          "key": "C",
+          "text": "0.4%-0.5%"
+        },
+        {
+          "key": "D",
+          "text": "0.6% or higher"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "6709be26eb54591b89413d66": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "-0.2% or lower"
+        },
+        {
+          "key": "B",
+          "text": "-0.1% to 0.0%"
+        },
+        {
+          "key": "C",
+          "text": "0.1%-0.2%"
+        },
+        {
+          "key": "D",
+          "text": "0.3% or higher"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "e16263721ccf7d86806062cd": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below 4.5%"
+        },
+        {
+          "key": "B",
+          "text": "4.5%-4.9%"
+        },
+        {
+          "key": "C",
+          "text": "5.0%-5.4%"
+        },
+        {
+          "key": "D",
+          "text": "5.5% or higher"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "d4731b70b821438a12b76743": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "uk_goods_trade_balance_sa_2026_07",
+        "definition": "ONS UK trade in goods, seasonally adjusted balance for July 2026. Goods only; exports minus imports, deficit negative. Do not use services or total trade. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "GBP million",
+        "scale": "One output unit equals one GBP million.",
+        "acceptedUnits": [
+          {
+            "unit": "GBP",
+            "multiplier": 1e-06
+          },
+          {
+            "unit": "GBP billion",
+            "multiplier": 1000
+          }
+        ]
+      }
+    },
+    "65134d1e15adb0dde098c30d": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "us_treasury_10y_auction_high_yield_2026_09_09",
+        "definition": "U.S. Treasury auction results: high yield for the 10-year note auction dated 9 September 2026. Yield percent, not coupon, high price or bid-to-cover ratio. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "percent",
+        "scale": "Percent quantity: 2.7 means 2.7 percent, not 0.027.",
+        "acceptedUnits": [
+          {
+            "unit": "fraction",
+            "multiplier": 100
+          }
+        ]
+      }
+    },
+    "7b3076d1c39fe494a657a14d": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "us_commercial_crude_weekly_change_2026_09_04",
+        "definition": "EIA weekly U.S. commercial crude-oil stocks change for the week ending 4 September 2026. Exclude SPR; current week minus preceding week, positive build and negative draw. Change, not total stock level. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "million barrels",
+        "scale": "One output unit equals one million barrels.",
+        "acceptedUnits": [
+          {
+            "unit": "thousand barrels",
+            "multiplier": 0.001
+          },
+          {
+            "unit": "barrels",
+            "multiplier": 1e-06
+          }
+        ]
+      }
+    },
+    "4431863a8022d2e4e588575d": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "china_retail_sales_yoy_2026_08",
+        "definition": "China total retail sales of consumer goods, August 2026 year-on-year growth rate. Monthly August aggregate relative to August 2025; not year-to-date growth, month-on-month growth or nominal sales level. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "percent",
+        "scale": "Percent quantity: 2.7 means 2.7 percent, not 0.027.",
+        "acceptedUnits": [
+          {
+            "unit": "fraction",
+            "multiplier": 100
+          }
+        ]
+      }
+    },
+    "893089763e17835b2c6fda5d": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "us_corn_yield_september_2026_wasde",
+        "definition": "USDA September 2026 WASDE: projected U.S. corn yield for the current crop in that report. Yield in bushels per acre; not production, acreage or another crop/country. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "bushels per acre",
+        "scale": "One output unit equals one bushels per acre."
+      }
+    },
+    "27f6c68fe4a8e79b95bad4d3": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "canada_national_net_worth_2026_q2",
+        "definition": "Statistics Canada national balance sheet accounts: national net worth for Q2 2026, all sectors nationally. Total level; not household net worth, per-capita net worth or percentage change. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "CAD billion",
+        "scale": "One output unit equals one CAD billion.",
+        "acceptedUnits": [
+          {
+            "unit": "CAD million",
+            "multiplier": 0.001
+          },
+          {
+            "unit": "CAD",
+            "multiplier": 1e-09
+          }
+        ]
+      }
+    },
+    "d0ad12703a9c38beb524ccda": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "us_federal_budget_balance_2026_08",
+        "definition": "Monthly Treasury Statement federal budget balance for August 2026: receipts minus outlays, surplus positive and deficit negative. Monthly August balance, not fiscal year-to-date balance or unsigned deficit magnitude. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "USD million",
+        "scale": "One output unit equals one USD million.",
+        "acceptedUnits": [
+          {
+            "unit": "USD billion",
+            "multiplier": 1000
+          },
+          {
+            "unit": "USD",
+            "multiplier": 1e-06
+          }
+        ]
+      }
+    },
+    "a602601968d64078a71879f4": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "japan_average_m3_level_2026_08",
+        "definition": "Bank of Japan Money Stock: average M3 outstanding level for August 2026. M3 monthly average, not M2, end-of-month stock, seasonally adjusted month-on-month growth or year-on-year percentage change. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "JPY trillion",
+        "scale": "One output unit equals one JPY trillion.",
+        "acceptedUnits": [
+          {
+            "unit": "JPY billion",
+            "multiplier": 0.001
+          },
+          {
+            "unit": "JPY 100 million",
+            "multiplier": 0.0001
+          },
+          {
+            "unit": "JPY",
+            "multiplier": 1e-12
+          }
+        ]
+      }
+    },
+    "356911c3e2fde65e5bf200f7": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5
+    },
+    "b0282e018de6df5b68a75f67": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5
+    },
+    "a0500f7e4a7480a7f0a91d23": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5
+    },
+    "bdea2cfcb452401b1eb67cb2": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 4
+    },
+    "b44a2cc142977cb59d902269": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "c95cfc80a1a0b78d838464c2": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "943d7bcf261d764177168f6a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "c50f3dafdc1b00587c0c369a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Docked to Poisk"
+        },
+        {
+          "key": "B",
+          "text": "Launched but not docked to Poisk by the deadline"
+        },
+        {
+          "key": "C",
+          "text": "Not launched by the deadline"
+        },
+        {
+          "key": "D",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "e4be83cb65d492aed4ea6ddc": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Both Sentinel-3C and FLEX confirmed separated"
+        },
+        {
+          "key": "B",
+          "text": "Only Sentinel-3C confirmed separated"
+        },
+        {
+          "key": "C",
+          "text": "Only FLEX confirmed separated"
+        },
+        {
+          "key": "D",
+          "text": "Launch occurred but neither payload separation was confirmed"
+        },
+        {
+          "key": "E",
+          "text": "NO_LAUNCH_BY_DEADLINE"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "e9d2d4ccda33a152b89096db": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "uspto_utility_patents_2026_09_15",
+        "definition": "USPTO Electronic Official Gazette dated 15 September 2026: count of utility patents issued in that issue. Exclude design patents, plant patents and application publications; count each utility patent once. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "patents",
+        "scale": "One output unit equals one patents."
+      }
+    },
+    "b41754667f5c2af634d676ac": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "responseFormat": "scalar"
+    },
+    "015307b6d0b309d6538e74ca": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "responseFormat": "identifier_set",
+      "identifierFormat": "cve"
+    },
+    "9a932fe3e18109d8bd027a7e": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5
+    },
+    "cd393fae33b637a951085586": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "responseFormat": "identifier_set",
+      "identifierFormat": "nct"
+    },
+    "8470ab6fda4de00033d6d75c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "6db3af7a62a9c2ccb8b83d42": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "1568681a24a002cc3586e3dd": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "48e23a797a95d6b2bb6d8eb5": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Helena Buonanno Foulkes"
+        },
+        {
+          "key": "B",
+          "text": "Daniel J. McKee"
+        },
+        {
+          "key": "C",
+          "text": "Gregory Stevens"
+        },
+        {
+          "key": "D",
+          "text": "Another ballot candidate"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "46575147e04586e9d367ee4d": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Mike Derry"
+        },
+        {
+          "key": "B",
+          "text": "Kyle Campbell"
+        },
+        {
+          "key": "C",
+          "text": "Kyle Joseph"
+        },
+        {
+          "key": "D",
+          "text": "John Roggeveen"
+        },
+        {
+          "key": "E",
+          "text": "Rolly Ashdown"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "ce6b1d6eeab22ac50481ca2f": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "ofac_sanctions_update_notices_2026_09_09_to_14",
+        "definition": "OFAC sanctions-list update notices published from 9 through 14 September 2026, inclusive, using the dates on OFAC notices. Count notices, not individual designated persons, entities or list records. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "notices",
+        "scale": "One output unit equals one notices."
+      }
+    },
+    "745a1eac5b135235f099b0eb": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 8
+    },
+    "b552cfa911b81efde744149c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_DATA"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "731e26ad5fbafb5dcd3b7660": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Below 40.0%"
+        },
+        {
+          "key": "B",
+          "text": "40.0% to 44.9%"
+        },
+        {
+          "key": "C",
+          "text": "45.0% to 49.9%"
+        },
+        {
+          "key": "D",
+          "text": "50.0% to 54.9%"
+        },
+        {
+          "key": "E",
+          "text": "55.0% or above"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "03f38cd3a718ede35d8e7e99": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0.0 mm"
+        },
+        {
+          "key": "B",
+          "text": "0.5 to 4.5 mm"
+        },
+        {
+          "key": "C",
+          "text": "5.0 to 19.5 mm"
+        },
+        {
+          "key": "D",
+          "text": "20.0 to 49.5 mm"
+        },
+        {
+          "key": "E",
+          "text": "50.0 mm or more"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_DATA"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "bc004bd4b04aa321a1f4889c": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0.0 mm"
+        },
+        {
+          "key": "B",
+          "text": "0.2 to 4.9 mm"
+        },
+        {
+          "key": "C",
+          "text": "5.0 to 14.9 mm"
+        },
+        {
+          "key": "D",
+          "text": "15.0 to 29.9 mm"
+        },
+        {
+          "key": "E",
+          "text": "30.0 mm or more"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_DATA"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "38fa5c8dc3a6c5eff894996a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0"
+        },
+        {
+          "key": "B",
+          "text": "1"
+        },
+        {
+          "key": "C",
+          "text": "2"
+        },
+        {
+          "key": "D",
+          "text": "3"
+        },
+        {
+          "key": "E",
+          "text": "4 or more"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "b32fad0f6a4248995b18a151": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "melbourne_olympic_park_tmax_2026_09_13",
+        "definition": "Australian Bureau of Meteorology maximum temperature for Melbourne Olympic Park dated 13 September 2026. Use that station and the source daily date, not Melbourne Airport, apparent temperature or a multi-day maximum. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "degrees Celsius",
+        "scale": "One output unit equals one degrees Celsius."
+      }
+    },
+    "b88a2453228e3c8a02353bdb": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5,
+      "choices": [
+        {
+          "key": "Tokyo",
+          "text": "Tokyo"
+        },
+        {
+          "key": "Osaka",
+          "text": "Osaka"
+        },
+        {
+          "key": "Sapporo",
+          "text": "Sapporo"
+        },
+        {
+          "key": "Fukuoka",
+          "text": "Fukuoka"
+        },
+        {
+          "key": "Naha",
+          "text": "Naha"
+        }
+      ]
+    },
+    "0133c872c7e805d2d5cb48ad": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "5210751f37b4f4177e574675": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "b1b3d55cb4e8e22b60f75e54": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "87b5cb1b6fac6650227f5202": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 2.30 million"
+        },
+        {
+          "key": "B",
+          "text": "2.30 million to under 2.40 million"
+        },
+        {
+          "key": "C",
+          "text": "2.40 million to under 2.50 million"
+        },
+        {
+          "key": "D",
+          "text": "2.50 million or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "033ca841cdcb25657da04ff0": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 50%"
+        },
+        {
+          "key": "B",
+          "text": "50% to under 60%"
+        },
+        {
+          "key": "C",
+          "text": "60% to under 70%"
+        },
+        {
+          "key": "D",
+          "text": "70% or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "f9b156d1890ff5815ef968ee": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 1.0%"
+        },
+        {
+          "key": "B",
+          "text": "1.0% to under 2.0%"
+        },
+        {
+          "key": "C",
+          "text": "2.0% to under 3.0%"
+        },
+        {
+          "key": "D",
+          "text": "3.0% or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "79d923cec7af2918e80c285e": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "under 0.5%"
+        },
+        {
+          "key": "B",
+          "text": "0.5% to under 0.8%"
+        },
+        {
+          "key": "C",
+          "text": "0.8% to under 1.1%"
+        },
+        {
+          "key": "D",
+          "text": "1.1% or more"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "3b32ab1678b5b10821f2d041": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "england_wales_registered_deaths_week_2026_08_28",
+        "definition": "ONS weekly deaths registered in England and Wales, week ending 28 August 2026. All-cause total registrations; not deaths by occurrence date, England alone or an age subgroup. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "deaths",
+        "scale": "One output unit equals one deaths."
+      }
+    },
+    "c3988497b5970d8b31ebd51c": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "nhs_diagnostic_waits_ge_six_weeks_2026_07",
+        "definition": "NHS England monthly diagnostic waiting-times statistics at end July 2026: number waiting six weeks or more for the 15 key diagnostic tests. Count, not the percentage waiting or total waiting list. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "patients",
+        "scale": "One output unit equals one patients."
+      }
+    },
+    "e53fb8c98852886c0fe95531": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "china_ili_outbreaks_2026_w36",
+        "definition": "China CDC influenza surveillance week 36 of 2026: nationwide influenza-like-illness outbreak count for that week. Not patient cases, cumulative season count or positivity rate. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "outbreaks",
+        "scale": "One output unit equals one outbreaks."
+      }
+    },
+    "c791f9de99593982d9c71cf3": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "hk_chp_influenza_positivity_2026_w36",
+        "definition": "Hong Kong CHP week 36 of 2026 seasonal-influenza respiratory-specimen positivity percentage. All seasonal-influenza viruses combined; not subtype share, ILI consultation rate or case count. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "percent",
+        "scale": "Percent quantity: 2.7 means 2.7 percent, not 0.027.",
+        "acceptedUnits": [
+          {
+            "unit": "fraction",
+            "multiplier": 100
+          }
+        ]
+      }
+    },
+    "6590b63b85286236dd4f63f5": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "nfl_patriots_seahawks_total_points_2026_kickoff",
+        "definition": "Final combined points scored by New England Patriots and Seattle Seahawks in the named 2026 NFL Kickoff Game. Sum both final scores including overtime; not winning margin or one team score. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "points",
+        "scale": "One output unit equals one points."
+      }
+    },
+    "7b8770061fc37ebb787d9995": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "nfl_49ers_rams_total_points_2026_melbourne",
+        "definition": "Final combined points scored by San Francisco 49ers and Los Angeles Rams in their named 2026 Melbourne NFL game. Sum both final scores including overtime; not winning margin or one team score. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "points",
+        "scale": "One output unit equals one points."
+      }
+    },
+    "da331559d899430d0b0b18c4": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "us_open_womens_final_completed_sets_2026",
+        "definition": "Number of fully completed sets in the 2026 US Open women singles final. Count completed sets, not games, points or any unfinished set after a retirement. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "completed sets",
+        "scale": "One output unit equals one completed sets."
+      }
+    },
+    "9e423bc681e1ed8dac09ccac": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, the Dodgers win"
+        },
+        {
+          "key": "B",
+          "text": "No, the Reds win"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "638c020829fad6a08ae57179": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, the Giants win"
+        },
+        {
+          "key": "B",
+          "text": "No, the Cardinals win"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "5657a98e0dfb902403bf0439": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, the United States are champions"
+        },
+        {
+          "key": "B",
+          "text": "No, another team are champions"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_CHAMPION"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "3cd7ea93b7a5528ccef6543f": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Ducati"
+        },
+        {
+          "key": "B",
+          "text": "Aprilia"
+        },
+        {
+          "key": "C",
+          "text": "KTM"
+        },
+        {
+          "key": "D",
+          "text": "Honda"
+        },
+        {
+          "key": "E",
+          "text": "Yamaha"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_CLASSIFICATION"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "e268b68f73654614dabb3dad": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Noah Lyles"
+        },
+        {
+          "key": "B",
+          "text": "Oblique Seville"
+        },
+        {
+          "key": "C",
+          "text": "Kishane Thompson"
+        },
+        {
+          "key": "D",
+          "text": "Letsile Tebogo"
+        },
+        {
+          "key": "E",
+          "text": "Any other athlete"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.9,
+        "reasons": [
+          "single-winner semantics"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "c5e3d86de072587644116f53": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "us_open_mens_final_completed_sets_2026",
+        "definition": "Number of fully completed sets in the 2026 US Open men singles final. Count completed sets, not games, points or any unfinished set after a retirement. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "completed sets",
+        "scale": "One output unit equals one completed sets."
+      }
+    },
+    "45f01f5415bca6653313b474": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "ultimate_championship_womens_1500m_winning_seconds_2026",
+        "definition": "Official winning elapsed time of the women 1500 metres final at the 2026 World Athletics Ultimate Championship. Convert minutes:seconds to total seconds; not the gap to second place or a qualifying time. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "seconds",
+        "scale": "One output unit equals one seconds.",
+        "acceptedUnits": [
+          {
+            "unit": "minutes",
+            "multiplier": 60
+          },
+          {
+            "unit": "milliseconds",
+            "multiplier": 0.001
+          }
+        ]
+      }
+    },
+    "42df558b87c159506af6194b": {
+      "kind": "numeric",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "numericContract": {
+        "targetField": "gp_montreal_winner_to_second_gap_seconds_2026",
+        "definition": "Official final time gap from winner to runner-up at the 2026 Grand Prix Cycliste de Montreal. Use the published results gap in seconds; not winner elapsed time, gap to the peloton or a rounded minutes figure. A same-time runner-up has gap zero. Reference period and resolving event are fixed by the pinned question; do not substitute a later period or a different release.",
+        "unit": "seconds",
+        "scale": "One output unit equals one seconds.",
+        "acceptedUnits": [
+          {
+            "unit": "minutes",
+            "multiplier": 60
+          },
+          {
+            "unit": "milliseconds",
+            "multiplier": 0.001
+          }
+        ]
+      }
+    },
+    "3a39f8dc07bc58fcfb8d45e1": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5
+    },
+    "91777526d3dedcab5f79dd25": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 5
+    },
+    "2c8a7280ff2d75cc7d1f4f1e": {
+      "kind": "ranking",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Ordered positions, not a scalar measurement."
+      },
+      "rankCount": 3
+    },
+    "98add0882ec787466edb8e79": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "9f60af2de289447b90393da5": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes"
+        },
+        {
+          "key": "B",
+          "text": "No"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "e76b71115125631000776bd4": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "The Diplomat"
+        },
+        {
+          "key": "B",
+          "text": "The Gilded Age"
+        },
+        {
+          "key": "C",
+          "text": "A Knight of the Seven Kingdoms"
+        },
+        {
+          "key": "D",
+          "text": "Paradise"
+        },
+        {
+          "key": "E",
+          "text": "The Pitt"
+        },
+        {
+          "key": "F",
+          "text": "Pluribus"
+        },
+        {
+          "key": "G",
+          "text": "Slow Horses"
+        },
+        {
+          "key": "H",
+          "text": "Your Friends & Neighbors"
+        },
+        {
+          "key": "I",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "d969f65abc65d186eefd7534": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Dancing with the Stars"
+        },
+        {
+          "key": "B",
+          "text": "RuPaul's Drag Race"
+        },
+        {
+          "key": "C",
+          "text": "Survivor"
+        },
+        {
+          "key": "D",
+          "text": "Top Chef"
+        },
+        {
+          "key": "E",
+          "text": "The Traitors"
+        },
+        {
+          "key": "F",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "4254aa7f59a5e47de1acc61d": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "0 or 1"
+        },
+        {
+          "key": "B",
+          "text": "2"
+        },
+        {
+          "key": "C",
+          "text": "3"
+        },
+        {
+          "key": "D",
+          "text": "4 or 5"
+        },
+        {
+          "key": "E",
+          "text": "NO_OFFICIAL_RELEASE"
+        }
+      ],
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request. Predict the count bucket as option A-E; top five describes the chart, not the answer format."
+      }
+    },
+    "10fc6b7e9c663330cd0e4e45": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "responseFormat": "scalar"
+    },
+    "b78dfb4a4b2c56878ae38972": {
+      "kind": "open_text",
+      "inference": {
+        "kind": "numeric",
+        "confidence": 0.9,
+        "reasons": [
+          "generic source-native settlement value after ranking exclusion"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      },
+      "responseFormat": "scalar"
+    },
+    "b1b7a7db24ae27f314771965": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "5305d4a9b1101e9ae384db80": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "44c19bd15de66ea6f6680fdb": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "4be6b327e5ca97d7597998c0": {
+      "kind": "ranking",
+      "rankCount": 5,
+      "inference": {
+        "kind": "ranking",
+        "confidence": 0.95,
+        "reasons": [
+          "explicit ranking language"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    },
+    "c2a96fdd53264c0c0ccc1d8a": {
+      "kind": "single_choice",
+      "choices": [
+        {
+          "key": "A",
+          "text": "Yes, Fiji win"
+        },
+        {
+          "key": "B",
+          "text": "No, Canada win"
+        },
+        {
+          "key": "C",
+          "text": "NO_OFFICIAL_RESULT"
+        }
+      ],
+      "inference": {
+        "kind": "single_choice",
+        "confidence": 0.75,
+        "reasons": [
+          "enumerated choices; default singleton"
+        ]
+      },
+      "review": {
+        "status": "edited",
+        "reviewedAtUtc": "2026-09-09T14:51:46Z",
+        "notes": "Reviewed against pinned question wording and output cardinality; prepared by Codex at user request."
+      }
+    }
+  }
+}

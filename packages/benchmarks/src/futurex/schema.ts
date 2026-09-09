@@ -43,6 +43,8 @@ export const FutureXRouteOverrideSchema = z.object({
   choices: z.array(z.object({ key: z.string().min(1), text: z.string().min(1) })).optional(),
   rankCount: z.number().int().min(1).optional(),
   numericContract: NumericOutputContractSchema.optional(),
+  responseFormat: z.enum(["scalar", "identifier_set"]).optional(),
+  identifierFormat: z.enum(["cve", "nct"]).optional(),
   inference: z.object({
     kind: FutureXTaskKindSchema,
     confidence: z.number().min(0).max(1),
@@ -56,6 +58,12 @@ export const FutureXRouteOverrideSchema = z.object({
 }).strict().superRefine((route, context) => {
   if (route.numericContract && route.kind !== "numeric") {
     context.addIssue({ code: z.ZodIssueCode.custom, path: ["numericContract"], message: "numericContract is only valid on numeric routes" });
+  }
+  if ((route.responseFormat || route.identifierFormat) && route.kind !== "open_text") {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "Text response formats are only valid on open_text routes" });
+  }
+  if (route.responseFormat === "identifier_set" && !route.identifierFormat) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "identifier_set requires a reviewed identifierFormat" });
   }
 });
 export const FutureXRouteOverrideFileSchema = z.object({

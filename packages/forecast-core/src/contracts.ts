@@ -83,7 +83,9 @@ export const NumericTaskSchema = z.object({
 
 export const FreeResponseTaskSchema = z.object({
   ...TaskBaseShape,
-  kind: z.literal("free_response")
+  kind: z.literal("free_response"),
+  responseFormat: z.enum(["scalar", "identifier_set"]).optional(),
+  identifierPattern: z.string().min(1).max(200).optional()
 });
 
 export const ForecastTaskSchema = z.discriminatedUnion("kind", [

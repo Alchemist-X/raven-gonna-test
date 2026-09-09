@@ -2,6 +2,7 @@ import type { ForecastAnswer, ForecastTask, TrialPrediction } from "./contracts.
 import { canonicalizeEntity, clusterAnswers } from "./canonicalize.js";
 import { chooseNumericPoint } from "./numeric-decision.js";
 import { normalizeNumericAnswer } from "./numeric-contract.js";
+import { normalizeIdentifierSet } from "./identifier-set.js";
 import { chooseF1Subset } from "./set-decision.js";
 import { blendLogOdds, clampProbability, logitPool, normalizeProbabilities } from "./probability.js";
 
@@ -256,6 +257,14 @@ export function aggregateTrialPredictions(
     case "free_response": {
       const raw = answers.flatMap((answer) => (answer.kind === "free_response" ? [answer.value] : []));
       if (raw.length === 0) throw new Error("No free-response prediction.");
+      if (task.responseFormat === "identifier_set") {
+        const sets = raw.map((value) => normalizeIdentifierSet(value, task.identifierPattern));
+        const tally = new Map<string, number>();
+        for (const value of sets) tally.set(value, (tally.get(value) ?? 0) + 1);
+        const winner = [...tally].sort((a, b) => b[1] - a[1])[0]!;
+        options.derivation?.push({ method: "exact-identifier-set-vote", inputs: { trialSets: sets }, chosen: winner[0], detail: { votes: winner[1], tieBreak: "first-trial" } });
+        return { kind: "free_response", value: winner[0] };
+      }
       // The old vote keyed on lowercase+trim, so "Real Madrid." and "Real
       // Madrid" were rivals rather than the same answer, and ties broke
       // ALPHABETICALLY rather than by support. Cluster equivalent spellings

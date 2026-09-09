@@ -1,0 +1,562 @@
+[
+  {
+    "id": "5fcfacd0ff632fb6997e66ce",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will China's headline CPI inflation be at least 0.8% year on year in August 2026? (resolved around 2026-09-09T12:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, 0.8% or higher\nB. the outcome be No, below 0.8%\nC. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-09T12:00:00+08:00",
+    "level": 1,
+    "en_title": "Will China's headline CPI inflation be at least 0.8% year on year in August 2026?"
+  },
+  {
+    "id": "2afe5ef465c3e93903cc3751",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will Malaysia's Industrial Production Index grow at least 5.0% year on year in July 2026? (resolved around 2026-09-09T18:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, 5.0% or higher\nB. the outcome be No, below 5.0%\nC. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-09T18:00:00+08:00",
+    "level": 1,
+    "en_title": "Will Malaysia's Industrial Production Index grow at least 5.0% year on year in July 2026?"
+  },
+  {
+    "id": "2045107c3e41c849221a4274",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will France's manufacturing output increase month on month in July 2026? (resolved around 2026-09-09T18:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, above 0.0%\nB. the outcome be No, 0.0% or below\nC. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-09T18:00:00+08:00",
+    "level": 1,
+    "en_title": "Will France's manufacturing output increase month on month in July 2026?"
+  },
+  {
+    "id": "90b29c36047d822dde719e58",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What will the Bank of Russia do with its key rate on 11 September 2026? (resolved around 2026-09-11T22:00:00+08:00 (GMT+8)).\nA. the outcome be Raise the key rate\nB. the outcome be Keep the key rate at 14.00%\nC. the outcome be Cut the key rate\nD. the outcome be NO_OFFICIAL_DECISION\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-11T22:00:00+08:00",
+    "level": 1,
+    "en_title": "What will the Bank of Russia do with its key rate on 11 September 2026?"
+  },
+  {
+    "id": "b686795eff906a09b78367f4",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which range will the U.S. all-items CPI monthly change fall in for August 2026? (resolved around 2026-09-11T22:00:00+08:00 (GMT+8)).\nA. the outcome be 0.1% or lower\nB. the outcome be 0.2%-0.3%\nC. the outcome be 0.4%-0.5%\nD. the outcome be 0.6% or higher\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-11T22:00:00+08:00",
+    "level": 2,
+    "en_title": "Which range will the U.S. all-items CPI monthly change fall in for August 2026?"
+  },
+  {
+    "id": "6709be26eb54591b89413d66",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which range will UK monthly real GDP growth fall in for July 2026? (resolved around 2026-09-11T18:00:00+08:00 (GMT+8)).\nA. the outcome be -0.2% or lower\nB. the outcome be -0.1% to 0.0%\nC. the outcome be 0.1%-0.2%\nD. the outcome be 0.3% or higher\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-11T18:00:00+08:00",
+    "level": 2,
+    "en_title": "Which range will UK monthly real GDP growth fall in for July 2026?"
+  },
+  {
+    "id": "e16263721ccf7d86806062cd",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which range will India's all-India combined CPI inflation fall in for August 2026? (resolved around 2026-09-14T22:00:00+08:00 (GMT+8)).\nA. the outcome be Below 4.5%\nB. the outcome be 4.5%-4.9%\nC. the outcome be 5.0%-5.4%\nD. the outcome be 5.5% or higher\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-14T22:00:00+08:00",
+    "level": 2,
+    "en_title": "Which range will India's all-India combined CPI inflation fall in for August 2026?"
+  },
+  {
+    "id": "d4731b70b821438a12b76743",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What seasonally adjusted UK trade-in-goods balance will ONS report for July 2026? (resolved around 2026-09-11T18:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in GBP million.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T18:00:00+08:00",
+    "level": 3,
+    "en_title": "What seasonally adjusted UK trade-in-goods balance will ONS report for July 2026?"
+  },
+  {
+    "id": "65134d1e15adb0dde098c30d",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What high yield will the U.S. Treasury report for its 10-year note auction on 9 September 2026? (resolved around 2026-09-10T08:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in percent.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-10T08:00:00+08:00",
+    "level": 3,
+    "en_title": "What high yield will the U.S. Treasury report for its 10-year note auction on 9 September 2026?"
+  },
+  {
+    "id": "7b3076d1c39fe494a657a14d",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What weekly change in U.S. commercial crude-oil stocks will EIA report for the week ending 4 September 2026? (resolved around 2026-09-11T06:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in million barrels.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T06:00:00+08:00",
+    "level": 3,
+    "en_title": "What weekly change in U.S. commercial crude-oil stocks will EIA report for the week ending 4 September 2026?"
+  },
+  {
+    "id": "4431863a8022d2e4e588575d",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What year-on-year growth rate will China report for total retail sales of consumer goods in August 2026? (resolved around 2026-09-15T13:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in percent.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-15T13:00:00+08:00",
+    "level": 3,
+    "en_title": "What year-on-year growth rate will China report for total retail sales of consumer goods in August 2026?"
+  },
+  {
+    "id": "893089763e17835b2c6fda5d",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What U.S. corn yield will USDA forecast in the September 2026 WASDE? (resolved around 2026-09-12T06:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in bushels per acre.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-12T06:00:00+08:00",
+    "level": 4,
+    "en_title": "What U.S. corn yield will USDA forecast in the September 2026 WASDE?"
+  },
+  {
+    "id": "27f6c68fe4a8e79b95bad4d3",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What national net worth will Statistics Canada report for Q2 2026? (resolved around 2026-09-11T23:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in CAD billion.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T23:00:00+08:00",
+    "level": 4,
+    "en_title": "What national net worth will Statistics Canada report for Q2 2026?"
+  },
+  {
+    "id": "d0ad12703a9c38beb524ccda",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What U.S. federal budget balance will the Monthly Treasury Statement report for August 2026? (resolved around 2026-09-15T23:59:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in USD million.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-15T23:59:00+08:00",
+    "level": 4,
+    "en_title": "What U.S. federal budget balance will the Monthly Treasury Statement report for August 2026?"
+  },
+  {
+    "id": "a602601968d64078a71879f4",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What average M3 money-stock level will the Bank of Japan report for August 2026? (resolved around 2026-09-09T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in JPY trillion.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-09T12:00:00+08:00",
+    "level": 4,
+    "en_title": "What average M3 money-stock level will the Bank of Japan report for August 2026?"
+  },
+  {
+    "id": "356911c3e2fde65e5bf200f7",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which five drivers will finish first through fifth overall at WRC Rally Chile Bio Bío 2026? (resolved around 2026-09-14T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T12:00:00+08:00",
+    "level": 4,
+    "en_title": "Which five drivers will finish first through fifth overall at WRC Rally Chile Bio Bío 2026?"
+  },
+  {
+    "id": "b0282e018de6df5b68a75f67",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which five drivers will finish first through fifth in the 2026 NASCAR Cup Series race at World Wide Technology Raceway? (resolved around 2026-09-14T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T12:00:00+08:00",
+    "level": 4,
+    "en_title": "Which five drivers will finish first through fifth in the 2026 NASCAR Cup Series race at World Wide Technology Raceway?"
+  },
+  {
+    "id": "a0500f7e4a7480a7f0a91d23",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which five athletes will finish first through fifth in the elite men race at 2026 WTCS Karlovy Vary? (resolved around 2026-09-14T04:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T04:00:00+08:00",
+    "level": 4,
+    "en_title": "Which five athletes will finish first through fifth in the elite men race at 2026 WTCS Karlovy Vary?"
+  },
+  {
+    "id": "bdea2cfcb452401b1eb67cb2",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which four archers will occupy first through fourth place in the recurve men classification at the Saltillo 2026 Hyundai Archery World Cup Final? (resolved around 2026-09-14T04:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T04:00:00+08:00",
+    "level": 4,
+    "en_title": "Which four archers will occupy first through fourth place in the recurve men classification at the Saltillo 2026 Hyundai Archery World Cup Final?"
+  },
+  {
+    "id": "b44a2cc142977cb59d902269",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will Apple announce its first foldable iPhone at the 9 September 2026 Apple Event? (resolved around 2026-09-10T06:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T06:00:00+08:00",
+    "level": 1,
+    "en_title": "Will Apple announce its first foldable iPhone at the 9 September 2026 Apple Event?"
+  },
+  {
+    "id": "c95cfc80a1a0b78d838464c2",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will Microsoft's September 2026 regular security update mark at least one newly released CVE as Exploitation Detected? (resolved around 2026-09-10T08:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T08:00:00+08:00",
+    "level": 1,
+    "en_title": "Will Microsoft's September 2026 regular security update mark at least one newly released CVE as Exploitation Detected?"
+  },
+  {
+    "id": "943d7bcf261d764177168f6a",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will USGS ComCat record at least one magnitude 6.5 or larger earthquake from 9 through 14 September 2026 UTC? (resolved around 2026-09-15T20:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-15T20:00:00+08:00",
+    "level": 1,
+    "en_title": "Will USGS ComCat record at least one magnitude 6.5 or larger earthquake from 9 through 14 September 2026 UTC?"
+  },
+  {
+    "id": "c50f3dafdc1b00587c0c369a",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What outcome will NASA report for the Progress 96 launch and planned Poisk-module docking? (resolved around 2026-09-12T12:00:00+08:00 (GMT+8)).\nA. the outcome be Docked to Poisk\nB. the outcome be Launched but not docked to Poisk by the deadline\nC. the outcome be Not launched by the deadline\nD. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-12T12:00:00+08:00",
+    "level": 2,
+    "en_title": "What outcome will NASA report for the Progress 96 launch and planned Poisk-module docking?"
+  },
+  {
+    "id": "e4be83cb65d492aed4ea6ddc",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What payload-deployment outcome will be officially reported for Vega-C mission VV30 on 15 September 2026? (resolved around 2026-09-15T23:59:00+08:00 (GMT+8)).\nA. the outcome be Both Sentinel-3C and FLEX confirmed separated\nB. the outcome be Only Sentinel-3C confirmed separated\nC. the outcome be Only FLEX confirmed separated\nD. the outcome be Launch occurred but neither payload separation was confirmed\nE. the outcome be NO_LAUNCH_BY_DEADLINE\nF. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-15T23:59:00+08:00",
+    "level": 2,
+    "en_title": "What payload-deployment outcome will be officially reported for Vega-C mission VV30 on 15 September 2026?"
+  },
+  {
+    "id": "e9d2d4ccda33a152b89096db",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many utility patents will the USPTO Electronic Official Gazette issue on 15 September 2026? (resolved around 2026-09-15T23:59:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-15T23:59:00+08:00",
+    "level": 3,
+    "en_title": "How many utility patents will the USPTO Electronic Official Gazette issue on 15 September 2026?"
+  },
+  {
+    "id": "b41754667f5c2af634d676ac",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What will be the strongest solar-flare class reported by NASA DONKI from 9 through 11 September 2026 UTC? (resolved around 2026-09-13T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-13T12:00:00+08:00",
+    "level": 3,
+    "en_title": "What will be the strongest solar-flare class reported by NASA DONKI from 9 through 11 September 2026 UTC?"
+  },
+  {
+    "id": "015307b6d0b309d6538e74ca",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which CVE identifiers will CISA add to its Known Exploited Vulnerabilities Catalog from 9 through 14 September 2026? (resolved around 2026-09-15T20:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-15T20:00:00+08:00",
+    "level": 4,
+    "en_title": "Which CVE identifiers will CISA add to its Known Exploited Vulnerabilities Catalog from 9 through 14 September 2026?"
+  },
+  {
+    "id": "9a932fe3e18109d8bd027a7e",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which five PDB entries first released on 9 September 2026 will have the best experimental resolution? (resolved around 2026-09-10T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-10T12:00:00+08:00",
+    "level": 4,
+    "en_title": "Which five PDB entries first released on 9 September 2026 will have the best experimental resolution?"
+  },
+  {
+    "id": "cd393fae33b637a951085586",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which Phase 3 study NCT identifiers will ClinicalTrials.gov first post on 10 September 2026? (resolved around 2026-09-12T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-12T12:00:00+08:00",
+    "level": 4,
+    "en_title": "Which Phase 3 study NCT identifiers will ClinicalTrials.gov first post on 10 September 2026?"
+  },
+  {
+    "id": "8470ab6fda4de00033d6d75c",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will John E. Sununu win New Hampshire's 2026 Republican primary for U.S. Senate? (resolved around 2026-09-09T12:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-09T12:00:00+08:00",
+    "level": 1,
+    "en_title": "Will John E. Sununu win New Hampshire's 2026 Republican primary for U.S. Senate?"
+  },
+  {
+    "id": "6db3af7a62a9c2ccb8b83d42",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will Chris Pappas win New Hampshire's 2026 Democratic primary for U.S. Senate? (resolved around 2026-09-09T12:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-09T12:00:00+08:00",
+    "level": 1,
+    "en_title": "Will Chris Pappas win New Hampshire's 2026 Democratic primary for U.S. Senate?"
+  },
+  {
+    "id": "1568681a24a002cc3586e3dd",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will the UK House of Commons give the Terminally Ill Adults (End of Life) Bill a second reading on 11 September 2026? (resolved around 2026-09-12T08:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-12T08:00:00+08:00",
+    "level": 1,
+    "en_title": "Will the UK House of Commons give the Terminally Ill Adults (End of Life) Bill a second reading on 11 September 2026?"
+  },
+  {
+    "id": "48e23a797a95d6b2bb6d8eb5",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Who will win Rhode Island's 2026 Democratic primary for governor? (resolved around 2026-09-10T12:00:00+08:00 (GMT+8)).\nA. the outcome be Helena Buonanno Foulkes\nB. the outcome be Daniel J. McKee\nC. the outcome be Gregory Stevens\nD. the outcome be Another ballot candidate\nE. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T12:00:00+08:00",
+    "level": 2,
+    "en_title": "Who will win Rhode Island's 2026 Democratic primary for governor?"
+  },
+  {
+    "id": "46575147e04586e9d367ee4d",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Who will win Alberta's Calgary-Shaw provincial by-election on 14 September 2026? (resolved around 2026-09-15T14:00:00+08:00 (GMT+8)).\nA. the outcome be Mike Derry\nB. the outcome be Kyle Campbell\nC. the outcome be Kyle Joseph\nD. the outcome be John Roggeveen\nE. the outcome be Rolly Ashdown\nF. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-15T14:00:00+08:00",
+    "level": 2,
+    "en_title": "Who will win Alberta's Calgary-Shaw provincial by-election on 14 September 2026?"
+  },
+  {
+    "id": "ce6b1d6eeab22ac50481ca2f",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many sanctions-list update notices will OFAC publish from 9 through 14 September 2026? (resolved around 2026-09-15T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-15T12:00:00+08:00",
+    "level": 3,
+    "en_title": "How many sanctions-list update notices will OFAC publish from 9 through 14 September 2026?"
+  },
+  {
+    "id": "745a1eac5b135235f099b0eb",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What will be the preliminary national ranking of Sweden's eight incumbent Riksdag parties by vote share in the 2026 election? (resolved around 2026-09-14T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T12:00:00+08:00",
+    "level": 4,
+    "en_title": "What will be the preliminary national ranking of Sweden's eight incumbent Riksdag parties by vote share in the 2026 election?"
+  },
+  {
+    "id": "b552cfa911b81efde744149c",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will JMA report a daily maximum temperature of at least 30.0 degrees Celsius at Tokyo station on 10 September 2026? (resolved around 2026-09-11T12:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_DATA\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-11T12:00:00+08:00",
+    "level": 1,
+    "en_title": "Will JMA report a daily maximum temperature of at least 30.0 degrees Celsius at Tokyo station on 10 September 2026?"
+  },
+  {
+    "id": "731e26ad5fbafb5dcd3b7660",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What share of the contiguous United States will the U.S. Drought Monitor place in D1-D4 drought on the map valid 8 September 2026? (resolved around 2026-09-11T08:00:00+08:00 (GMT+8)).\nA. the outcome be Below 40.0%\nB. the outcome be 40.0% to 44.9%\nC. the outcome be 45.0% to 49.9%\nD. the outcome be 50.0% to 54.9%\nE. the outcome be 55.0% or above\nF. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-11T08:00:00+08:00",
+    "level": 2,
+    "en_title": "What share of the contiguous United States will the U.S. Drought Monitor place in D1-D4 drought on the map valid 8 September 2026?"
+  },
+  {
+    "id": "03f38cd3a718ede35d8e7e99",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What daily precipitation total will JMA report at Osaka station on 11 September 2026? (resolved around 2026-09-12T12:00:00+08:00 (GMT+8)).\nA. the outcome be 0.0 mm\nB. the outcome be 0.5 to 4.5 mm\nC. the outcome be 5.0 to 19.5 mm\nD. the outcome be 20.0 to 49.5 mm\nE. the outcome be 50.0 mm or more\nF. the outcome be NO_OFFICIAL_DATA\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-12T12:00:00+08:00",
+    "level": 2,
+    "en_title": "What daily precipitation total will JMA report at Osaka station on 11 September 2026?"
+  },
+  {
+    "id": "bc004bd4b04aa321a1f4889c",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What rainfall total will Australia's Bureau of Meteorology report for Sydney Observatory Hill on 12 September 2026? (resolved around 2026-09-13T16:00:00+08:00 (GMT+8)).\nA. the outcome be 0.0 mm\nB. the outcome be 0.2 to 4.9 mm\nC. the outcome be 5.0 to 14.9 mm\nD. the outcome be 15.0 to 29.9 mm\nE. the outcome be 30.0 mm or more\nF. the outcome be NO_OFFICIAL_DATA\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-13T16:00:00+08:00",
+    "level": 2,
+    "en_title": "What rainfall total will Australia's Bureau of Meteorology report for Sydney Observatory Hill on 12 September 2026?"
+  },
+  {
+    "id": "38fa5c8dc3a6c5eff894996a",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many numbered Atlantic disturbances will NHC's 1800 UTC 14 September 2026 Tropical Weather Outlook contain? (resolved around 2026-09-15T06:00:00+08:00 (GMT+8)).\nA. the outcome be 0\nB. the outcome be 1\nC. the outcome be 2\nD. the outcome be 3\nE. the outcome be 4 or more\nF. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-15T06:00:00+08:00",
+    "level": 2,
+    "en_title": "How many numbered Atlantic disturbances will NHC's 1800 UTC 14 September 2026 Tropical Weather Outlook contain?"
+  },
+  {
+    "id": "b32fad0f6a4248995b18a151",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What maximum temperature will Australia's Bureau of Meteorology report for Melbourne Olympic Park on 13 September 2026? (resolved around 2026-09-14T16:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in degrees Celsius.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T16:00:00+08:00",
+    "level": 3,
+    "en_title": "What maximum temperature will Australia's Bureau of Meteorology report for Melbourne Olympic Park on 13 September 2026?"
+  },
+  {
+    "id": "b88a2453228e3c8a02353bdb",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Rank Tokyo, Osaka, Sapporo, Fukuoka, and Naha from highest to lowest JMA daily maximum temperature on 12 September 2026. (resolved around 2026-09-13T12:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-13T12:00:00+08:00",
+    "level": 4,
+    "en_title": "Rank Tokyo, Osaka, Sapporo, Fukuoka, and Naha from highest to lowest JMA daily maximum temperature on 12 September 2026."
+  },
+  {
+    "id": "0133c872c7e805d2d5cb48ad",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will NHS England report that at least 80.0% of urgent suspected-cancer referrals in July 2026 met the 28-day Faster Diagnosis Standard? (resolved around 2026-09-10T20:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T20:00:00+08:00",
+    "level": 1,
+    "en_title": "Will NHS England report that at least 80.0% of urgent suspected-cancer referrals in July 2026 met the 28-day Faster Diagnosis Standard?"
+  },
+  {
+    "id": "5210751f37b4f4177e574675",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will at least 66.0% of NHS England incomplete RTT pathways be within 18 weeks at the end of July 2026? (resolved around 2026-09-10T20:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T20:00:00+08:00",
+    "level": 1,
+    "en_title": "Will at least 66.0% of NHS England incomplete RTT pathways be within 18 weeks at the end of July 2026?"
+  },
+  {
+    "id": "b1b3d55cb4e8e22b60f75e54",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will ONS report a lower employed share for people waiting over 52 weeks for musculoskeletal elective treatment than for those waiting 18 weeks or less? (resolved around 2026-09-09T18:00:00+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\nC. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-09T18:00:00+08:00",
+    "level": 1,
+    "en_title": "Will ONS report a lower employed share for people waiting over 52 weeks for musculoskeletal elective treatment than for those waiting 18 weeks or less?"
+  },
+  {
+    "id": "87b5cb1b6fac6650227f5202",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which band will NHS England's total A&E attendances occupy in August 2026? (resolved around 2026-09-10T20:00:00+08:00 (GMT+8)).\nA. the outcome be under 2.30 million\nB. the outcome be 2.30 million to under 2.40 million\nC. the outcome be 2.40 million to under 2.50 million\nD. the outcome be 2.50 million or more\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T20:00:00+08:00",
+    "level": 2,
+    "en_title": "Which band will NHS England's total A&E attendances occupy in August 2026?"
+  },
+  {
+    "id": "033ca841cdcb25657da04ff0",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What share of adults trying to contact an NHS GP practice will ONS report as finding contact easy in its 10 September 2026 Health Insight Survey release? (resolved around 2026-09-10T18:00:00+08:00 (GMT+8)).\nA. the outcome be under 50%\nB. the outcome be 50% to under 60%\nC. the outcome be 60% to under 70%\nD. the outcome be 70% or more\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T18:00:00+08:00",
+    "level": 2,
+    "en_title": "What share of adults trying to contact an NHS GP practice will ONS report as finding contact easy in its 10 September 2026 Health Insight Survey release?"
+  },
+  {
+    "id": "f9b156d1890ff5815ef968ee",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What influenza laboratory-positivity band will Public Health Scotland report for surveillance week 36 of 2026? (resolved around 2026-09-10T18:00:00+08:00 (GMT+8)).\nA. the outcome be under 1.0%\nB. the outcome be 1.0% to under 2.0%\nC. the outcome be 2.0% to under 3.0%\nD. the outcome be 3.0% or more\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T18:00:00+08:00",
+    "level": 2,
+    "en_title": "What influenza laboratory-positivity band will Public Health Scotland report for surveillance week 36 of 2026?"
+  },
+  {
+    "id": "79d923cec7af2918e80c285e",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What national clinical-laboratory influenza positivity band will CDC FluView report for week 35 of 2026? (resolved around 2026-09-12T06:00:00+08:00 (GMT+8)).\nA. the outcome be under 0.5%\nB. the outcome be 0.5% to under 0.8%\nC. the outcome be 0.8% to under 1.1%\nD. the outcome be 1.1% or more\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-12T06:00:00+08:00",
+    "level": 2,
+    "en_title": "What national clinical-laboratory influenza positivity band will CDC FluView report for week 35 of 2026?"
+  },
+  {
+    "id": "3b32ab1678b5b10821f2d041",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many deaths will ONS report as registered in England and Wales in the week ending 28 August 2026? (resolved around 2026-09-09T18:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in deaths.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-09T18:00:00+08:00",
+    "level": 3,
+    "en_title": "How many deaths will ONS report as registered in England and Wales in the week ending 28 August 2026?"
+  },
+  {
+    "id": "c3988497b5970d8b31ebd51c",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many patients will NHS England report waiting six weeks or more for one of 15 key diagnostic tests at the end of July 2026? (resolved around 2026-09-10T20:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in patients.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-10T20:00:00+08:00",
+    "level": 3,
+    "en_title": "How many patients will NHS England report waiting six weeks or more for one of 15 key diagnostic tests at the end of July 2026?"
+  },
+  {
+    "id": "e53fb8c98852886c0fe95531",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many influenza-like-illness outbreaks will China CDC report nationwide for surveillance week 36 of 2026? (resolved around 2026-09-11T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in outbreaks.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T23:59:59+08:00",
+    "level": 3,
+    "en_title": "How many influenza-like-illness outbreaks will China CDC report nationwide for surveillance week 36 of 2026?"
+  },
+  {
+    "id": "c791f9de99593982d9c71cf3",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What seasonal-influenza respiratory-specimen positivity percentage will Hong Kong CHP report for week 36 of 2026? (resolved around 2026-09-10T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in percent.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-10T23:59:59+08:00",
+    "level": 3,
+    "en_title": "What seasonal-influenza respiratory-specimen positivity percentage will Hong Kong CHP report for week 36 of 2026?"
+  },
+  {
+    "id": "6590b63b85286236dd4f63f5",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many total points will the New England Patriots and Seattle Seahawks score in the 2026 NFL Kickoff Game? (resolved around 2026-09-10T14:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in points.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-10T14:00:00+08:00",
+    "level": 3,
+    "en_title": "How many total points will the New England Patriots and Seattle Seahawks score in the 2026 NFL Kickoff Game?"
+  },
+  {
+    "id": "7b8770061fc37ebb787d9995",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many total points will the San Francisco 49ers and Los Angeles Rams score in their 2026 Melbourne NFL game? (resolved around 2026-09-11T15:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in points.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T15:00:00+08:00",
+    "level": 3,
+    "en_title": "How many total points will the San Francisco 49ers and Los Angeles Rams score in their 2026 Melbourne NFL game?"
+  },
+  {
+    "id": "da331559d899430d0b0b18c4",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many sets will be completed in the 2026 US Open women's singles final? (resolved around 2026-09-13T10:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in completed sets.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-13T10:00:00+08:00",
+    "level": 3,
+    "en_title": "How many sets will be completed in the 2026 US Open women's singles final?"
+  },
+  {
+    "id": "9e423bc681e1ed8dac09ccac",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will the Los Angeles Dodgers defeat the Cincinnati Reds on 9 September 2026? (resolved around 2026-09-10T14:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, the Dodgers win\nB. the outcome be No, the Reds win\nC. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T14:00:00+08:00",
+    "level": 1,
+    "en_title": "Will the Los Angeles Dodgers defeat the Cincinnati Reds on 9 September 2026?"
+  },
+  {
+    "id": "638c020829fad6a08ae57179",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will the San Francisco Giants defeat the St. Louis Cardinals on 9 September 2026? (resolved around 2026-09-10T08:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, the Giants win\nB. the outcome be No, the Cardinals win\nC. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T08:00:00+08:00",
+    "level": 1,
+    "en_title": "Will the San Francisco Giants defeat the St. Louis Cardinals on 9 September 2026?"
+  },
+  {
+    "id": "5657a98e0dfb902403bf0439",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will the United States win the 2026 FIBA Women's Basketball World Cup? (resolved around 2026-09-14T08:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, the United States are champions\nB. the outcome be No, another team are champions\nC. the outcome be NO_OFFICIAL_CHAMPION\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-14T08:00:00+08:00",
+    "level": 1,
+    "en_title": "Will the United States win the 2026 FIBA Women's Basketball World Cup?"
+  },
+  {
+    "id": "3cd7ea93b7a5528ccef6543f",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which manufacturer will win the 2026 San Marino MotoGP Sprint? (resolved around 2026-09-13T02:00:00+08:00 (GMT+8)).\nA. the outcome be Ducati\nB. the outcome be Aprilia\nC. the outcome be KTM\nD. the outcome be Honda\nE. the outcome be Yamaha\nF. the outcome be NO_OFFICIAL_CLASSIFICATION\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-13T02:00:00+08:00",
+    "level": 2,
+    "en_title": "Which manufacturer will win the 2026 San Marino MotoGP Sprint?"
+  },
+  {
+    "id": "e268b68f73654614dabb3dad",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Who will win the men's 100 metres at the 2026 World Athletics Ultimate Championship? (resolved around 2026-09-13T06:00:00+08:00 (GMT+8)).\nA. the outcome be Noah Lyles\nB. the outcome be Oblique Seville\nC. the outcome be Kishane Thompson\nD. the outcome be Letsile Tebogo\nE. the outcome be Any other athlete\nF. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-13T06:00:00+08:00",
+    "level": 2,
+    "en_title": "Who will win the men's 100 metres at the 2026 World Athletics Ultimate Championship?"
+  },
+  {
+    "id": "c5e3d86de072587644116f53",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many sets will be completed in the 2026 US Open men's singles final? (resolved around 2026-09-14T08:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in completed sets.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T08:00:00+08:00",
+    "level": 3,
+    "en_title": "How many sets will be completed in the 2026 US Open men's singles final?"
+  },
+  {
+    "id": "45f01f5415bca6653313b474",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What will be the winning time in the women's 1500 metres final at the 2026 World Athletics Ultimate Championship? (resolved around 2026-09-13T06:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in seconds.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-13T06:00:00+08:00",
+    "level": 3,
+    "en_title": "What will be the winning time in the women's 1500 metres final at the 2026 World Athletics Ultimate Championship?"
+  },
+  {
+    "id": "42df558b87c159506af6194b",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What will be the winning time gap at the 2026 Grand Prix Cycliste de Montréal? (resolved around 2026-09-14T10:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nReport the value in seconds.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T10:00:00+08:00",
+    "level": 3,
+    "en_title": "What will be the winning time gap at the 2026 Grand Prix Cycliste de Montréal?"
+  },
+  {
+    "id": "3a39f8dc07bc58fcfb8d45e1",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which five riders will finish first through fifth in the 2026 San Marino MotoGP Grand Prix race? (resolved around 2026-09-14T04:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T04:00:00+08:00",
+    "level": 4,
+    "en_title": "Which five riders will finish first through fifth in the 2026 San Marino MotoGP Grand Prix race?"
+  },
+  {
+    "id": "91777526d3dedcab5f79dd25",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which five riders will finish first through fifth at the 2026 Grand Prix Cycliste de Québec? (resolved around 2026-09-12T10:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-12T10:00:00+08:00",
+    "level": 4,
+    "en_title": "Which five riders will finish first through fifth at the 2026 Grand Prix Cycliste de Québec?"
+  },
+  {
+    "id": "2c8a7280ff2d75cc7d1f4f1e",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which three athletes will finish first through third in the women's 100 metres final at the 2026 World Athletics Ultimate Championship? (resolved around 2026-09-13T06:00:00+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-13T06:00:00+08:00",
+    "level": 4,
+    "en_title": "Which three athletes will finish first through third in the women's 100 metres final at the 2026 World Athletics Ultimate Championship?"
+  },
+  {
+    "id": "98add0882ec787466edb8e79",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will the incumbent Spotify Global Weekly Top Songs No. 1 retain the top spot on the chart dated 10 September 2026? (resolved around 2026-09-11T23:59:59+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-11T23:59:59+08:00",
+    "level": 1,
+    "en_title": "Will the incumbent Spotify Global Weekly Top Songs No. 1 retain the top spot on the chart dated 10 September 2026?"
+  },
+  {
+    "id": "9f60af2de289447b90393da5",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will the incumbent No. 1 retain the top spot on Circle Chart's 2026 Week 36 Digital Chart? (resolved around 2026-09-10T23:59:59+08:00 (GMT+8)).\nA. the outcome be Yes\nB. the outcome be No\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-10T23:59:59+08:00",
+    "level": 1,
+    "en_title": "Will the incumbent No. 1 retain the top spot on Circle Chart's 2026 Week 36 Digital Chart?"
+  },
+  {
+    "id": "e76b71115125631000776bd4",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which program will win the 2026 Emmy for Outstanding Drama Series? (resolved around 2026-09-15T23:59:59+08:00 (GMT+8)).\nA. the outcome be The Diplomat\nB. the outcome be The Gilded Age\nC. the outcome be A Knight of the Seven Kingdoms\nD. the outcome be Paradise\nE. the outcome be The Pitt\nF. the outcome be Pluribus\nG. the outcome be Slow Horses\nH. the outcome be Your Friends & Neighbors\nI. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-15T23:59:59+08:00",
+    "level": 2,
+    "en_title": "Which program will win the 2026 Emmy for Outstanding Drama Series?"
+  },
+  {
+    "id": "d969f65abc65d186eefd7534",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Which program will win the 2026 Emmy for Outstanding Reality Competition Program? (resolved around 2026-09-15T23:59:59+08:00 (GMT+8)).\nA. the outcome be Dancing with the Stars\nB. the outcome be RuPaul's Drag Race\nC. the outcome be Survivor\nD. the outcome be Top Chef\nE. the outcome be The Traitors\nF. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-15T23:59:59+08:00",
+    "level": 2,
+    "en_title": "Which program will win the 2026 Emmy for Outstanding Reality Competition Program?"
+  },
+  {
+    "id": "4254aa7f59a5e47de1acc61d",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"How many songs from YouTube's prior United States Weekly Top Songs top five will remain in the top five for 4–10 September 2026? (resolved around 2026-09-14T23:59:59+08:00 (GMT+8)).\nA. the outcome be 0 or 1\nB. the outcome be 2\nC. the outcome be 3\nD. the outcome be 4 or 5\nE. the outcome be NO_OFFICIAL_RELEASE\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-14T23:59:59+08:00",
+    "level": 2,
+    "en_title": "How many songs from YouTube's prior United States Weekly Top Songs top five will remain in the top five for 4–10 September 2026?"
+  },
+  {
+    "id": "10fc6b7e9c663330cd0e4e45",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What exact track will rank No. 1 on Spotify's United Kingdom Weekly Top Songs chart dated 10 September 2026? (resolved around 2026-09-11T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T23:59:59+08:00",
+    "level": 3,
+    "en_title": "What exact track will rank No. 1 on Spotify's United Kingdom Weekly Top Songs chart dated 10 September 2026?"
+  },
+  {
+    "id": "b78dfb4a4b2c56878ae38972",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What exact music video will rank No. 1 on YouTube's Global Weekly Top Music Videos chart for 4–10 September 2026? (resolved around 2026-09-14T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T23:59:59+08:00",
+    "level": 3,
+    "en_title": "What exact music video will rank No. 1 on YouTube's Global Weekly Top Music Videos chart for 4–10 September 2026?"
+  },
+  {
+    "id": "b1b7a7db24ae27f314771965",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What ordered top five tracks will Spotify publish for Canada Weekly Top Songs dated 10 September 2026? (resolved around 2026-09-11T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-11T23:59:59+08:00",
+    "level": 4,
+    "en_title": "What ordered top five tracks will Spotify publish for Canada Weekly Top Songs dated 10 September 2026?"
+  },
+  {
+    "id": "5305d4a9b1101e9ae384db80",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What ordered top five artists will YouTube publish on its Global Weekly Top Artists chart for 4–10 September 2026? (resolved around 2026-09-14T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-14T23:59:59+08:00",
+    "level": 4,
+    "en_title": "What ordered top five artists will YouTube publish on its Global Weekly Top Artists chart for 4–10 September 2026?"
+  },
+  {
+    "id": "44c19bd15de66ea6f6680fdb",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What ordered top five songs will Circle Chart publish on its 2026 Week 36 Streaming Chart? (resolved around 2026-09-10T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-10T23:59:59+08:00",
+    "level": 4,
+    "en_title": "What ordered top five songs will Circle Chart publish on its 2026 Week 36 Streaming Chart?"
+  },
+  {
+    "id": "4be6b327e5ca97d7597998c0",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"What ordered top five films will Box Office Mojo report in Domestic Weekend 37 actuals for 11–13 September 2026? (resolved around 2026-09-15T23:59:59+08:00 (GMT+8)).\"\nReturn exactly the source-native value required by the settlement contract, with no units or commentary.\nIMPORTANT: End with \\boxed{YOUR_PREDICTION}.",
+    "end_time": "2026-09-15T23:59:59+08:00",
+    "level": 4,
+    "en_title": "What ordered top five films will Box Office Mojo report in Domestic Weekend 37 actuals for 11–13 September 2026?"
+  },
+  {
+    "id": "c2a96fdd53264c0c0ccc1d8a",
+    "prompt": "You are an agent that can predict future events. The event to be predicted: \"Will Fiji defeat Canada in their 2026 Pacific Nations Cup semifinal? (resolved around 2026-09-12T22:00:00+08:00 (GMT+8)).\nA. the outcome be Yes, Fiji win\nB. the outcome be No, Canada win\nC. the outcome be NO_OFFICIAL_RESULT\"\nIMPORTANT: End with the selected option letter(s) in \\boxed{...}.",
+    "end_time": "2026-09-12T22:00:00+08:00",
+    "level": 1,
+    "en_title": "Will Fiji defeat Canada in their 2026 Pacific Nations Cup semifinal?"
+  }
+]
