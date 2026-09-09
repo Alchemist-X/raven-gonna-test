@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "raven-gonna-test.counterfactual-input.v1",
+  "executionMode": "offline-sensitivity",
+  "submissionEligible": false,
+  "asOfUtc": "2026-09-09T14:55:53Z",
+  "informationPolicy": {
+    "id": "postmortem-frozen-predictions-v1",
+    "outcomes": "retrospective diagnosis only; never a new forecast",
+    "liveResearch": "historical leaderboard only"
+  },
+  "round": "2026-08-26",
+  "officialDisplayWeek": "2026 Sep. Week 1",
+  "leaderboardSource": "https://futurex.live/",
+  "pastRevision": "ed53434a9ddb812ce621c8e7f98965931dd93845",
+  "numericProfile": "github-5pct-truth; dataset std retained but not used",
+  "levelCounts": {
+    "1": 19,
+    "2": 19,
+    "3": 17,
+    "4": 19
+  },
+  "levelWeights": {
+    "1": 0.1,
+    "2": 0.2,
+    "3": 0.3,
+    "4": 0.4
+  },
+  "leaders": [
+    {
+      "rank": 1,
+      "model": "branchus-beta",
+      "framework": "Branchus-beta",
+      "score": 65.93
+    },
+    {
+      "rank": 2,
+      "model": "branchus-alpha",
+      "framework": "Branchus",
+      "score": 65.39
+    },
+    {
+      "rank": 3,
+      "model": "branchus-beta",
+      "framework": "Branchus",
+      "score": 63.32
+    },
+    {
+      "rank": 4,
+      "model": "qwen36-35b",
+      "framework": "DeepForecaster",
+      "score": 60.92
+    },
+    {
+      "rank": 5,
+      "model": "qwen-36",
+      "framework": "Morrow",
+      "score": 60.82
+    }
+  ],
+  "models": {
+    "opus": {
+      "officialScore": 53.8,
+      "officialRank": 31,
+      "unitCases": [
+        {
+          "id": "fa081774b75deba4b9cec134",
+          "title": "U.S. commercial crude-oil stocks for the week ending August 21, 2026",
+          "level": 4,
+          "prediction": "432.2",
+          "groundTruth": [
+            428910.0
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "million barrels",
+          "canonicalUnit": "thousand barrels"
+        },
+        {
+          "id": "2269a24382b3e6b080442590",
+          "title": "How many prescription items will Northern Ireland report in General Pharmaceutical Services Statistics for Q1 2026/27?",
+          "level": 3,
+          "prediction": "11660000",
+          "groundTruth": [
+            11534.5
+          ],
+          "multiplier": 0.001,
+          "predictedUnit": "items",
+          "canonicalUnit": "thousand items"
+        },
+        {
+          "id": "fb039f1ab3d3c02479563914",
+          "title": "Salesforce Q2 FY2027: what exact total revenue will the company report?",
+          "level": 3,
+          "prediction": "11.3898624344406",
+          "groundTruth": [
+            11345.0
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "USD billion",
+          "canonicalUnit": "USD million"
+        },
+        {
+          "id": "60e2cc4116d885a2344f85a2",
+          "title": "Marvell Q2 FY2027: what exact GAAP net revenue will it report?",
+          "level": 3,
+          "prediction": "2.723",
+          "groundTruth": [
+            2739.3
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "USD billion",
+          "canonicalUnit": "USD million"
+        }
+      ],
+      "targetCases": [
+        {
+          "id": "48e68bf06f1297c45a5c0b0d",
+          "title": "U.S. construction spending, July 2026",
+          "level": 4,
+          "prediction": "-0.1",
+          "groundTruth": [
+            2157.6
+          ]
+        },
+        {
+          "id": "4405b5604c4d30f8e8279ab4",
+          "title": "U.S. July 2026 personal consumption expenditures price index",
+          "level": 4,
+          "prediction": "131.5275",
+          "groundTruth": [
+            0.2
+          ]
+        }
+      ]
+    },
+    "gpt56sol": {
+      "officialScore": 58.09,
+      "officialRank": 16,
+      "unitCases": [
+        {
+          "id": "2b9575679e010acb837fcf8e",
+          "title": "Statistics Canada food-services and drinking-places sales, June 2026",
+          "level": 3,
+          "prediction": "8.9",
+          "groundTruth": [
+            8849068.0
+          ],
+          "multiplier": 1000000.0,
+          "predictedUnit": "CAD billion",
+          "canonicalUnit": "CAD thousand"
+        },
+        {
+          "id": "2269a24382b3e6b080442590",
+          "title": "How many prescription items will Northern Ireland report in General Pharmaceutical Services Statistics for Q1 2026/27?",
+          "level": 3,
+          "prediction": "11645000",
+          "groundTruth": [
+            11534.5
+          ],
+          "multiplier": 0.001,
+          "predictedUnit": "items",
+          "canonicalUnit": "thousand items"
+        },
+        {
+          "id": "60e2cc4116d885a2344f85a2",
+          "title": "Marvell Q2 FY2027: what exact GAAP net revenue will it report?",
+          "level": 3,
+          "prediction": "2.728",
+          "groundTruth": [
+            2739.3
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "USD billion",
+          "canonicalUnit": "USD million"
+        },
+        {
+          "id": "ea8809715cd8d76f988cf988",
+          "title": "NVIDIA Q2 FY2027: what exact Data Center revenue will the company report?",
+          "level": 4,
+          "prediction": "88398.569078598",
+          "groundTruth": [
+            89.0
+          ],
+          "multiplier": 0.001,
+          "predictedUnit": "USD million",
+          "canonicalUnit": "USD billion"
+        }
+      ],
+      "targetCases": [
+        {
+          "id": "48e68bf06f1297c45a5c0b0d",
+          "title": "U.S. construction spending, July 2026",
+          "level": 4,
+          "prediction": "-0.2",
+          "groundTruth": [
+            2157.6
+          ]
+        },
+        {
+          "id": "4405b5604c4d30f8e8279ab4",
+          "title": "U.S. July 2026 personal consumption expenditures price index",
+          "level": 4,
+          "prediction": "3.6",
+          "groundTruth": [
+            0.2
+          ]
+        }
+      ]
+    }
+  },
+  "effort": [
+    {
+      "round": "2026-08-26",
+      "sourceArtifact": "runtime-artifacts/futurex/2026-08-26/formal-final/opus5-max/submission.jsonl.manifest.json",
+      "sha256": "ea655fd8743546e206a759c7ea5eb0b44b931ed1c95585faa6fb47779b4af931",
+      "model": "claude-opus-5",
+      "provider": "claude-cli",
+      "reasoningEffort": "high",
+      "effortOverride": "max",
+      "trials": 4,
+      "configuredProviderEffort": "max"
+    },
+    {
+      "round": "2026-08-26",
+      "sourceArtifact": "runtime-artifacts/futurex/2026-08-26/formal-final/gpt56sol-max/submission.jsonl.manifest.json",
+      "sha256": "375d247d7cd1384a3a9aebcb9daddd2067ade449f19ef4e9580c852a3fd24be0",
+      "model": "gpt-5.6-sol",
+      "provider": "codex-cli",
+      "reasoningEffort": "high",
+      "effortOverride": "max",
+      "trials": 4,
+      "configuredProviderEffort": "max"
+    },
+    {
+      "round": "2026-09-02",
+      "sourceArtifact": "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/submission-opus.run-metadata.json",
+      "sha256": "f9cd04e1e17e602c78311670b6816473fc1d829ea0790e48ec968f093792e7b8",
+      "model": "claude-opus-5",
+      "provider": "claude-cli",
+      "reasoningEffort": "high",
+      "effortOverride": null,
+      "trialsCeiling": 4,
+      "configuredProviderEffort": "high"
+    },
+    {
+      "round": "2026-09-02",
+      "sourceArtifact": "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/submission-fable.run-metadata.json",
+      "sha256": "331fa2040552f15d8429fa5e65d405027b8b515defadf242cba94c6b46ed9fe4",
+      "model": "claude-fable-5",
+      "provider": "claude-cli",
+      "reasoningEffort": "high",
+      "effortOverride": null,
+      "trialsCeiling": 4,
+      "configuredProviderEffort": "high"
+    },
+    {
+      "round": "2026-09-02",
+      "sourceArtifact": "runtime-artifacts/futurex/review-2026-09-09/remote-0902-sol/submission.jsonl.manifest.json",
+      "sha256": "f67ccc125bc9fec29facea8c2349aa37c997d0a46f4e48c69c2170605373c65b",
+      "model": "gpt-5.6-sol",
+      "provider": "codex-cli",
+      "reasoningEffort": "high",
+      "effortOverride": "xhigh",
+      "trials": 4,
+      "configuredProviderEffort": "xhigh"
+    }
+  ],
+  "august26LaunchSlots": [
+    {
+      "name": "opus5-max",
+      "model": "claude-opus-5",
+      "requestedEffort": "ultra",
+      "effectiveEffort": "max",
+      "concurrency": 8
+    },
+    {
+      "name": "gpt56sol-max",
+      "model": "gpt-5.6-sol",
+      "requestedEffort": "max",
+      "effectiveEffort": "max",
+      "concurrency": 8
+    }
+  ],
+  "launchSha256": "f96a0bfd0a3a85bb6f55bec21f6850e3849af73a3702f7793be5f34e21a53b26",
+  "sourceHashes": {
+    "runtime-artifacts/futurex/review-2026-09-09/past.json": "b7fcd253aa906fc0ba2b8639a02112f6927283945b34e107b99d9d4c8c4ee862",
+    "runtime-artifacts/futurex/2026-08-19/questions.json": "1efb0dfd1f659482cf69d3d8fbb225fec9de92b7a1f8b72ede6fa40fdcf0a465",
+    "rounds/futurex/2026-08-19/submission-opus.jsonl": "4318d9c68cc8147d7ad986e419d4f93e16b5a5d315738c8b94cf41278937673a",
+    "rounds/futurex/2026-08-19/submission-opus.reasoning.jsonl": "6de7c2f4476686053817af8d8e64afc6ca2623b2334a8925e58dd906823ce810",
+    "rounds/futurex/2026-08-19/submission-fable.jsonl": "16ed6dc65e779432591ab85d91385a00844af6c2172fa44942e4587050ca892b",
+    "rounds/futurex/2026-08-19/submission-fable.reasoning.jsonl": "0b04f3c119809c8f25181f9cac1ba3bf8f3af2f8195b693f73b41b4c68653e2b",
+    "rounds/futurex/2026-08-19/submission-sonnet5.jsonl": "ce350b8282eed6ea01f4cb053fb16661e2eff630a3b877e3743fc89f04b30c42",
+    "rounds/futurex/2026-08-19/submission-sonnet5.reasoning.jsonl": "761f4cf7a4ab910bd660142d0b72409d6d94ba2c4b5c486de523938c5af7c4c3",
+    "runtime-artifacts/futurex/2026-08-26/formal-final/questions.json": "748e62f98e79969b6c90d864c4b7791bcf88bae13cbdfca4901a6e0bb5f42684",
+    "runtime-artifacts/futurex/2026-08-26/formal-final/submission-ready/submission-opus-0826.jsonl": "22f0a0f0eaea75263ba1ff4fc0d658311793c69ab521cd6a024d637362d88c0e",
+    "runtime-artifacts/futurex/2026-08-26/formal-final/opus5-max/submission.reasoning.jsonl": "42fb42baa0f23e1fa178279bf421f83e5f0032c6c6a8ecf8315f792fc505f64c",
+    "runtime-artifacts/futurex/2026-08-26/formal-final/submission-ready/submission-gpt56sol-0826.jsonl": "05c0ccce70b9dea897bb61ed6c267fcf77006738d41b212a68036198e1f63cea",
+    "runtime-artifacts/futurex/2026-08-26/formal-final/gpt56sol-max/submission.reasoning.jsonl": "ac43ae62b29f0de3a8a6f7221f16f838de331133d1aca19d85a9c9343e2bc1f5",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/raw/questions.json": "c9b69a8765fecef89d644d2533017d4e3b56104aae4df38c8c44375c300eec7d",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/submission-opus.jsonl": "beb2ad3d8f7b662dd93e7a46fc6426d19839bd628f27b9b69078d9fe7926f459",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/submission-opus.reasoning.jsonl": "1614f3e58163c8726b7dab0e4f45ff662b59e2ac4d08559b7744809c6e1e295b",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/submission-fable.jsonl": "1e3860fa96bb3e92bfd713b7536b6a6990964df78cc8f4303310f03b11e8f1e4",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-local/submission-fable.reasoning.jsonl": "a77e13fe7e076b3b8672ff95374a2962bc2758d9782e0024646c727aacded39a",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-sol/submission.jsonl": "d4a6b6f4e193bf045f1da0e8dfabdac5a7852f1756da911d4717d590bde92eec",
+    "runtime-artifacts/futurex/review-2026-09-09/remote-0902-sol/submission.reasoning.jsonl": "42b585d3f3458c2dcd355dd4927076d70a4bcd55bd990f2c37446a4cd0263d32"
+  },
+  "caveat": "Adds a local numeric delta to the displayed official baseline under an unverified same-scoring assumption. Local and official L3 baselines do not fully match. Exact production reranking is not established. Target cases are scenario scores, not reconstructed forecasts."
+}

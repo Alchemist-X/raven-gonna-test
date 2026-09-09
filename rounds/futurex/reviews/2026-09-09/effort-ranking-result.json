@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "raven-gonna-test.counterfactual-output.v1",
+  "executionMode": "offline-sensitivity",
+  "submissionEligible": false,
+  "asOfUtc": "2026-09-09T14:55:53Z",
+  "informationPolicy": {
+    "id": "postmortem-frozen-predictions-v1",
+    "outcomes": "retrospective diagnosis only; never a new forecast",
+    "liveResearch": "historical leaderboard only"
+  },
+  "inputSha256": "77087a8417217730e2b2c45e658a16ccbced4653a4ec803ad71274a78aeecbba",
+  "caveat": "Adds a local numeric delta to the displayed official baseline under an unverified same-scoring assumption. Local and official L3 baselines do not fully match. Exact production reranking is not established. Target cases are scenario scores, not reconstructed forecasts.",
+  "models": {
+    "opus": {
+      "officialScore": 53.8,
+      "officialRank": 31,
+      "unitCases": [
+        {
+          "id": "fa081774b75deba4b9cec134",
+          "title": "U.S. commercial crude-oil stocks for the week ending August 21, 2026",
+          "level": 4,
+          "prediction": "432.2",
+          "groundTruth": [
+            428910
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "million barrels",
+          "canonicalUnit": "thousand barrels",
+          "converted": 432200,
+          "before": 0,
+          "after": 0.9764647159926579,
+          "weightedDelta": 2.05571519156349
+        },
+        {
+          "id": "2269a24382b3e6b080442590",
+          "title": "How many prescription items will Northern Ireland report in General Pharmaceutical Services Statistics for Q1 2026/27?",
+          "level": 3,
+          "prediction": "11660000",
+          "groundTruth": [
+            11534.5
+          ],
+          "multiplier": 0.001,
+          "predictedUnit": "items",
+          "canonicalUnit": "thousand items",
+          "converted": 11660,
+          "before": 0,
+          "after": 0.9526467385646005,
+          "weightedDelta": 1.6811413033492948
+        },
+        {
+          "id": "fb039f1ab3d3c02479563914",
+          "title": "Salesforce Q2 FY2027: what exact total revenue will the company report?",
+          "level": 3,
+          "prediction": "11.3898624344406",
+          "groundTruth": [
+            11345
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "USD billion",
+          "canonicalUnit": "USD million",
+          "converted": 11389.8624344406,
+          "before": 0,
+          "after": 0.9937451533831847,
+          "weightedDelta": 1.7536679177350318
+        },
+        {
+          "id": "60e2cc4116d885a2344f85a2",
+          "title": "Marvell Q2 FY2027: what exact GAAP net revenue will it report?",
+          "level": 3,
+          "prediction": "2.723",
+          "groundTruth": [
+            2739.3
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "USD billion",
+          "canonicalUnit": "USD million",
+          "converted": 2723,
+          "before": 0,
+          "after": 0.9858369755418587,
+          "weightedDelta": 1.7397123097797504
+        }
+      ],
+      "unitDelta": 7.230236722427567,
+      "unitsOnly": 61.03023672242757,
+      "rankIfOnlyThisModelChanges": 4,
+      "scenarios": [
+        {
+          "assumedScoreOnEachTargetCase": 0,
+          "targetDelta": 0,
+          "combinedScore": 61.03023672242757,
+          "rankIfOnlyThisModelChanges": 4,
+          "rankIfBothModelsHaveSameTargetScore": 5
+        },
+        {
+          "assumedScoreOnEachTargetCase": 0.5,
+          "targetDelta": 2.1052631578947367,
+          "combinedScore": 63.13549988032231,
+          "rankIfOnlyThisModelChanges": 4,
+          "rankIfBothModelsHaveSameTargetScore": 5
+        },
+        {
+          "assumedScoreOnEachTargetCase": 1,
+          "targetDelta": 4.2105263157894735,
+          "combinedScore": 65.24076303821704,
+          "rankIfOnlyThisModelChanges": 3,
+          "rankIfBothModelsHaveSameTargetScore": 4
+        }
+      ],
+      "rankIfBothModelsFixUnits": 5
+    },
+    "gpt56sol": {
+      "officialScore": 58.09,
+      "officialRank": 16,
+      "unitCases": [
+        {
+          "id": "2b9575679e010acb837fcf8e",
+          "title": "Statistics Canada food-services and drinking-places sales, June 2026",
+          "level": 3,
+          "prediction": "8.9",
+          "groundTruth": [
+            8849068
+          ],
+          "multiplier": 1000000,
+          "predictedUnit": "CAD billion",
+          "canonicalUnit": "CAD thousand",
+          "converted": 8900000,
+          "before": 0,
+          "after": 0.9867490691596229,
+          "weightedDelta": 1.7413218867522757
+        },
+        {
+          "id": "2269a24382b3e6b080442590",
+          "title": "How many prescription items will Northern Ireland report in General Pharmaceutical Services Statistics for Q1 2026/27?",
+          "level": 3,
+          "prediction": "11645000",
+          "groundTruth": [
+            11534.5
+          ],
+          "multiplier": 0.001,
+          "predictedUnit": "items",
+          "canonicalUnit": "thousand items",
+          "converted": 11645,
+          "before": 0,
+          "after": 0.9632897788643617,
+          "weightedDelta": 1.699923139172403
+        },
+        {
+          "id": "60e2cc4116d885a2344f85a2",
+          "title": "Marvell Q2 FY2027: what exact GAAP net revenue will it report?",
+          "level": 3,
+          "prediction": "2.728",
+          "groundTruth": [
+            2739.3
+          ],
+          "multiplier": 1000,
+          "predictedUnit": "USD billion",
+          "canonicalUnit": "USD million",
+          "converted": 2728,
+          "before": 0,
+          "after": 0.9931932831756555,
+          "weightedDelta": 1.7526940291335096
+        },
+        {
+          "id": "ea8809715cd8d76f988cf988",
+          "title": "NVIDIA Q2 FY2027: what exact Data Center revenue will the company report?",
+          "level": 4,
+          "prediction": "88398.569078598",
+          "groundTruth": [
+            89
+          ],
+          "multiplier": 0.001,
+          "predictedUnit": "USD million",
+          "canonicalUnit": "USD billion",
+          "converted": 88.398569078598,
+          "before": 0,
+          "after": 0.9817336622538337,
+          "weightedDelta": 2.066807710008071
+        }
+      ],
+      "unitDelta": 7.260746765066259,
+      "unitsOnly": 65.35074676506626,
+      "rankIfOnlyThisModelChanges": 3,
+      "scenarios": [
+        {
+          "assumedScoreOnEachTargetCase": 0,
+          "targetDelta": 0,
+          "combinedScore": 65.35074676506626,
+          "rankIfOnlyThisModelChanges": 3,
+          "rankIfBothModelsHaveSameTargetScore": 3
+        },
+        {
+          "assumedScoreOnEachTargetCase": 0.5,
+          "targetDelta": 2.1052631578947367,
+          "combinedScore": 67.456009922961,
+          "rankIfOnlyThisModelChanges": 1,
+          "rankIfBothModelsHaveSameTargetScore": 1
+        },
+        {
+          "assumedScoreOnEachTargetCase": 1,
+          "targetDelta": 4.2105263157894735,
+          "combinedScore": 69.56127308085574,
+          "rankIfOnlyThisModelChanges": 1,
+          "rankIfBothModelsHaveSameTargetScore": 1
+        }
+      ],
+      "rankIfBothModelsFixUnits": 3
+    }
+  },
+  "solGapToObservedLeaderAfterUnits": 0.5792532349337449,
+  "solRequiredCombinedTargetScoreToTieLeader": 0.2751452865935288
+}
