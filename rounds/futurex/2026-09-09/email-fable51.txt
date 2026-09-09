@@ -13,8 +13,8 @@ Please find attached our submission for the 2026-09-09 round.
 - Agent framework: raven-gonna-test, commit c62f147407ddbd34a62655597832fd92582e1219 (github.com/Alchemist-X/raven-gonna-test)
 - Dataset revision: 30c9fba49e4b37b12db857714a0b6884d80c6cfa
 - Coverage: 80/80 questions
-- Evidence cutoff: research was performed between 2026-09-09T15:03:16Z and 2026-09-09T15:50:47Z, and retrieval for every question was stopped before that question's own end time; the eight questions already closed at the start were researched for their published results after their end time
-- Attachment SHA-256: 9400a20c7a03ac4c01350c8da811cff4c3a68a7248c6941efa035fd0ecf4cd8f
+- Evidence cutoff: research was performed between 2026-09-09T15:03:16Z and 2026-09-09T15:52:25Z, and retrieval for every question was stopped before that question's own end time; the eight questions already closed at the start were researched for their published results after their end time
+- Attachment SHA-256: f8d4d269ef769f1af0b59587791dc5e10570af8b39e7953b9fdeea308d360baa
 - Visibility: public — fine to list on the leaderboard
 
 Per-question reasoning traces and provenance manifests are archived in the repository above and available on request.

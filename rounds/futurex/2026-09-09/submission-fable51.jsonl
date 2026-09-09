@@ -5,13 +5,13 @@
 {"id":"b686795eff906a09b78367f4","prediction":"C"}
 {"id":"6709be26eb54591b89413d66","prediction":"B"}
 {"id":"e16263721ccf7d86806062cd","prediction":"B"}
-{"id":"d4731b70b821438a12b76743","prediction":"0"}
+{"id":"d4731b70b821438a12b76743","prediction":"-21500"}
 {"id":"65134d1e15adb0dde098c30d","prediction":"4.83"}
-{"id":"7b3076d1c39fe494a657a14d","prediction":"0"}
-{"id":"4431863a8022d2e4e588575d","prediction":"0"}
+{"id":"7b3076d1c39fe494a657a14d","prediction":"-1.5"}
+{"id":"4431863a8022d2e4e588575d","prediction":"3.4"}
 {"id":"893089763e17835b2c6fda5d","prediction":"178.6"}
-{"id":"27f6c68fe4a8e79b95bad4d3","prediction":"0"}
-{"id":"d0ad12703a9c38beb524ccda","prediction":"0"}
+{"id":"27f6c68fe4a8e79b95bad4d3","prediction":"18600"}
+{"id":"d0ad12703a9c38beb524ccda","prediction":"-350000"}
 {"id":"a602601968d64078a71879f4","prediction":"1639.99186666667"}
 {"id":"356911c3e2fde65e5bf200f7","prediction":"Sébastien Ogier, Elfyn Evans, Thierry Neuville, Adrien Fourmaux, Oliver Solberg"}
 {"id":"b0282e018de6df5b68a75f67","prediction":"Kyle Larson, Denny Hamlin, Christopher Bell, William Byron, Ryan Blaney"}
@@ -22,7 +22,7 @@
 {"id":"943d7bcf261d764177168f6a","prediction":"B"}
 {"id":"c50f3dafdc1b00587c0c369a","prediction":"C"}
 {"id":"e4be83cb65d492aed4ea6ddc","prediction":"A"}
-{"id":"e9d2d4ccda33a152b89096db","prediction":"0"}
+{"id":"e9d2d4ccda33a152b89096db","prediction":"6900"}
 {"id":"b41754667f5c2af634d676ac","prediction":"C5.8"}
 {"id":"015307b6d0b309d6538e74ca","prediction":"[]"}
 {"id":"9a932fe3e18109d8bd027a7e","prediction":"38HB, 12NS, 12NQ, 12NR, 12NV"}
@@ -39,7 +39,7 @@
 {"id":"03f38cd3a718ede35d8e7e99","prediction":"B"}
 {"id":"bc004bd4b04aa321a1f4889c","prediction":"A"}
 {"id":"38fa5c8dc3a6c5eff894996a","prediction":"A"}
-{"id":"b32fad0f6a4248995b18a151","prediction":"0"}
+{"id":"b32fad0f6a4248995b18a151","prediction":"18.4"}
 {"id":"b88a2453228e3c8a02353bdb","prediction":"Osaka, Naha, Fukuoka, Tokyo, Sapporo"}
 {"id":"0133c872c7e805d2d5cb48ad","prediction":"B"}
 {"id":"5210751f37b4f4177e574675","prediction":"A"}
@@ -48,21 +48,21 @@
 {"id":"033ca841cdcb25657da04ff0","prediction":"B"}
 {"id":"f9b156d1890ff5815ef968ee","prediction":"B"}
 {"id":"79d923cec7af2918e80c285e","prediction":"D"}
-{"id":"3b32ab1678b5b10821f2d041","prediction":"0"}
-{"id":"c3988497b5970d8b31ebd51c","prediction":"0"}
-{"id":"e53fb8c98852886c0fe95531","prediction":"0"}
-{"id":"c791f9de99593982d9c71cf3","prediction":"0"}
+{"id":"3b32ab1678b5b10821f2d041","prediction":"9900"}
+{"id":"c3988497b5970d8b31ebd51c","prediction":"390000"}
+{"id":"e53fb8c98852886c0fe95531","prediction":"30"}
+{"id":"c791f9de99593982d9c71cf3","prediction":"8"}
 {"id":"6590b63b85286236dd4f63f5","prediction":"44"}
-{"id":"7b8770061fc37ebb787d9995","prediction":"0"}
+{"id":"7b8770061fc37ebb787d9995","prediction":"47"}
 {"id":"da331559d899430d0b0b18c4","prediction":"2"}
 {"id":"9e423bc681e1ed8dac09ccac","prediction":"A"}
 {"id":"638c020829fad6a08ae57179","prediction":"B"}
 {"id":"5657a98e0dfb902403bf0439","prediction":"A"}
 {"id":"3cd7ea93b7a5528ccef6543f","prediction":"A"}
 {"id":"e268b68f73654614dabb3dad","prediction":"E"}
-{"id":"c5e3d86de072587644116f53","prediction":"0"}
-{"id":"45f01f5415bca6653313b474","prediction":"0"}
-{"id":"42df558b87c159506af6194b","prediction":"0"}
+{"id":"c5e3d86de072587644116f53","prediction":"4"}
+{"id":"45f01f5415bca6653313b474","prediction":"236.5"}
+{"id":"42df558b87c159506af6194b","prediction":"5"}
 {"id":"3a39f8dc07bc58fcfb8d45e1","prediction":"Marc Márquez, Marco Bezzecchi, Álex Márquez, Francesco Bagnaia, Pedro Acosta"}
 {"id":"91777526d3dedcab5f79dd25","prediction":"Tadej Pogačar, Arnaud De Lie, Julian Alaphilippe, Michael Matthews, Biniam Girmay"}
 {"id":"2c8a7280ff2d75cc7d1f4f1e","prediction":"Melissa Jefferson-Wooden, Julien Alfred, Sha'Carri Richardson"}

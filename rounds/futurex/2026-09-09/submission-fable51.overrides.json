@@ -244,5 +244,95 @@
     "source": "manual:knowledge-based-ranking",
     "confidence": 0.08,
     "evidence": "knowledge-based 2026 summer holdovers; weekend-37 openers unknown"
+  },
+  "d4731b70b821438a12b76743": {
+    "prediction": "-21500",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "knowledge-based: UK SA goods deficit ran ~£20–23bn/month through 2025-26"
+  },
+  "7b3076d1c39fe494a657a14d": {
+    "prediction": "-1.5",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.05,
+    "evidence": "knowledge-based: median weekly EIA crude draw in late summer ≈ -1 to -2 mb"
+  },
+  "4431863a8022d2e4e588575d": {
+    "prediction": "3.4",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.12,
+    "evidence": "knowledge-based: China retail sales YoY trend 3–4% in 2026"
+  },
+  "27f6c68fe4a8e79b95bad4d3": {
+    "prediction": "18600",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "knowledge-based: StatCan national net worth ≈ C$18 trillion, growing ~1%/qtr"
+  },
+  "d0ad12703a9c38beb524ccda": {
+    "prediction": "-350000",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.08,
+    "evidence": "knowledge-based: August MTS deficits ≈ $-345bn (2025); sign = receipts − outlays"
+  },
+  "e9d2d4ccda33a152b89096db": {
+    "prediction": "6900",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.15,
+    "evidence": "knowledge-based: USPTO weekly utility patent issues ≈ 6,500–7,300 in 2026"
+  },
+  "b32fad0f6a4248995b18a151": {
+    "prediction": "18.4",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.12,
+    "evidence": "climatology: Melbourne Olympic Park mid-September mean max ≈ 18°C"
+  },
+  "c3988497b5970d8b31ebd51c": {
+    "prediction": "390000",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "knowledge-based: NHS England 6+ week diagnostic waits ≈ 380–410k in 2025-26"
+  },
+  "e53fb8c98852886c0fe95531": {
+    "prediction": "30",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.08,
+    "evidence": "knowledge-based: China CDC ILI outbreaks in early-September weeks typically 10–60"
+  },
+  "c791f9de99593982d9c71cf3": {
+    "prediction": "8",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.06,
+    "evidence": "knowledge-based: Hong Kong CHP influenza positivity in September ≈ 5–12%"
+  },
+  "7b8770061fc37ebb787d9995": {
+    "prediction": "47",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.05,
+    "evidence": "knowledge-based: NFL 49ers–Rams totals ≈ 44–50"
+  },
+  "c5e3d86de072587644116f53": {
+    "prediction": "4",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.33,
+    "evidence": "base rate: recent US Open men's finals mostly 4 sets"
+  },
+  "45f01f5415bca6653313b474": {
+    "prediction": "236.5",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.3,
+    "evidence": "knowledge-based: championship women's 1500 m wins ≈ 3:53–3:58 (233–238 s)"
+  },
+  "42df558b87c159506af6194b": {
+    "prediction": "5",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.05,
+    "evidence": "knowledge-based: Montréal gaps range 0 s (sprint) to ~60 s (solo); median small"
+  },
+  "3b32ab1678b5b10821f2d041": {
+    "prediction": "9900",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "ONS page not reachable in time; late-August 2025 weekly registrations ≈ 9.7–10.1k"
   }
 }

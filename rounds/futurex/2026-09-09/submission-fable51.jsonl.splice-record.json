@@ -1,5 +1,5 @@
 {
-  "generatedAtUtc": "2026-09-09T15:50:49.591Z",
+  "generatedAtUtc": "2026-09-09T15:52:27.193Z",
   "checkpoints": [
     "/private/tmp/claude-501/-Users-Aincrad-dev-proj-raven-gonna-test--claude-worktrees-futurex-concurrent-multi-model-testing-8a1b70/9a8f2370-fa80-4917-8238-c1377c7a6556/scratchpad/local-run/run4/submission.jsonl.checkpoint.json",
     "/private/tmp/claude-501/-Users-Aincrad-dev-proj-raven-gonna-test--claude-worktrees-futurex-concurrent-multi-model-testing-8a1b70/9a8f2370-fa80-4917-8238-c1377c7a6556/scratchpad/local-run/run3/submission.jsonl.checkpoint.json",
@@ -29,6 +29,46 @@
       "before": "A",
       "after": "B",
       "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "d4731b70b821438a12b76743",
+      "level": 3,
+      "before": "0",
+      "after": "-21500",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "7b3076d1c39fe494a657a14d",
+      "level": 3,
+      "before": "0",
+      "after": "-1.5",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "4431863a8022d2e4e588575d",
+      "level": 3,
+      "before": "0",
+      "after": "3.4",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "27f6c68fe4a8e79b95bad4d3",
+      "level": 4,
+      "before": "0",
+      "after": "18600",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "d0ad12703a9c38beb524ccda",
+      "level": 4,
+      "before": "0",
+      "after": "-350000",
+      "source": "manual:knowledge-based-numeric",
       "wasFallback": true
     },
     {
@@ -69,6 +109,14 @@
       "before": "A",
       "after": "A",
       "source": "agent-research:tail-A",
+      "wasFallback": true
+    },
+    {
+      "id": "e9d2d4ccda33a152b89096db",
+      "level": 3,
+      "before": "0",
+      "after": "6900",
+      "source": "manual:knowledge-based-numeric",
       "wasFallback": true
     },
     {
@@ -136,6 +184,14 @@
       "wasFallback": true
     },
     {
+      "id": "b32fad0f6a4248995b18a151",
+      "level": 3,
+      "before": "0",
+      "after": "18.4",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
       "id": "b88a2453228e3c8a02353bdb",
       "level": 4,
       "before": "Tokyo, Osaka, Sapporo, Fukuoka, Naha",
@@ -184,11 +240,75 @@
       "wasFallback": true
     },
     {
+      "id": "3b32ab1678b5b10821f2d041",
+      "level": 3,
+      "before": "0",
+      "after": "9900",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "c3988497b5970d8b31ebd51c",
+      "level": 3,
+      "before": "0",
+      "after": "390000",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "e53fb8c98852886c0fe95531",
+      "level": 3,
+      "before": "0",
+      "after": "30",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "c791f9de99593982d9c71cf3",
+      "level": 3,
+      "before": "0",
+      "after": "8",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "7b8770061fc37ebb787d9995",
+      "level": 3,
+      "before": "0",
+      "after": "47",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
       "id": "5657a98e0dfb902403bf0439",
       "level": 1,
       "before": "A",
       "after": "A",
       "source": "agent-research:tail-B",
+      "wasFallback": true
+    },
+    {
+      "id": "c5e3d86de072587644116f53",
+      "level": 3,
+      "before": "0",
+      "after": "4",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "45f01f5415bca6653313b474",
+      "level": 3,
+      "before": "0",
+      "after": "236.5",
+      "source": "manual:knowledge-based-numeric",
+      "wasFallback": true
+    },
+    {
+      "id": "42df558b87c159506af6194b",
+      "level": 3,
+      "before": "0",
+      "after": "5",
+      "source": "manual:knowledge-based-numeric",
       "wasFallback": true
     },
     {
@@ -296,21 +416,5 @@
       "wasFallback": true
     }
   ],
-  "remainingFallback": [
-    "L3:d4731b70b821438a12b76743",
-    "L3:7b3076d1c39fe494a657a14d",
-    "L3:4431863a8022d2e4e588575d",
-    "L4:27f6c68fe4a8e79b95bad4d3",
-    "L4:d0ad12703a9c38beb524ccda",
-    "L3:e9d2d4ccda33a152b89096db",
-    "L3:b32fad0f6a4248995b18a151",
-    "L3:3b32ab1678b5b10821f2d041",
-    "L3:c3988497b5970d8b31ebd51c",
-    "L3:e53fb8c98852886c0fe95531",
-    "L3:c791f9de99593982d9c71cf3",
-    "L3:7b8770061fc37ebb787d9995",
-    "L3:c5e3d86de072587644116f53",
-    "L3:45f01f5415bca6653313b474",
-    "L3:42df558b87c159506af6194b"
-  ]
+  "remainingFallback": []
 }
