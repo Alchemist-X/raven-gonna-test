@@ -396,14 +396,18 @@ async function writeRunAuditArtifact(output: string, results: readonly ForecastR
  * weight/count: 0.1/20 = 0.005 at L1 but 0.4/22 = 0.0182 at L4 — 3.6x. Uniform
  * trials across all 80 therefore buys the least valuable questions the same
  * effort as the most valuable. Trials are the lever with the most direct effect
- * on answer quality, so they scale with level; effort follows for the top two.
+ * on answer quality, so they scale with level (1/1/2/2 since 2026-09-09; see
+ * the table below); effort follows for the top two.
  */
 function futureXLevelOptions(
   task: ForecastTask,
   config: ReturnType<typeof loadPredictorConfig>
 ): Parameters<ForecastEngine["forecast"]>[2] {
   const level = Number((task.metadata as { level?: unknown } | undefined)?.level ?? 1);
-  const trialsByLevel: Record<number, number> = { 1: 1, 2: 2, 3: 3, 4: 4 };
+  // Operator decision 2026-09-09: two rounds in a row were cut short by
+  // subscription session limits and 403 throttling before the deeper trials
+  // ran, so coverage beats depth — one trial for L1/L2, two for L3/L4.
+  const trialsByLevel: Record<number, number> = { 1: 1, 2: 1, 3: 2, 4: 2 };
   // Never spend MORE than the operator configured; the env value is the ceiling.
   const trials = Math.max(1, Math.min(config.trials, trialsByLevel[level] ?? config.trials));
   return {

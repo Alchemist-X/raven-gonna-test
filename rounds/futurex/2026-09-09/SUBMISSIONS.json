@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "raven-gonna-test.futurex-submission-log.v1",
+  "round": "2026-09-09",
+  "deadlineUtc": "2026-09-09T16:00:00Z",
+  "recipient": "FutureX-ai@outlook.com",
+  "channel": "email (FutureX has no submission API)",
+  "datasetRevision": "30c9fba49e4b37b12db857714a0b6884d80c6cfa",
+  "leaderboardUpdateDue": "2026-09-17T16:00:00Z",
+  "submissions": [],
+  "candidates": [
+    {
+      "entry": "raven_labs/claude-fable-5-1",
+      "attachment": "submission-fable51.jsonl",
+      "sha256": "f8d4d269ef769f1af0b59587791dc5e10570af8b39e7953b9fdeea308d360baa",
+      "evidenceCutoffUtc": "2026-09-09T15:03:16Z",
+      "researchWindowUtc": [
+        "2026-09-09T15:03:16Z",
+        "2026-09-09T15:52:25Z"
+      ],
+      "agentFrameworkCommit": "f7941fe8a8ea378df5cc307412445087aa167dec (Huginn worktree) / c62f147407ddbd34a62655597832fd92582e1219 (local, docs-only delta)",
+      "emailBody": "email-fable51.txt",
+      "status": "awaiting human send",
+      "answerSources": {
+        "harness": 29,
+        "splicedAgentResearch": 51,
+        "deterministicFallback": 0
+      },
+      "note": "Time-boxed round (50 min). See README for the run history and per-row answer sources."
+    }
+  ]
+}

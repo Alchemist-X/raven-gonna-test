@@ -1,0 +1,338 @@
+{
+  "b686795eff906a09b78367f4": {
+    "prediction": "C",
+    "source": "agent-research:tail-A",
+    "confidence": 0.5,
+    "evidence": "Street consensus for Aug 2026 headline CPI m/m is 0.4% (Cleveland Fed nowcast 0.36%), release Sep 11 8:30 ET - https://nowflation.com/cpi/august-2026"
+  },
+  "6709be26eb54591b89413d66": {
+    "prediction": "B",
+    "source": "agent-research:tail-A",
+    "confidence": 0.5,
+    "evidence": "Consensus for July 2026 UK monthly GDP is 0.0% m/m; Deutsche Bank forecasts -0.1% (services/production drag) - https://www.fxstreet.com/news/united-kingdom-growth-pace-cools-after-hot-start-deutsche-bank-202609071411"
+  },
+  "e16263721ccf7d86806062cd": {
+    "prediction": "B",
+    "source": "agent-research:tail-A",
+    "confidence": 0.7,
+    "evidence": "Reuters poll (44 economists, Sep 3-9) median 4.80% for Aug 2026 CPI, range 4.40-5.05%, data due Sep 14 - https://www.investing.com/news/economy-news/india-august-consumer-inflation-likely-hit-20month-high-on-food-fuel-prices-reuters-poll-4892966"
+  },
+  "e4be83cb65d492aed4ea6ddc": {
+    "prediction": "A",
+    "source": "agent-research:tail-A",
+    "confidence": 0.6,
+    "evidence": "Avio/ESA confirm VV30 liftoff Sep 14 22:21 Kourou (01:21 UTC Sep 15), 116 min to last separation, both satellites stacked in launch tower, no delay reported - https://www.avio.com/press-release/avio-to-launch-copernicus-sentinel-3-c-and-flex-satellites-on-september-14th-2026-on-vega-c"
+  },
+  "46575147e04586e9d367ee4d": {
+    "prediction": "A",
+    "source": "agent-research:tail-A",
+    "confidence": 0.55,
+    "evidence": "UCP held Calgary-Shaw by 13 pts in 2023 (Schulz); UCP's Mike Derry vs NDP's Kyle Campbell, no public riding poll found; incumbency/riding lean favors UCP despite NDP momentum - https://daveberta.substack.com/p/calgary-shaw-by-election-called-for"
+  },
+  "731e26ad5fbafb5dcd3b7660": {
+    "prediction": "E",
+    "source": "agent-research:tail-A",
+    "confidence": 0.9,
+    "evidence": "USDM CONUS D1-D4: 52.70% (Aug 18) -> 56.61% (Aug 25) -> 59.05% (Sep 1), rising ~3 pts/week - https://usdmdataservices.unl.edu/api/USStatistics/GetDroughtSeverityStatisticsByAreaPercent?aoi=conus&startdate=8/18/2026&enddate=9/1/2026&statisticsType=1"
+  },
+  "bc004bd4b04aa321a1f4889c": {
+    "prediction": "A",
+    "source": "agent-research:tail-A",
+    "confidence": 0.65,
+    "evidence": "Met Office forecast for Sydney Sat 12 Sep 2026: sunny, <5% chance of precipitation (Fri 10%, Sun <5%); BoM page blocked (403) - https://weather.metoffice.gov.uk/forecast/r3gx2b7f8"
+  },
+  "38fa5c8dc3a6c5eff894996a": {
+    "prediction": "A",
+    "source": "agent-research:tail-A",
+    "confidence": 0.5,
+    "evidence": "NHC Atlantic TWO 8 AM EDT Sep 9 2026: zero numbered areas, 'tropical cyclone formation is not expected during the next 7 days'; below-normal El Nino season (only Arthur, Bertha so far) - https://www.nhc.noaa.gov/gtwo.php?basin=atlc&fdays=7"
+  },
+  "87b5cb1b6fac6650227f5202": {
+    "prediction": "B",
+    "source": "agent-research:tail-A",
+    "confidence": 0.65,
+    "evidence": "July 2026 A&E attendances ~2.49-2.5m (record); Aug/Jul seasonal ratio 2025 = 2,265,945/2,407,884 = 0.94 -> ~2.34m for Aug 2026 - https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2025/09/Statistical-commentary-August-2025-4F9gs-2.pdf"
+  },
+  "033ca841cdcb25657da04ff0": {
+    "prediction": "B",
+    "source": "agent-research:tail-A",
+    "confidence": 0.4,
+    "evidence": "No HIS 'easy to contact' figure retrievable (bulletin pages 404/blocked); GP Patient Survey 2026 has 57% finding phone contact easy and HIS overall 'good' experience 73%, so ease-of-contact most likely in the 50s - https://www.healthwatch.co.uk/response/2026-07-09/our-response-gp-patient-survey-2026"
+  },
+  "f9b156d1890ff5815ef968ee": {
+    "prediction": "B",
+    "source": "agent-research:tail-A",
+    "confidence": 0.4,
+    "evidence": "PHS 3 Sep 2026 report page gives no table; influenza at baseline activity in late summer, Scotland summer flu positivity typically ~1-2% - https://publichealthscotland.scot/publications/viral-respiratory-diseases-in-scotland-surveillance-report/viral-respiratory-diseases-in-scotland-surveillance-report-3-september-2026/"
+  },
+  "79d923cec7af2918e80c285e": {
+    "prediction": "D",
+    "source": "agent-research:tail-A",
+    "confidence": 0.6,
+    "evidence": "CDC clinical-lab flu positivity rising: wk32 0.7% -> wk33 0.8% -> wk34 1.1%; trend points to >=1.1% in wk35 - https://www.cdc.gov/fluview/surveillance/2026-week-34.html"
+  },
+  "e76b71115125631000776bd4": {
+    "prediction": "E",
+    "source": "agent-research:tail-B",
+    "confidence": 0.7,
+    "evidence": "The Pitt (defending winner, 25 noms) leads Kalshi Outstanding Drama market at 74% vs Knight of Seven Kingdoms 15%, Pluribus 11%; ceremony 2026-09-14 - https://news.kalshi.com/p/2026-emmy-odds-favorites-to-win"
+  },
+  "d969f65abc65d186eefd7534": {
+    "prediction": "E",
+    "source": "agent-research:tail-B",
+    "confidence": 0.6,
+    "evidence": "Variety final predictions have The Traitors (2024+2025 winner) narrowly edging Survivor S50 for a third straight win - https://variety.com/lists/2026-emmys-predictions/"
+  },
+  "4254aa7f59a5e47de1acc61d": {
+    "prediction": "D",
+    "source": "agent-research:tail-B",
+    "confidence": 0.45,
+    "evidence": "Prior (Aug28-Sep3) top5: Choosin' Texas, Dai Dai, Hootie Frutti, AH HA, Animal (soundcharts.com/en/charts/youtube/united-states); kworb US daily Sep 7: LISA SaWaDiKa new #1 (MV out Sep 4), Dai Dai/Choosin' Texas safe, AH HA collapsed to #9, Animal 1.20M vs Sunflower 1.17M vs Hootie Frutti 1.16M fighting for slots 4-5; both KATSEYE songs had early-week lead so 4 remain slightly favored over 3 - https://kworb.net/youtube/insights/us_daily.html"
+  },
+  "90b29c36047d822dde719e58": {
+    "prediction": "B",
+    "source": "agent-research:tail-B",
+    "confidence": 0.85,
+    "evidence": "TASS consensus: 18 of 19 analysts expect CBR to hold at 14.00% on Sep 11 (inflation re-accelerating, weaker ruble, fuel shortages) - https://tass.com/economy/2184827"
+  },
+  "943d7bcf261d764177168f6a": {
+    "prediction": "B",
+    "source": "agent-research:tail-B",
+    "confidence": 0.52,
+    "evidence": "USGS ComCat: 27 M6.5+ events Jan1-Sep9 2026 (0.107/day) -> P(>=1 in remaining ~5.4 days) ~44%; no M6.5+ since Sep 1 (only M6.3 Alaska Sep 3, M6.2 S.Sandwich Sep 2) - https://earthquake.usgs.gov/fdsnws/event/1/count?starttime=2026-01-01&minmagnitude=6.5"
+  },
+  "1568681a24a002cc3586e3dd": {
+    "prediction": "A",
+    "source": "agent-research:tail-B",
+    "confidence": 0.66,
+    "evidence": "Lauren Edwards' reintroduced bill has 2nd reading scheduled Fri 11 Sep 2026; sponsor 'confident', 'not seeing big amounts of switchers'; predecessor passed 330-275 (2R) and 314-291 (3R); free vote - https://commonslibrary.parliament.uk/research-briefings/cbp-12181/ ; https://www.kentonline.co.uk/medway/news/kent-mp-fronting-assisted-dying-bill-confident-it-will-pas-344708/"
+  },
+  "0133c872c7e805d2d5cb48ad": {
+    "prediction": "B",
+    "source": "agent-research:tail-B",
+    "confidence": 0.6,
+    "evidence": "FDS June 2026 = 79% (below 80% target), April 2026 = 76%; July historically flat vs June, so clearing 80.0 needs an unusual jump - https://news.cancerresearchuk.org/2026/08/18/cancer-waiting-times-latest-updates-and-analysis/"
+  },
+  "5210751f37b4f4177e574675": {
+    "prediction": "A",
+    "source": "agent-research:tail-B",
+    "confidence": 0.53,
+    "evidence": "RTT within 18 weeks: May 2026 65.5% -> June 2026 65.8% (+0.3/mo); 66.0 needs +0.2, though RCS notes 52-week waits rose 11k Mar->Jun (summer pressure) - https://www.rcseng.ac.uk/news-and-events/media-centre/press-releases/rtt-august-2026/ ; https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2026/07/May26-RTT-statistical-press-notice-PDF-574K-3jBgba.pdf"
+  },
+  "b1b3d55cb4e8e22b60f75e54": {
+    "prediction": "B",
+    "source": "agent-research:tail-B",
+    "confidence": 0.6,
+    "evidence": "ONS bulletin published 9 Sep 2026: 'no statistical evidence of a relationship between waiting times for elective inpatient treatment for MSK conditions and subsequent employee status or benefit receipt'; only earnings reductions reported, no lower employed share by waiting band - https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/musculoskeletalelectivetreatmentwaitingtimesandlabourmarketoutcomesengland/2014to2025"
+  },
+  "5657a98e0dfb902403bf0439": {
+    "prediction": "A",
+    "source": "agent-research:tail-B",
+    "confidence": 0.7,
+    "evidence": "USA 3-0 in group (105-64 Czechia, 55-52 scare vs Italy), straight to QF Sep 10 vs Hungary/Japan, SF Sep 12, final Sep 13; still the clear favorite despite a thin roster - https://www.usab.com/news/2026/09/usa-ita-2026wwc-game-2"
+  },
+  "98add0882ec787466edb8e79": {
+    "prediction": "A",
+    "source": "agent-research:tail-B",
+    "confidence": 0.92,
+    "evidence": "Incumbent 'BbY WOW' (KAROL G) #1 on Sep 3 weekly chart; kworb global daily Sep 7: 6.02M streams vs 3.16M for #2 Tame Impala 'Loser' - near-2x lead mid-week - https://kworb.net/spotify/country/global_daily.html"
+  },
+  "9f60af2de289447b90393da5": {
+    "prediction": "B",
+    "source": "agent-research:tail-B",
+    "confidence": 0.65,
+    "evidence": "Week 35 (Aug 23-29) #1 'Blingy' NCT 127 (released Aug 24) via download-driven double crown (21.03M pts) ending Rescene 'Love Attack' 7-week run; only #9 on Soompi's Sep wk1 composite chart, so week-2 download decay likely hands #1 back to a streaming hit - https://www.soompi.com/article/1869117wpp/nct-127-alpha-drive-one-rescene-illit-and-more-top-circle-weekly-charts ; https://en.wikipedia.org/wiki/List_of_Circle_Digital_Chart_number_ones_of_2026"
+  },
+  "10fc6b7e9c663330cd0e4e45": {
+    "prediction": "Rein Me In",
+    "source": "agent-research:tail-M",
+    "confidence": 0.6,
+    "evidence": "kworb Spotify UK weekly chart dated 2026-09-03: Sam Fender ft. Olivia Dean 'Rein Me In' No.1 (2.29M) held, 19% ahead of No.2 — https://kworb.net/spotify/country/gb_weekly.html"
+  },
+  "b41754667f5c2af634d676ac": {
+    "prediction": "C5.8",
+    "source": "agent-research:tail-M",
+    "confidence": 0.15,
+    "evidence": "9 Sep activity capped at C1.3, SWPC 15%/day M-class chance → C-class most likely strongest over 9–11 Sep — https://meteoagent.com/solar-flares-forecast"
+  },
+  "015307b6d0b309d6538e74ca": {
+    "prediction": "[]",
+    "source": "manual:empty-identifier-set",
+    "confidence": 0.1,
+    "evidence": "No KEV additions published for 9 Sep as of 15:45Z (latest alert 8 Sep, four CVEs); future IDs unknowable"
+  },
+  "cd393fae33b637a951085586": {
+    "prediction": "[]",
+    "source": "manual:empty-identifier-set",
+    "confidence": 0.05,
+    "evidence": "Resolves 10 Sep; no records visible before posting"
+  },
+  "356911c3e2fde65e5bf200f7": {
+    "prediction": "Sébastien Ogier, Elfyn Evans, Thierry Neuville, Adrien Fourmaux, Oliver Solberg",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.2,
+    "evidence": "knowledge-based: 2026 WRC front-runners; Ogier won Chile 2025"
+  },
+  "b0282e018de6df5b68a75f67": {
+    "prediction": "Kyle Larson, Denny Hamlin, Christopher Bell, William Byron, Ryan Blaney",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.15,
+    "evidence": "knowledge-based: 2026 Cup Series form"
+  },
+  "a0500f7e4a7480a7f0a91d23": {
+    "prediction": "Hayden Wilde, Alex Yee, Matthew Hauser, Léo Bergère, Vasco Vilaça",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.15,
+    "evidence": "knowledge-based: WTCS 2025-26 elite men ranking"
+  },
+  "bdea2cfcb452401b1eb67cb2": {
+    "prediction": "Kim Woojin, Marcus D'Almeida, Lee Woo-seok, Brady Ellison",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.15,
+    "evidence": "knowledge-based: recurve men World Cup Final regulars"
+  },
+  "745a1eac5b135235f099b0eb": {
+    "prediction": "Social Democrats, Sweden Democrats, Moderates, Left Party, Centre Party, Green Party, Christian Democrats, Liberals",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.35,
+    "evidence": "2026 polling order (S≈34, SD≈20, M≈18, V≈8, C≈6, MP≈5, KD≈5, L≈3)"
+  },
+  "b88a2453228e3c8a02353bdb": {
+    "prediction": "Osaka, Naha, Fukuoka, Tokyo, Sapporo",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.3,
+    "evidence": "mid-September climatology (Osaka/Naha/Fukuoka ~31, Tokyo ~29, Sapporo ~23)"
+  },
+  "3a39f8dc07bc58fcfb8d45e1": {
+    "prediction": "Marc Márquez, Marco Bezzecchi, Álex Márquez, Francesco Bagnaia, Pedro Acosta",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.2,
+    "evidence": "knowledge-based: 2026 MotoGP form; Bezzecchi strong at Misano"
+  },
+  "91777526d3dedcab5f79dd25": {
+    "prediction": "Tadej Pogačar, Arnaud De Lie, Julian Alaphilippe, Michael Matthews, Biniam Girmay",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.15,
+    "evidence": "knowledge-based: Québec 2025 podium + 2026 form"
+  },
+  "2c8a7280ff2d75cc7d1f4f1e": {
+    "prediction": "Melissa Jefferson-Wooden, Julien Alfred, Sha'Carri Richardson",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.25,
+    "evidence": "2025 world championship medallists"
+  },
+  "b1b7a7db24ae27f314771965": {
+    "prediction": "BbY WOW, Man I Need, Golden, Ordinary, SaWaDiKa",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.1,
+    "evidence": "global chart leaders per agent evidence (KAROL G BbY WOW global No.1 on Sep 7)"
+  },
+  "5305d4a9b1101e9ae384db80": {
+    "prediction": "KAROL G, Bad Bunny, Taylor Swift, HUNTR/X, Sombr",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.1,
+    "evidence": "YouTube global top-artist regulars 2026"
+  },
+  "44c19bd15de66ea6f6680fdb": {
+    "prediction": "Blingy, Golden, Soda Pop, Your Idol, Whiplash",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.08,
+    "evidence": "NCT 127 Blingy No.1 (agent evidence) + long-running K-streaming hits"
+  },
+  "4be6b327e5ca97d7597998c0": {
+    "prediction": "The Odyssey, Spider-Man Brand New Day, Toy Story 5, Supergirl, Disclosure Day",
+    "source": "manual:knowledge-based-ranking",
+    "confidence": 0.08,
+    "evidence": "knowledge-based 2026 summer holdovers; weekend-37 openers unknown"
+  },
+  "d4731b70b821438a12b76743": {
+    "prediction": "-21500",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "knowledge-based: UK SA goods deficit ran ~£20–23bn/month through 2025-26"
+  },
+  "7b3076d1c39fe494a657a14d": {
+    "prediction": "-1.5",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.05,
+    "evidence": "knowledge-based: median weekly EIA crude draw in late summer ≈ -1 to -2 mb"
+  },
+  "4431863a8022d2e4e588575d": {
+    "prediction": "3.4",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.12,
+    "evidence": "knowledge-based: China retail sales YoY trend 3–4% in 2026"
+  },
+  "27f6c68fe4a8e79b95bad4d3": {
+    "prediction": "18600",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "knowledge-based: StatCan national net worth ≈ C$18 trillion, growing ~1%/qtr"
+  },
+  "d0ad12703a9c38beb524ccda": {
+    "prediction": "-350000",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.08,
+    "evidence": "knowledge-based: August MTS deficits ≈ $-345bn (2025); sign = receipts − outlays"
+  },
+  "e9d2d4ccda33a152b89096db": {
+    "prediction": "6900",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.15,
+    "evidence": "knowledge-based: USPTO weekly utility patent issues ≈ 6,500–7,300 in 2026"
+  },
+  "b32fad0f6a4248995b18a151": {
+    "prediction": "18.4",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.12,
+    "evidence": "climatology: Melbourne Olympic Park mid-September mean max ≈ 18°C"
+  },
+  "c3988497b5970d8b31ebd51c": {
+    "prediction": "390000",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "knowledge-based: NHS England 6+ week diagnostic waits ≈ 380–410k in 2025-26"
+  },
+  "e53fb8c98852886c0fe95531": {
+    "prediction": "30",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.08,
+    "evidence": "knowledge-based: China CDC ILI outbreaks in early-September weeks typically 10–60"
+  },
+  "c791f9de99593982d9c71cf3": {
+    "prediction": "8",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.06,
+    "evidence": "knowledge-based: Hong Kong CHP influenza positivity in September ≈ 5–12%"
+  },
+  "7b8770061fc37ebb787d9995": {
+    "prediction": "47",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.05,
+    "evidence": "knowledge-based: NFL 49ers–Rams totals ≈ 44–50"
+  },
+  "c5e3d86de072587644116f53": {
+    "prediction": "4",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.33,
+    "evidence": "base rate: recent US Open men's finals mostly 4 sets"
+  },
+  "45f01f5415bca6653313b474": {
+    "prediction": "236.5",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.3,
+    "evidence": "knowledge-based: championship women's 1500 m wins ≈ 3:53–3:58 (233–238 s)"
+  },
+  "42df558b87c159506af6194b": {
+    "prediction": "5",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.05,
+    "evidence": "knowledge-based: Montréal gaps range 0 s (sprint) to ~60 s (solo); median small"
+  },
+  "3b32ab1678b5b10821f2d041": {
+    "prediction": "9900",
+    "source": "manual:knowledge-based-numeric",
+    "confidence": 0.1,
+    "evidence": "ONS page not reachable in time; late-August 2025 weekly registrations ≈ 9.7–10.1k"
+  }
+}
