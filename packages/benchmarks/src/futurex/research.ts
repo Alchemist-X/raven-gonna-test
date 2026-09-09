@@ -22,6 +22,7 @@ export interface FutureXInventoryRow {
   inferredConfidence: number;
   inferredReasons: string[];
   reviewStatus: "missing" | "pending" | "approved" | "edited";
+  numericContractStatus: "present" | "missing" | "not_applicable";
   openAtCutoff: boolean | null;
   theoreticalOverallWeight: number;
 }
@@ -52,6 +53,7 @@ export function analyzeFutureXQuestions(
       inferredConfidence: inferred.confidence,
       inferredReasons: inferred.reasons,
       reviewStatus: override?.review?.status ?? (override ? "pending" : "missing"),
+      numericContractStatus: effective.kind !== "numeric" ? "not_applicable" : override?.numericContract ? "present" : "missing",
       openAtCutoff: asOfMs === undefined || !Number.isFinite(endMs) ? null : asOfMs < endMs,
       theoreticalOverallWeight: LEVEL_WEIGHTS[question.level] / (levelCounts.get(question.level) ?? 1)
     };
@@ -80,7 +82,8 @@ export function analyzeFutureXQuestions(
       approved: rows.filter((row) => row.reviewStatus === "approved" || row.reviewStatus === "edited").length,
       pending: rows.filter((row) => row.reviewStatus === "pending").length,
       missing: rows.filter((row) => row.reviewStatus === "missing").length,
-      lowConfidence: rows.filter((row) => row.inferredConfidence < 0.8).length
+      lowConfidence: rows.filter((row) => row.inferredConfidence < 0.8).length,
+      missingNumericContracts: rows.filter((row) => row.numericContractStatus === "missing").length
     },
     rows
   };

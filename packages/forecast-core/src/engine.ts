@@ -15,6 +15,7 @@ import { validatePolicyForTask } from "./policy.js";
 import { answerTypeForTask, buildPrompts } from "./prompt.js";
 import { extractJsonLenient, salvageChoice, salvageNumber } from "./parse.js";
 import { normalizeProbabilities } from "./probability.js";
+import { normalizeNumericAnswer } from "./numeric-contract.js";
 
 export interface ForecastEngineOptions extends AggregationOptions {
   trials?: number;
@@ -135,6 +136,20 @@ export function parseModelAnswer(task: ForecastTask, response: ModelResponse): F
     }
     case "numeric": {
       const raw = typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : {};
+      if (task.numericContract) {
+        // Contracted answers are structured: scraping a number out of prose can
+        // extract a year or an unconverted source value instead of the forecast.
+        const value = raw.value;
+        if (typeof value !== "number" || !Number.isFinite(value)) throw new Error("Numeric contract requires a finite JSON value number.");
+        const sd = raw.standard_deviation ?? raw.standardDeviation;
+        if (sd !== undefined && (typeof sd !== "number" || !Number.isFinite(sd) || sd < 0)) {
+          throw new Error("Numeric standard_deviation must be finite and nonnegative.");
+        }
+        return normalizeNumericAnswer(task, {
+          kind: "numeric", value, targetField: raw.target_field, unit: raw.unit,
+          ...(typeof sd === "number" ? { interval: [value - 1.96 * sd, value + 1.96 * sd] } : {})
+        });
+      }
       const supplied = raw.mean ?? raw.value ?? parsed;
       // parseQuantity throws on prose. Scrape a figure out of the reply instead
       // of deleting the trial — and via salvageNumber, which likewise keeps a

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { NumericOutputContractSchema } from "@raven-gonna-test/forecast-core";
 
 export const FutureXLevelSchema = z.preprocess(
   (value) => typeof value === "string" ? Number(value.trim()) : typeof value === "bigint" ? Number(value) : value,
@@ -41,6 +42,7 @@ export const FutureXRouteOverrideSchema = z.object({
   kind: FutureXTaskKindSchema,
   choices: z.array(z.object({ key: z.string().min(1), text: z.string().min(1) })).optional(),
   rankCount: z.number().int().min(1).optional(),
+  numericContract: NumericOutputContractSchema.optional(),
   inference: z.object({
     kind: FutureXTaskKindSchema,
     confidence: z.number().min(0).max(1),
@@ -51,7 +53,11 @@ export const FutureXRouteOverrideSchema = z.object({
     reviewedAtUtc: z.string().datetime({ offset: true }).optional(),
     notes: z.string().max(2_000).optional()
   }).strict().optional()
-}).strict();
+}).strict().superRefine((route, context) => {
+  if (route.numericContract && route.kind !== "numeric") {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["numericContract"], message: "numericContract is only valid on numeric routes" });
+  }
+});
 export const FutureXRouteOverrideFileSchema = z.object({
   schemaVersion: z.literal("raven-gonna-test.futurex-routes.v1"),
   revision: z.string().regex(/^[0-9a-f]{40}$/i),

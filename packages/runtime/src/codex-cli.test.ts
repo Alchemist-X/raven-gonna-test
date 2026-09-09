@@ -31,6 +31,16 @@ const task = (shape: Record<string, unknown>): ForecastTask => shape as unknown 
 const property = (schema: Record<string, unknown>, name: string): Record<string, unknown> =>
   (schema.properties as Record<string, Record<string, unknown>>)[name]!;
 
+it("requires numeric target and declared units in the Codex structured output", () => {
+  const schema = answerSchemaForTask(task({ kind: "numeric", numericContract: {
+    targetField: "revenue", definition: "Total quarterly revenue.", unit: "USD million", scale: "Millions.",
+    acceptedUnits: [{ unit: "USD billion", multiplier: 1000 }]
+  } }));
+  expect(schema.required).toEqual(expect.arrayContaining(["value", "target_field", "unit"]));
+  expect(property(schema, "target_field").enum).toEqual(["revenue"]);
+  expect(property(schema, "unit").enum).toEqual(["USD million", "USD billion"]);
+});
+
 // Predictor tests need a real per-call scratch home, which needs a real
 // auth.json source. An empty directory works: the symlink is simply dangling.
 const fakeAuthHome = (): string => mkdtempSync(path.join(tmpdir(), "codex-auth-"));

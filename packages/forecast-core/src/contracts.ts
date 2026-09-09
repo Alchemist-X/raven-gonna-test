@@ -51,10 +51,30 @@ export const RankingTaskSchema = z.object({
   rankCount: z.number().int().min(1)
 });
 
+/** A reviewed measurement definition. Conversions are multiplicative, never guessed from magnitude. */
+export const NumericOutputContractSchema = z.object({
+  targetField: z.string().trim().min(1),
+  definition: z.string().trim().min(1),
+  unit: z.string().trim().min(1),
+  scale: z.string().trim().min(1),
+  example: z.object({ sourceValue: z.string().min(1), outputValue: z.number().finite() }).strict().optional(),
+  acceptedUnits: z.array(z.object({
+    unit: z.string().trim().min(1),
+    multiplier: z.number().finite().positive()
+  }).strict()).optional()
+}).strict().superRefine((contract, context) => {
+  const units = [contract.unit, ...(contract.acceptedUnits ?? []).map((entry) => entry.unit)];
+  if (new Set(units).size !== units.length) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["acceptedUnits"], message: "Unit names must be unique, including the canonical unit" });
+  }
+});
+export type NumericOutputContract = z.infer<typeof NumericOutputContractSchema>;
+
 export const NumericTaskSchema = z.object({
   ...TaskBaseShape,
   kind: z.literal("numeric"),
   unit: z.string().optional(),
+  numericContract: NumericOutputContractSchema.optional(),
   minimum: z.number().finite().optional(),
   maximum: z.number().finite().optional(),
   /** The answer can only be a whole number (a count of discrete things). */
@@ -74,6 +94,9 @@ export const ForecastTaskSchema = z.discriminatedUnion("kind", [
   NumericTaskSchema,
   FreeResponseTaskSchema
 ]).superRefine((task, context) => {
+  if (task.kind === "numeric" && task.numericContract && task.unit !== task.numericContract.unit) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["unit"], message: "Task unit must equal the numeric contract's canonical unit" });
+  }
   if (task.kind === "categorical" || task.kind === "multi_label") {
     if (new Set(task.choices).size !== task.choices.length) {
       context.addIssue({ code: z.ZodIssueCode.custom, path: ["choices"], message: "Choices must be unique" });
@@ -162,7 +185,13 @@ export const NumericAnswerSchema = z.object({
   kind: z.literal("numeric"),
   value: z.number().finite(),
   interval: z.tuple([z.number().finite(), z.number().finite()]).optional(),
-  unit: z.string().optional()
+  unit: z.string().optional(),
+  targetField: z.string().optional(),
+  normalization: z.object({
+    sourceUnit: z.string(),
+    sourceValue: z.number().finite(),
+    multiplier: z.number().finite().positive()
+  }).strict().optional()
 });
 
 export const FreeResponseAnswerSchema = z.object({

@@ -95,7 +95,7 @@ packages/benchmarks  packages/runtime  packages/eval
 - `benchmarks` owns external contracts, routing, fallbacks, export, and validation.
 - `eval` owns Brier, ECE, Edge over Market, Platt calibration, and chronological splits.
 
-See [Architecture](architecture.md), [Benchmark playbook](benchmark-playbook.md), the [end-to-end three-benchmark runbook](three-benchmark-runbook.md), and the [next-session handoff](agent-handoff.md). The full milestone plan is in the [development plan](../../Plan/2026-08-09-raven-gonna-test-development-plan.en.md).
+See [Architecture](architecture.md), [Benchmark playbook](benchmark-playbook.md), the [end-to-end three-benchmark runbook](three-benchmark-runbook.md), and the [next-session handoff](agent-handoff.md). Configure the [numeric target and unit contract](futurex-numeric-contract.md) before running FutureX numeric tasks. The full milestone plan is in the [development plan](../../Plan/2026-08-09-raven-gonna-test-development-plan.en.md).
 
 ## Verification
 

@@ -11,6 +11,7 @@ import {
 } from "@raven-gonna-test/forecast-core";
 import {
   analyzeFutureXQuestions,
+  assertFutureXNumericResults,
   buildForecastBenchForecastSet,
   buildFutureXSubmission,
   buildProphetLegacyResponse,
@@ -453,6 +454,9 @@ function assertFutureXRoutesReviewed(
       problems.push(`${id}: missing route`);
       continue;
     }
+    if (route.kind === "numeric" && !route.numericContract) {
+      problems.push(`${id}: missing numericContract (targetField, definition, unit, scale)`);
+    }
     if (route.review?.status !== "approved" && route.review?.status !== "edited") {
       problems.push(`${id}: route review is ${route.review?.status ?? "missing"}`);
     } else if (!route.review.reviewedAtUtc) {
@@ -637,15 +641,22 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       // while the grader parses another.
       const drifted = inferred !== undefined && inferred.kind !== route.kind;
       const unsure = (route.inference?.confidence ?? 1) <= lowConfidence;
-      return { id, kind: route.kind, inferredKind: inferred?.kind, drifted, unsure, status: route.review?.status ?? "pending" };
+      const missingNumericContract = route.kind === "numeric" && !route.numericContract;
+      return { id, kind: route.kind, inferredKind: inferred?.kind, drifted, unsure, missingNumericContract, status: route.review?.status ?? "pending" };
     });
-    const needsEyes = rows.filter((row) => row.drifted || row.unsure);
+    const needsEyes = rows.filter((row) => row.drifted || row.unsure || row.missingNumericContract);
     if (enabled(args, "list")) {
       process.stdout.write(`${JSON.stringify({ total: rows.length, needsAttention: needsEyes, rows }, null, 2)}\n`);
       return;
     }
 
     const targets = only ?? rows.map((row) => row.id);
+    const unknown = targets.filter((id) => !routeFile.routes[id] || !questionById.has(id));
+    if (unknown.length > 0) throw new Error(`Unknown route-review ids: ${unknown.join(", ")}`);
+    const missingContracts = rows.filter((row) => targets.includes(row.id) && row.missingNumericContract);
+    if (missingContracts.length > 0) {
+      throw new Error(`Add numericContract (targetField, definition, unit, scale) before approving: ${missingContracts.map((row) => row.id).join(", ")}`);
+    }
     const reviewedAtUtc = new Date().toISOString();
     const updated = Object.fromEntries(
       Object.entries(routeFile.routes).map(([id, route]) => [
@@ -781,7 +792,8 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       roundId,
       asOfUtc,
       deadlineUtc,
-      routeOverrides: routeFile.routes
+      routeOverrides: routeFile.routes,
+      requireNumericContracts: true
     });
     // Questions can resolve before the round's submission deadline. Put the
     // soonest ones first, then enforce the earlier of event end and submission
@@ -798,6 +810,7 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     requirePaidOptIn(args, tasks.length * config.trials);
     const checkpointIdentity = {
       benchmark: "futurex",
+      numericContractVersion: 1,
       revision,
       roundId,
       asOfUtc,
@@ -876,6 +889,9 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
         );
       }
     });
+    assertFutureXNumericResults(tasks, results, {
+      allowFallbackTaskIds: new Set(tasks.filter((task) => closedMode !== "research" && closedIds.has(task.origin.externalId)).map((task) => task.taskId))
+    });
     const submission = buildFutureXSubmission(questions, results);
     const report = validateFutureXSubmission(questions, submission, {
       deadlineUtc,
@@ -901,6 +917,7 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       roundId,
       model: config.model,
       provider: config.provider,
+      numericContractVersion: 1,
       // Enough harness identity to tell whether two runs are comparable:
       // trials is the per-question ceiling, effortOverride the provider-level
       // escalation past the engine's own reasoningEffort.
@@ -956,12 +973,14 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       revision,
       roundId,
       asOfUtc,
-      routeOverrides: routeFile!.routes
+      routeOverrides: routeFile!.routes,
+      requireNumericContracts: true
     });
     const { config, engine } = createEngine();
     requirePaidOptIn(args, tasks.length * config.trials);
     const checkpointIdentity = {
       benchmark: "futurex-pilot",
+      numericContractVersion: 1,
       revision,
       roundId,
       asOfUtc,
@@ -989,8 +1008,10 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
       onProgress: (completed, total, task, result) =>
         info(`FutureX pilot ${completed}/${total}: ${task.origin.externalId}${result.fallbackUsed ? " [fallback]" : ""}`)
     });
+    assertFutureXNumericResults(tasks, results);
     const artifact = {
       schemaVersion: "raven-gonna-test.futurex-pilot.v1",
+      numericContractVersion: 1,
       status: "research_only",
       submissionEligible: false,
       evidenceCutoffVerified: false,
@@ -1006,6 +1027,7 @@ async function commandFutureX(action: string | undefined, args: Args): Promise<v
     await writeManifest(output, {
       benchmark: "futurex",
       mode: "research-pilot",
+      numericContractVersion: 1,
       submissionEligible: false,
       evidenceCutoffVerified: false,
       revision,

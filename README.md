@@ -194,7 +194,7 @@ packages/benchmarks  packages/runtime  packages/eval
 - `benchmarks` 只负责外部协议、路由、fallback、导出和校验。
 - `eval` 负责 Brier、ECE、Edge-over-Market、Platt 和时间顺序切分。
 
-详细说明见 [架构文档](docs/architecture.md)。参赛手续、时间窗口和最后时段策略见 [三榜操作手册](docs/benchmark-playbook.md)。下次直接从 [开发接力](docs/agent-handoff.md) 继续；完整阶段规划见 [开发计划](Plan/2026-08-09-raven-gonna-test-development-plan.md)。
+详细说明见 [架构文档](docs/architecture.md)。参赛手续、时间窗口和最后时段策略见 [三榜操作手册](docs/benchmark-playbook.md)。FutureX 数值题运行前先配置 [预测目标与单位合同](docs/futurex-numeric-contract.md)。下次直接从 [开发接力](docs/agent-handoff.md) 继续；完整阶段规划见 [开发计划](Plan/2026-08-09-raven-gonna-test-development-plan.md)。
 
 ## 验证
 

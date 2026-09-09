@@ -1,6 +1,7 @@
 import type { ForecastAnswer, ForecastTask, TrialPrediction } from "./contracts.js";
 import { canonicalizeEntity, clusterAnswers } from "./canonicalize.js";
 import { chooseNumericPoint } from "./numeric-decision.js";
+import { normalizeNumericAnswer } from "./numeric-contract.js";
 import { chooseF1Subset } from "./set-decision.js";
 import { blendLogOdds, clampProbability, logitPool, normalizeProbabilities } from "./probability.js";
 
@@ -206,9 +207,14 @@ export function aggregateTrialPredictions(
       return { kind: "ranking", order, scores };
     }
     case "numeric": {
-      const values = answers
-        .flatMap((answer) => (answer.kind === "numeric" ? [answer.value] : []))
-        .filter(Number.isFinite);
+      const numericAnswers = answers.flatMap((answer) => {
+        if (answer.kind !== "numeric") {
+          if (task.numericContract) throw new Error("Non-numeric trial supplied to a numeric contract.");
+          return [];
+        }
+        return [normalizeNumericAnswer(task, answer)];
+      });
+      const values = numericAnswers.map((answer) => answer.value).filter(Number.isFinite);
       if (values.length === 0) throw new Error("No finite numeric predictions.");
       // A trimmed mean is a central-tendency estimator, and the grader's score
       // is not maximized there. max(0, 1-((x-t)/sigma)^2) has bounded support,
@@ -228,7 +234,10 @@ export function aggregateTrialPredictions(
       }
       options.derivation?.push({
         method: decision.method,
-        inputs: { trialValues: values },
+        inputs: {
+          trialValues: values,
+          ...(task.numericContract ? { normalizedTrials: numericAnswers, numericContract: task.numericContract } : {})
+        },
         chosen: decision.value,
         detail: {
           expectedScore: decision.expectedScore,
@@ -241,6 +250,7 @@ export function aggregateTrialPredictions(
       });
       const numericAnswer: ForecastAnswer = { kind: "numeric", value: decision.value };
       if (task.unit !== undefined) numericAnswer.unit = task.unit;
+      if (task.numericContract) numericAnswer.targetField = task.numericContract.targetField;
       return numericAnswer;
     }
     case "free_response": {

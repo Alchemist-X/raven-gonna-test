@@ -242,6 +242,10 @@ export function answerSchemaForTask(task: ForecastTask): Record<string, unknown>
       });
     case "numeric":
       return objectSchema({
+        ...(task.numericContract ? {
+          target_field: { type: "string", enum: [task.numericContract.targetField] },
+          unit: { type: "string", enum: [task.numericContract.unit, ...(task.numericContract.acceptedUnits ?? []).map((entry) => entry.unit)] }
+        } : {}),
         value: {
           type: "number",
           description: task.integerValued

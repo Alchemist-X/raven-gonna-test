@@ -27,7 +27,9 @@ function answerShape(task: ForecastTask): string {
     case "ranking":
       return '{"ranking": ["first", "second"]}';
     case "numeric":
-      return '{"value": 123.45}';
+      return task.numericContract
+        ? JSON.stringify({ value: 123.45, target_field: task.numericContract.targetField, unit: task.numericContract.unit })
+        : '{"value": 123.45}';
     case "free_response":
       return '{"answer": "Official Entity Name"}';
   }
@@ -59,6 +61,16 @@ function taskContract(task: ForecastTask): string {
         // comma inside a name would be read as two entries.
         : `Return exactly ${task.rankCount} entity names in predicted order as a JSON array, each spelled exactly as the resolving source publishes it (official title or full name, no commentary); if a name itself contains a comma, write it without the comma.`;
     case "numeric":
+      if (task.numericContract) {
+        const contract = task.numericContract;
+        return [
+          `Reviewed numeric settlement contract:\n${JSON.stringify(contract, null, 2)}`,
+          "Before forecasting, identify the exact metric, reference period, resolving source and release vintage in this definition. Distinguish level from change, month-on-month from year-on-year, and headline from core or subcomponents.",
+          "Return a JSON number in value, declare the exact target_field and the unit actually used. Prefer the canonical unit. Alternative units are accepted ONLY when listed in acceptedUnits; canonical value = value * multiplier. Never relabel an unconverted number as the canonical unit.",
+          "Any standard_deviation must use the same declared unit as value. A percent quantity such as 2.7% is 2.7 in percent units, not 0.027.",
+          ...(task.integerValued ? ["The canonical measurement is a count of discrete things; forecast a whole-number outcome in canonical units."] : [])
+        ].join("\n");
+      }
       if (task.integerValued) {
         return `Return a whole number — this quantity is a count and cannot be fractional${task.unit ? ` (${unitLabel(task.unit)})` : ""}. Bare integer only: no units, commas, decimals, or ranges.`;
       }

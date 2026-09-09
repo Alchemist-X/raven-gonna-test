@@ -1,5 +1,5 @@
 import type { ForecastResult, ForecastTask } from "@raven-gonna-test/forecast-core";
-import { futureXPolicy } from "@raven-gonna-test/forecast-core";
+import { futureXPolicy, normalizeNumericAnswer, NumericOutputContractSchema } from "@raven-gonna-test/forecast-core";
 import type { ValidationReport } from "../contract.js";
 import {
   FutureXQuestionSchema,
@@ -81,6 +81,8 @@ export interface FutureXAdapterOptions {
   asOfUtc: string;
   deadlineUtc?: string;
   routeOverrides?: Record<string, FutureXRouteOverride>;
+  /** Live run/pilot preflight. Historical offline adapters remain readable. */
+  requireNumericContracts?: boolean;
 }
 
 export function extractFutureXChoices(prompt: string): Array<{ key: string; text: string }> {
@@ -298,16 +300,22 @@ export function futureXQuestionsToTasks(
         };
       }
       case "numeric": {
+        const suppliedContract = options.routeOverrides?.[question.id]?.numericContract;
+        const numericContract = suppliedContract ? NumericOutputContractSchema.parse(suppliedContract) : undefined;
+        if (options.requireNumericContracts && !numericContract) {
+          throw new Error(`FutureX numeric ${question.id} requires a reviewed numericContract (targetField, definition, unit, scale) in the revision-bound routes file.`);
+        }
         // The prompt names the exact field it wants ("...numeric value for
         // revenue_usd_millions"), which carries the scale and unit. Passing it
         // through is the difference between the model answering in millions and
         // answering in billions — an error no downstream aggregation can repair.
-        const targetField = numericTargetField(question.prompt);
+        const targetField = numericContract?.unit ?? numericTargetField(question.prompt);
         const integerValued = isCountQuestion(question.en_title, targetField);
         return {
           ...common,
           kind: "numeric" as const,
           ...(targetField ? { unit: targetField } : {}),
+          ...(numericContract ? { numericContract } : {}),
           ...(integerValued ? { integerValued: true } : {})
         };
       }
@@ -400,6 +408,38 @@ export function buildFutureXSubmission(
     if (!result) throw new Error(`Missing FutureX result for ${question.id}.`);
     return FutureXSubmissionRowSchema.parse({ id: question.id, prediction: futureXPredictionFromResult(result) });
   });
+}
+
+/** Candidate gate, including resumed/imported results. Call before writing any formal prediction rows. */
+export function assertFutureXNumericResults(
+  tasks: readonly ForecastTask[],
+  results: readonly ForecastResult[],
+  options: { allowFallbackTaskIds?: ReadonlySet<string> } = {}
+): void {
+  const byId = new Map(results.map((result) => [result.taskId, result]));
+  const problems: string[] = [];
+  for (const task of tasks) {
+    if (task.kind !== "numeric") continue;
+    try {
+      if (!task.numericContract) throw new Error("missing reviewed numericContract");
+      const result = byId.get(task.taskId);
+      if (!result) throw new Error("missing result");
+      if (result.fallbackUsed) {
+        if (options.allowFallbackTaskIds?.has(task.taskId) && result.warnings.length > 0 && result.answer.kind === "numeric" && Number.isFinite(result.answer.value)) continue;
+        throw new Error("numeric fallback is not eligible; inspect the checkpoint and retry failed trials");
+      }
+      if (result.trials.length === 0) throw new Error("numeric result has no validated trials");
+      for (const trial of result.trials) normalizeNumericAnswer(task, trial.answer);
+      const normalized = normalizeNumericAnswer(task, result.answer);
+      if (result.answer.kind !== "numeric" || result.answer.unit !== task.numericContract.unit || normalized.value !== result.answer.value) {
+        throw new Error("final numeric answer is not in canonical units");
+      }
+      if (task.integerValued && !Number.isInteger(normalized.value)) throw new Error("final count must be an integer");
+    } catch (error) {
+      problems.push(`${task.origin.externalId}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  if (problems.length > 0) throw new Error(`FutureX numeric candidate validation failed:\n${problems.join("\n")}`);
 }
 
 const DECIMAL_ONLY = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
